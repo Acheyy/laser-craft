@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build && cp -rL node_modules/react .output/server/node_modules/react && cp -rL node_modules/react-dom .output/server/node_modules/react-dom",
+    "build": "vite build && cd .output/server && npm install --install-strategy=nested react react-dom",
     "preview": "vite preview"
   },
   "dependencies": {
