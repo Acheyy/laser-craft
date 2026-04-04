@@ -5,9 +5,13 @@ export const Route = createFileRoute('/despre-noi')({
   component: DespreNoiPage,
   head: () => ({
     meta: seo({
-      title: 'Despre Noi - LaserCraft',
+      title: 'Despre Noi - LaserCraft | Experiență în Servicii Laser',
       description:
-        'Descoperiți povestea LaserCraft — peste 10 ani de experiență în servicii profesionale de tăiere și gravare laser în România.',
+        'Descoperiți povestea LaserCraft — peste 10 ani de experiență în servicii profesionale de tăiere și gravare laser în România. 2000+ proiecte realizate.',
+      keywords:
+        'despre LaserCraft, echipa laser craft, experienta taiere laser, firma taiere laser București, servicii laser România',
+      image: '/img/og/og-despre-noi.png',
+      url: '/despre-noi',
     }),
   }),
 })
@@ -80,28 +84,6 @@ const values = [
   },
 ]
 
-const equipment = [
-  {
-    name: 'Laser Fibră',
-    power: '3000W',
-    description: 'Pentru tăiere metal de înaltă precizie',
-  },
-  {
-    name: 'Laser CO2',
-    power: '150W',
-    description: 'Pentru lemn, acril, piele și materiale nemetalice',
-  },
-  {
-    name: 'CNC Router',
-    power: 'Industrial',
-    description: 'Pentru debitare și frezare de precizie',
-  },
-  {
-    name: 'Laser Gravură',
-    power: '60W',
-    description: 'Pentru gravuri fine pe diverse materiale',
-  },
-]
 
 function DespreNoiPage() {
   return (
@@ -155,7 +137,7 @@ function DespreNoiPage() {
                   { value: '10+', label: 'Ani de Experiență' },
                   { value: '2000+', label: 'Proiecte Realizate' },
                   { value: '500+', label: 'Clienți Fideli' },
-                  { value: '4', label: 'Echipamente Laser' },
+                  { value: '99%', label: 'Clienți Mulțumiți' },
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
                     <div className="text-3xl sm:text-4xl font-bold text-amber-400">
@@ -198,33 +180,6 @@ function DespreNoiPage() {
         </div>
       </section>
 
-      <section className="py-20 sm:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-zinc-900 mb-4 text-center">
-            Echipamentele Noastre
-          </h2>
-          <p className="text-lg text-zinc-600 text-center mb-12 max-w-2xl mx-auto">
-            Investim constant în echipamente industriale de top pentru a oferi
-            cele mai bune rezultate.
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {equipment.map((item) => (
-              <div
-                key={item.name}
-                className="bg-slate-900 rounded-2xl p-6 text-center"
-              >
-                <div className="text-amber-400 font-bold text-sm uppercase tracking-wider mb-2">
-                  {item.power}
-                </div>
-                <h3 className="text-white font-semibold text-lg mb-2">
-                  {item.name}
-                </h3>
-                <p className="text-zinc-400 text-sm">{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
     </>
   )
 }

@@ -6,40 +6,56 @@ export const Route = createFileRoute('/portofoliu')({
   component: PortofoliuPage,
   head: () => ({
     meta: seo({
-      title: 'Portofoliu - LaserCraft',
+      title: 'Portofoliu - LaserCraft | Proiecte Tăiere și Gravură Laser',
       description:
-        'Explorați portofoliul LaserCraft — proiecte de tăiere laser, gravură laser și debitare CNC realizate pentru clienții noștri.',
+        'Explorați portofoliul LaserCraft — proiecte de tăiere laser și gravură laser realizate pentru clienții noștri. Signalistică, decorațiuni și gravuri.',
+      keywords:
+        'portofoliu taiere laser, proiecte laser, placute adresa laser, signalistica laser, gravura laser proiecte, decoratiuni laser',
+      image: '/img/og/og-portofoliu.png',
+      url: '/portofoliu',
     }),
   }),
 })
 
 const categories = [
   'Toate',
-  'Tăiere Metal',
-  'Tăiere Lemn',
+  'Signalistică',
   'Gravură',
   'Decorațiuni',
-  'Industrial',
 ]
 
 const projects = [
   {
-    title: 'Panouri Decorative Metal',
-    category: 'Tăiere Metal',
-    description: 'Panouri decorative din oțel pentru fațade exterioare',
-    material: 'Oțel carbon 3mm',
+    title: 'Plăcuță Adresă — Str. Zorilor 35',
+    category: 'Signalistică',
+    description:
+      'Plăcuță elegantă din acril negru cu litere și cifre aurii volumetrice, montaj cu distanțiere inox.',
+    material: 'Acril negru + auriu',
+    image: '/img/products/Product 1.png',
   },
   {
-    title: 'Litere Volumetrice',
-    category: 'Tăiere Metal',
-    description: 'Signalistică din inox pentru spații comerciale',
-    material: 'Oțel inoxidabil 2mm',
+    title: 'Plăcuță Adresă — Str. Caisului 36',
+    category: 'Signalistică',
+    description:
+      'Plăcuță de adresă orizontală din acril negru lucios, cu cifre aurii și distanțiere aurii.',
+    material: 'Acril negru + auriu',
+    image: '/img/products/Product 2.png',
   },
   {
-    title: 'Decorațiuni Nuntă',
-    category: 'Tăiere Lemn',
-    description: 'Elemente decorative personalizate din lemn pentru nunți',
-    material: 'Placaj mesteacăn 4mm',
+    title: 'Plăcuță Adresă — Mihail Sadoveanu 31G',
+    category: 'Signalistică',
+    description:
+      'Plăcuță din metal vopsit mat cu decupaj laser — icon casă și text personalizat.',
+    material: 'Oțel vopsit mat',
+    image: '/img/products/Product 3.jpg',
+  },
+  {
+    title: 'Plăcuță Adresă — Strada Gloriei Nr. 1',
+    category: 'Signalistică',
+    description:
+      'Plăcuță din acril negru lucios cu icon casă și text auriu, montaj cu distanțiere.',
+    material: 'Acril negru + auriu',
+    image: '/img/products/Product 4.jpg',
   },
   {
     title: 'Trofee Personalizate',
@@ -48,34 +64,10 @@ const projects = [
     material: 'Acril transparent 10mm',
   },
   {
-    title: 'Piese Industriale',
-    category: 'Industrial',
-    description: 'Componente de precizie pentru industria automotive',
-    material: 'Aluminiu 6mm',
-  },
-  {
     title: 'Tablouri Laser Cut',
     category: 'Decorațiuni',
     description: 'Tablouri artistice din lemn realizate prin tăiere laser',
     material: 'MDF 6mm',
-  },
-  {
-    title: 'Grătare Ventilație',
-    category: 'Industrial',
-    description: 'Grile de ventilație cu modele geometrice pentru clădiri',
-    material: 'Aluminiu 2mm',
-  },
-  {
-    title: 'Cadouri Personalizate',
-    category: 'Gravură',
-    description: 'Portofele și agende din piele cu gravură laser',
-    material: 'Piele naturală',
-  },
-  {
-    title: 'Separatoare Cameră',
-    category: 'Decorațiuni',
-    description: 'Panouri decorative din MDF pentru delimitarea spațiilor',
-    material: 'MDF 12mm',
   },
 ]
 
@@ -122,23 +114,33 @@ function PortofoliuPage() {
                 key={project.title}
                 className="group bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/5 transition-all duration-300"
               >
-                <div className="aspect-[4/3] bg-gradient-to-br from-slate-100 to-zinc-100 flex items-center justify-center">
-                  <div className="text-zinc-400 text-center p-6">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1}
-                      className="w-12 h-12 mx-auto mb-2 text-zinc-300"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a1.5 1.5 0 001.5-1.5V4.5a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v15a1.5 1.5 0 001.5 1.5z"
-                      />
-                    </svg>
-                    <p className="text-xs">Foto proiect</p>
-                  </div>
+                <div className="aspect-[4/3] bg-gradient-to-br from-slate-100 to-zinc-100 overflow-hidden">
+                  {'image' in project && project.image ? (
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center text-zinc-400 text-center p-6">
+                      <div>
+                        <svg
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth={1}
+                          className="w-12 h-12 mx-auto mb-2 text-zinc-300"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a1.5 1.5 0 001.5-1.5V4.5a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v15a1.5 1.5 0 001.5 1.5z"
+                          />
+                        </svg>
+                        <p className="text-xs">Foto proiect</p>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <div className="p-6">
                   <div className="text-xs text-amber-600 font-semibold uppercase tracking-wider mb-2">

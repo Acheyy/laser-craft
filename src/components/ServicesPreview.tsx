@@ -2,9 +2,9 @@ import { Link } from '@tanstack/react-router'
 
 const services = [
   {
-    title: 'Tăiere Laser Metal',
+    title: 'Tăiere Laser Acril',
     description:
-      'Tăiere precisă a metalelor — oțel, inox, aluminiu, cupru — cu toleranțe de sub 0.1mm. Ideal pentru piese industriale și decorative.',
+      'Tăiere de precizie în acril (plexiglas) cu margini curate și lustruite. Ideal pentru signalistică, plăcuțe de adresă și decorațiuni.',
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -49,7 +49,7 @@ const services = [
   {
     title: 'Gravură Laser',
     description:
-      'Gravuri detaliate pe metal, lemn, sticlă, piele și acril. Personalizare premium pentru cadouri, trofee și branding.',
+      'Gravuri detaliate pe lemn, sticlă, piele și acril. Personalizare premium pentru cadouri, trofee și branding.',
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -62,26 +62,6 @@ const services = [
           strokeLinecap="round"
           strokeLinejoin="round"
           d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"
-        />
-      </svg>
-    ),
-  },
-  {
-    title: 'Debitare CNC',
-    description:
-      'Debitare de precizie cu control numeric pentru producție de serie. Repetabilitate perfectă și timpi de execuție reduși.',
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-7 h-7"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M11.42 15.17l-5.684 5.684a2.121 2.121 0 01-3-3l5.684-5.684m0 0L15.17 5.42a2.121 2.121 0 113 3L11.42 15.17zm0 0L3 21M10.5 6H21m-10.5 6H21m-10.5 6H21"
         />
       </svg>
     ),
@@ -102,7 +82,7 @@ export function ServicesPreview() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
             <div
               key={service.title}

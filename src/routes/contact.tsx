@@ -26,9 +26,13 @@ export const Route = createFileRoute('/contact')({
   component: ContactPage,
   head: () => ({
     meta: seo({
-      title: 'Contact - LaserCraft',
+      title: 'Contact - LaserCraft | Solicită o Ofertă Gratuită',
       description:
-        'Contactați LaserCraft pentru o ofertă gratuită. Telefon, email sau formularul de contact — răspundem în 24 de ore.',
+        'Contactați LaserCraft pentru o ofertă gratuită. Telefon, email sau formularul de contact — răspundem în 24 de ore. București, România.',
+      keywords:
+        'contact LaserCraft, oferta taiere laser, pret taiere laser, contact servicii laser București, cerere oferta laser',
+      image: '/img/og/og-contact.png',
+      url: '/contact',
     }),
   }),
 })

@@ -6,25 +6,30 @@ export const Route = createFileRoute('/servicii')({
   component: ServiciiPage,
   head: () => ({
     meta: seo({
-      title: 'Servicii - LaserCraft',
+      title: 'Servicii de Tăiere și Gravare Laser - LaserCraft',
       description:
-        'Servicii complete de tăiere laser metal, tăiere laser lemn, gravură laser și debitare CNC. Descoperă soluțiile LaserCraft.',
+        'Servicii complete de tăiere laser acril, lemn, gravură laser și personalizare. Descoperă soluțiile LaserCraft pentru proiectul tău.',
+      keywords:
+        'taiere laser acril, taiere laser lemn, gravura laser, personalizare laser, taiere plexiglas, servicii laser București, gravare sticla, taiere piele',
+      image: '/img/og/og-servicii.png',
+      url: '/servicii',
     }),
   }),
 })
 
 const services = [
   {
-    title: 'Tăiere Laser Metal',
+    title: 'Tăiere Laser Acril',
+    image: '/img/acril-laser-cut.jpg',
     description:
-      'Serviciul nostru principal de tăiere laser pentru metale oferă rezultate de excepție pentru o gamă variată de aplicații industriale și decorative.',
+      'Tăiere de precizie în acril (plexiglas) pentru signalistică, decorațiuni, plăcuțe de adresă și aplicații comerciale. Margini curate și lustruite.',
     features: [
-      'Oțel carbon până la 20mm grosime',
-      'Oțel inoxidabil până la 12mm',
-      'Aluminiu până la 8mm',
-      'Cupru și alamă până la 6mm',
+      'Acril (plexiglas) până la 25mm',
+      'Margini curate, lustruite',
       'Toleranțe de ±0.05mm',
-      'Margini curate, fără bavuri',
+      'Acril transparent, colorat sau oglindă',
+      'Ideal pentru signalistică',
+      'Personalizare completă',
     ],
     icon: (
       <svg
@@ -48,16 +53,17 @@ const services = [
     ),
   },
   {
-    title: 'Tăiere Laser Lemn & Acril',
+    title: 'Tăiere Laser Lemn',
+    image: '/img/wood-laser-cut.jpg',
     description:
-      'Realizăm decupări complexe în materiale nemetalice cu precizie ridicată, ideale pentru design, decorațiuni și aplicații comerciale.',
+      'Decupări complexe în lemn, placaj, MDF și alte materiale organice. Perfect pentru decorațiuni, mobilier personalizat și elemente arhitecturale.',
     features: [
       'Lemn masiv până la 15mm',
       'Placaj și MDF până la 20mm',
-      'Acril (plexiglas) până la 25mm',
       'Carton și hârtie',
       'Piele naturală și sintetică',
       'Textile și fetru',
+      'Forme complexe și detaliate',
     ],
     icon: (
       <svg
@@ -77,14 +83,14 @@ const services = [
   },
   {
     title: 'Gravură Laser',
+    image: '/img/laser-engraving.jpg',
     description:
       'Gravuri de înaltă rezoluție pe diverse materiale, perfecte pentru personalizare, branding și elemente decorative de excepție.',
     features: [
-      'Gravură pe metal (oțel, aluminiu, inox)',
+      'Gravură pe acril și plastic',
       'Gravură pe lemn și bambus',
       'Gravură pe sticlă și cristal',
       'Gravură pe piele',
-      'Gravură pe acril și plastic',
       'Rezoluție până la 1200 DPI',
     ],
     icon: (
@@ -103,49 +109,17 @@ const services = [
       </svg>
     ),
   },
-  {
-    title: 'Debitare CNC',
-    description:
-      'Debitare cu precizie numerică pentru producție de serie sau prototipuri. Control total al procesului pentru rezultate repetabile.',
-    features: [
-      'Piese metalice de serie',
-      'Prototipuri rapide',
-      'Frezare 2D și 3D',
-      'Îndoire și sudură',
-      'Finisare suprafețe',
-      'Control calitate inclus',
-    ],
-    icon: (
-      <svg
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1.5}
-        className="w-10 h-10"
-      >
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          d="M11.42 15.17l-5.684 5.684a2.121 2.121 0 01-3-3l5.684-5.684m0 0L15.17 5.42a2.121 2.121 0 113 3L11.42 15.17zm0 0L3 21M10.5 6H21m-10.5 6H21m-10.5 6H21"
-        />
-      </svg>
-    ),
-  },
 ]
 
 const materials = [
-  { name: 'Oțel Carbon', category: 'Metal' },
-  { name: 'Oțel Inoxidabil', category: 'Metal' },
-  { name: 'Aluminiu', category: 'Metal' },
-  { name: 'Cupru', category: 'Metal' },
-  { name: 'Alamă', category: 'Metal' },
-  { name: 'Lemn Masiv', category: 'Organic' },
-  { name: 'Placaj / MDF', category: 'Organic' },
   { name: 'Acril (Plexiglas)', category: 'Plastic' },
   { name: 'Policarbonat', category: 'Plastic' },
+  { name: 'Lemn Masiv', category: 'Organic' },
+  { name: 'Placaj / MDF', category: 'Organic' },
   { name: 'Piele', category: 'Organic' },
-  { name: 'Sticlă', category: 'Mineral' },
-  { name: 'Textile', category: 'Organic' },
+  { name: 'Textile / Fetru', category: 'Organic' },
+  { name: 'Carton / Hârtie', category: 'Organic' },
+  { name: 'Sticlă (gravură)', category: 'Mineral' },
 ]
 
 function ServiciiPage() {
@@ -161,8 +135,8 @@ function ServiciiPage() {
               </span>
             </h1>
             <p className="mt-6 text-lg text-zinc-400 leading-relaxed">
-              Oferim soluții complete de prelucrare laser pentru orice tip de
-              proiect, de la piese unice la producție industrială de serie.
+              Oferim soluții complete de tăiere și gravare laser pentru orice
+              tip de proiect — de la piese unice la producție de serie.
             </p>
           </div>
         </div>
@@ -212,16 +186,15 @@ function ServiciiPage() {
                 </ul>
               </div>
               <div
-                className={`bg-gradient-to-br from-slate-100 to-zinc-100 rounded-2xl aspect-[4/3] flex items-center justify-center ${
+                className={`rounded-2xl aspect-[4/3] overflow-hidden ${
                   index % 2 === 1 ? 'lg:order-1' : ''
                 }`}
               >
-                <div className="text-zinc-400 text-center p-8">
-                  <div className="w-16 h-16 bg-zinc-200 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                    {service.icon}
-                  </div>
-                  <p className="text-sm">Imagine {service.title}</p>
-                </div>
+                <img
+                  src={service.image}
+                  alt={service.title}
+                  className="w-full h-full object-cover rounded-2xl"
+                />
               </div>
             </div>
           ))}

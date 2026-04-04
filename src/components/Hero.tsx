@@ -26,7 +26,7 @@ export function Hero() {
 
           <p className="mt-6 text-lg sm:text-xl text-zinc-400 leading-relaxed max-w-2xl">
             Transformăm ideile dumneavoastră în realitate cu tehnologie laser de
-            ultimă generație. Metal, lemn, acril, piele — orice material,
+            ultimă generație. Acril, lemn, piele, textile — orice material,
             rezultate impecabile.
           </p>
 

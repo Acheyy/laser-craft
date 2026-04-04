@@ -61,11 +61,11 @@ export function Footer() {
               Servicii
             </h4>
             <ul className="space-y-2 text-sm">
-              <li>Tăiere Laser Metal</li>
+              <li>Tăiere Laser Acril</li>
               <li>Tăiere Laser Lemn</li>
               <li>Gravură Laser</li>
-              <li>Debitare CNC</li>
-              <li>Prototipare Rapidă</li>
+              <li>Personalizare</li>
+              <li>Signalistică</li>
             </ul>
           </div>
 
