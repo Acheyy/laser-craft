@@ -4,7 +4,7 @@ export function NotFound() {
   return (
     <div className="min-h-[60vh] flex items-center justify-center px-4">
       <div className="text-center max-w-md">
-        <h1 className="text-8xl font-bold text-amber-500 mb-4">404</h1>
+        <h1 className="text-6xl sm:text-8xl font-bold text-amber-500 mb-4">404</h1>
         <h2 className="text-2xl font-semibold text-zinc-900 mb-4">
           Pagina nu a fost găsită
         </h2>

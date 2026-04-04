@@ -147,9 +147,7 @@ function ServiciiPage() {
           {services.map((service, index) => (
             <div
               key={service.title}
-              className={`grid grid-cols-1 lg:grid-cols-2 gap-12 items-center ${
-                index % 2 === 1 ? 'lg:direction-rtl' : ''
-              }`}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
             >
               <div className={index % 2 === 1 ? 'lg:order-2' : ''}>
                 <div className="w-16 h-16 bg-amber-500/10 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
@@ -193,6 +191,7 @@ function ServiciiPage() {
                 <img
                   src={service.image}
                   alt={service.title}
+                  loading="lazy"
                   className="w-full h-full object-cover rounded-2xl"
                 />
               </div>
@@ -203,7 +202,7 @@ function ServiciiPage() {
 
       <section className="py-20 sm:py-28 bg-zinc-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-zinc-900 mb-4 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4 text-center">
             Materiale Prelucrate
           </h2>
           <p className="text-lg text-zinc-600 text-center mb-12 max-w-2xl mx-auto">
@@ -228,7 +227,7 @@ function ServiciiPage() {
 
       <section className="bg-slate-900 py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
             Aveți nevoie de un serviciu personalizat?
           </h2>
           <p className="text-zinc-400 text-lg mb-8">

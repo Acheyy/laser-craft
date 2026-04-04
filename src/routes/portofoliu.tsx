@@ -154,6 +154,7 @@ function PortofoliuPage() {
                     <img
                       src={project.image}
                       alt={project.title}
+                      loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
@@ -212,7 +213,7 @@ function PortofoliuPage() {
 
       <section className="bg-slate-900 py-20">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
             Vă place ce vedeți?
           </h2>
           <p className="text-zinc-400 text-lg mb-8">

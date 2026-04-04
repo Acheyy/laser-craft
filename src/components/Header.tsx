@@ -23,6 +23,11 @@ export function Header() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  useEffect(() => {
+    document.body.style.overflow = mobileOpen ? 'hidden' : ''
+    return () => { document.body.style.overflow = '' }
+  }, [mobileOpen])
+
   return (
     <header
       className={`sticky top-0 z-50 border-b border-slate-800 transition-all duration-300 ${
@@ -100,31 +105,33 @@ export function Header() {
         </div>
       </div>
 
-      {mobileOpen && (
-        <div className="md:hidden bg-slate-900 border-t border-slate-800">
-          <div className="px-4 py-4 space-y-1">
-            {navLinks.map((link) => (
-              <Link
-                key={link.to}
-                to={link.to}
-                activeOptions={{ exact: link.to === '/' }}
-                activeProps={{ className: '!text-amber-400 !bg-amber-500/10' }}
-                className="block px-4 py-3 text-sm font-medium text-zinc-300 hover:text-amber-400 hover:bg-white/5 rounded-lg transition-colors"
-                onClick={() => setMobileOpen(false)}
-              >
-                {link.label}
-              </Link>
-            ))}
+      <div
+        className={`md:hidden bg-slate-900 border-t border-slate-800 overflow-hidden transition-all duration-300 ease-in-out ${
+          mobileOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="px-4 py-4 space-y-1">
+          {navLinks.map((link) => (
             <Link
-              to="/contact"
-              className="block mt-3 px-4 py-3 bg-amber-500 text-white text-sm font-semibold rounded-lg hover:bg-amber-600 transition-colors text-center"
+              key={link.to}
+              to={link.to}
+              activeOptions={{ exact: link.to === '/' }}
+              activeProps={{ className: '!text-amber-400 !bg-amber-500/10' }}
+              className="block px-4 py-3 text-sm font-medium text-zinc-300 hover:text-amber-400 hover:bg-white/5 rounded-lg transition-colors"
               onClick={() => setMobileOpen(false)}
             >
-              Solicită Ofertă
+              {link.label}
             </Link>
-          </div>
+          ))}
+          <Link
+            to="/contact"
+            className="block mt-3 px-4 py-3 bg-amber-500 text-white text-sm font-semibold rounded-lg hover:bg-amber-600 transition-colors text-center"
+            onClick={() => setMobileOpen(false)}
+          >
+            Solicită Ofertă
+          </Link>
         </div>
-      )}
+      </div>
     </header>
   )
 }

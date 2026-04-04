@@ -109,7 +109,7 @@ function DespreNoiPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div>
-              <h2 className="text-3xl font-bold text-zinc-900 mb-6">
+              <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-6">
                 Povestea Noastră
               </h2>
               <div className="space-y-4 text-zinc-600 leading-relaxed">
@@ -156,7 +156,7 @@ function DespreNoiPage() {
 
       <section className="py-20 sm:py-28 bg-zinc-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-zinc-900 mb-12 text-center">
+          <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-12 text-center">
             Valorile Noastre
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

@@ -58,7 +58,7 @@ export function Hero() {
             </Link>
           </div>
 
-          <div className="mt-16 grid grid-cols-3 gap-8 max-w-lg">
+          <div className="mt-16 grid grid-cols-3 gap-4 sm:gap-8 max-w-lg">
             {[
               { value: '10+', label: 'Ani Experiență' },
               { value: '2000+', label: 'Proiecte Finalizate' },

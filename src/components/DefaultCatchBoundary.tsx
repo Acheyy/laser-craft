@@ -11,16 +11,16 @@ export function DefaultCatchBoundary({ error }: ErrorComponentProps) {
         <p className="text-zinc-600 text-lg mb-8">
           {error.message || 'A apărut o eroare neașteptată.'}
         </p>
-        <div className="flex gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
           <button
             onClick={() => router.invalidate()}
-            className="px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors"
+            className="w-full sm:w-auto px-6 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors"
           >
             Încearcă din nou
           </button>
           <Link
             to="/"
-            className="px-6 py-3 border border-zinc-300 text-zinc-700 font-semibold rounded-lg hover:bg-zinc-50 transition-colors"
+            className="w-full sm:w-auto px-6 py-3 border border-zinc-300 text-zinc-700 font-semibold rounded-lg hover:bg-zinc-50 transition-colors text-center"
           >
             Acasă
           </Link>

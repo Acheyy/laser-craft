@@ -141,7 +141,7 @@ export function WhyUs() {
               <div className="w-12 h-12 bg-slate-900 text-amber-400 rounded-xl flex items-center justify-center shrink-0">
                 {feature.icon}
               </div>
-              <div>
+              <div className="min-w-0">
                 <h3 className="font-semibold text-zinc-900 mb-1">
                   {feature.title}
                 </h3>
