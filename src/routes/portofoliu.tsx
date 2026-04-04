@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
 import { seo } from '~/utils/seo'
@@ -62,16 +63,49 @@ const projects = [
     category: 'Gravură',
     description: 'Trofee din acril cu gravură laser pentru competiții sportive',
     material: 'Acril transparent 10mm',
+    image: '/img/products/product-acrylic-trophy.jpg',
   },
   {
     title: 'Tablouri Laser Cut',
     category: 'Decorațiuni',
     description: 'Tablouri artistice din lemn realizate prin tăiere laser',
     material: 'MDF 6mm',
+    image: '/img/products/product-wood-panel.jpg',
+  },
+  {
+    title: 'Set Coastere Gravate',
+    category: 'Gravură',
+    description:
+      'Set de 4 coastere din lemn cu modele botanice și geometrice gravate laser.',
+    material: 'Lemn de nuc',
+    image: '/img/products/product-wood-coasters.jpg',
+  },
+  {
+    title: 'Jurnal Piele Personalizat',
+    category: 'Gravură',
+    description:
+      'Copertă de jurnal din piele naturală cu gravură laser — artă botanică și monogramă.',
+    material: 'Piele naturală',
+    image: '/img/products/product-leather-journal.jpg',
+  },
+  {
+    title: 'Semn LED Acril Business',
+    category: 'Signalistică',
+    description:
+      'Semn de business din acril edge-lit cu logo gravat laser, iluminare LED.',
+    material: 'Acril transparent 8mm',
+    image: '/img/products/product-acrylic-led-sign.jpg',
   },
 ]
 
 function PortofoliuPage() {
+  const [activeCategory, setActiveCategory] = useState('Toate')
+
+  const filteredProjects =
+    activeCategory === 'Toate'
+      ? projects
+      : projects.filter((p) => p.category === activeCategory)
+
   return (
     <>
       <section className="bg-slate-900 py-20 sm:py-28">
@@ -97,8 +131,9 @@ function PortofoliuPage() {
             {categories.map((category) => (
               <button
                 key={category}
+                onClick={() => setActiveCategory(category)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  category === 'Toate'
+                  category === activeCategory
                     ? 'bg-amber-500 text-white'
                     : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
                 }`}
@@ -109,7 +144,7 @@ function PortofoliuPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {projects.map((project) => (
+            {filteredProjects.map((project) => (
               <div
                 key={project.title}
                 className="group bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/5 transition-all duration-300"
