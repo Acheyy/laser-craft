@@ -21,15 +21,15 @@ const structuredData = {
       '@id': `${SITE_URL}/#business`,
       name: 'LaserCraft',
       description:
-        'Servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în București, România.',
+        'Servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în Craiova, România.',
       url: SITE_URL,
-      telephone: '+40700000000',
-      email: 'contact@laser-craft.ro',
+      telephone: '+40754497243',
+      email: 'lasercraft.contact@gmail.com',
       image: `${SITE_URL}/img/og/og-home.png`,
       logo: `${SITE_URL}/img/logo.svg`,
       address: {
         '@type': 'PostalAddress',
-        addressLocality: 'București',
+        addressLocality: 'Craiova',
         addressCountry: 'RO',
       },
       openingHoursSpecification: [
@@ -66,9 +66,9 @@ export const Route = createRootRoute({
       ...seo({
         title: 'LaserCraft - Servicii Profesionale de Tăiere și Gravare Laser',
         description:
-          'LaserCraft oferă servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în București, România.',
+          'LaserCraft oferă servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în Craiova, România.',
         keywords:
-          'taiere laser, gravare laser, taiere acril, taiere lemn, laser craft, servicii laser, București',
+          'taiere laser, gravare laser, taiere acril, taiere lemn, laser craft, servicii laser, Craiova',
         image: '/img/og/og-home.png',
         url: '/',
       }),

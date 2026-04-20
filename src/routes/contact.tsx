@@ -28,9 +28,9 @@ export const Route = createFileRoute('/contact')({
     meta: seo({
       title: 'Contact - LaserCraft | Solicită o Ofertă Gratuită',
       description:
-        'Contactați LaserCraft pentru o ofertă gratuită. Telefon, email sau formularul de contact — răspundem în 24 de ore. București, România.',
+        'Contactați LaserCraft pentru o ofertă gratuită. Telefon, email sau formularul de contact — răspundem în 24 de ore. Craiova, România.',
       keywords:
-        'contact LaserCraft, oferta taiere laser, pret taiere laser, contact servicii laser București, cerere oferta laser',
+        'contact LaserCraft, oferta taiere laser, pret taiere laser, contact servicii laser Craiova, cerere oferta laser',
       image: '/img/og/og-contact.png',
       url: '/contact',
     }),
@@ -183,7 +183,7 @@ function ContactPage() {
                       id="phone"
                       name="phone"
                       className="w-full px-4 py-3 border border-zinc-300 rounded-xl focus:ring-2 focus:ring-amber-500 focus:border-amber-500 outline-none transition-all text-zinc-900"
-                      placeholder="+40 700 000 000"
+                      placeholder="+40 754 497 243"
                     />
                   </div>
 
@@ -247,7 +247,7 @@ function ContactPage() {
                         Adresă
                       </div>
                       <div className="text-sm text-zinc-400 mt-1">
-                        București, România
+                        Craiova, România
                       </div>
                     </div>
                   </li>
@@ -270,10 +270,10 @@ function ContactPage() {
                         Telefon
                       </div>
                       <a
-                        href="tel:+40700000000"
+                        href="tel:+40754497243"
                         className="text-sm text-zinc-400 mt-1 hover:text-amber-400 transition-colors"
                       >
-                        +40 700 000 000
+                        +40 754 497 243
                       </a>
                     </div>
                   </li>
@@ -296,10 +296,10 @@ function ContactPage() {
                         Email
                       </div>
                       <a
-                        href="mailto:contact@laser-craft.ro"
+                        href="mailto:lasercraft.contact@gmail.com"
                         className="text-sm text-zinc-400 mt-1 hover:text-amber-400 transition-colors"
                       >
-                        contact@laser-craft.ro
+                        lasercraft.contact@gmail.com
                       </a>
                     </div>
                   </li>

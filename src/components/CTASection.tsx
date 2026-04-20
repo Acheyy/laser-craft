@@ -24,7 +24,7 @@ export function CTASection() {
             Solicită Ofertă Gratuită
           </Link>
           <a
-            href="tel:+40700000000"
+            href="tel:+40754497243"
             className="inline-flex items-center justify-center px-8 py-4 border border-zinc-700 text-zinc-300 font-semibold rounded-xl hover:bg-white/5 hover:border-zinc-600 transition-all"
           >
             <svg

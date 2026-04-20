@@ -10,7 +10,7 @@ export const Route = createFileRoute('/servicii')({
       description:
         'Servicii complete de tăiere laser acril, lemn, gravură laser și personalizare. Descoperă soluțiile LaserCraft pentru proiectul tău.',
       keywords:
-        'taiere laser acril, taiere laser lemn, gravura laser, personalizare laser, taiere plexiglas, servicii laser București, gravare sticla, taiere piele',
+        'taiere laser acril, taiere laser lemn, gravura laser, personalizare laser, taiere plexiglas, servicii laser Craiova, gravare sticla, taiere piele',
       image: '/img/og/og-servicii.png',
       url: '/servicii',
     }),

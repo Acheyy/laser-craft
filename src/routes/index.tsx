@@ -11,9 +11,9 @@ export const Route = createFileRoute('/')({
     meta: seo({
       title: 'LaserCraft - Servicii Profesionale de Tăiere și Gravare Laser',
       description:
-        'LaserCraft oferă servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în București, România.',
+        'LaserCraft oferă servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în Craiova, România.',
       keywords:
-        'taiere laser, gravare laser, taiere acril, taiere lemn, laser craft, servicii laser, București, gravura laser, plexiglas',
+        'taiere laser, gravare laser, taiere acril, taiere lemn, laser craft, servicii laser, Craiova, gravura laser, plexiglas',
       image: '/img/og/og-home.png',
       url: '/',
     }),

@@ -93,7 +93,7 @@ export function Footer() {
                     d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                   />
                 </svg>
-                <span>București, România</span>
+                <span>Craiova, România</span>
               </li>
               <li className="flex items-start gap-2">
                 <svg
@@ -110,10 +110,10 @@ export function Footer() {
                   />
                 </svg>
                 <a
-                  href="tel:+40700000000"
+                  href="tel:+40754497243"
                   className="hover:text-amber-400 transition-colors"
                 >
-                  +40 700 000 000
+                  +40 754 497 243
                 </a>
               </li>
               <li className="flex items-start gap-2">
@@ -131,10 +131,10 @@ export function Footer() {
                   />
                 </svg>
                 <a
-                  href="mailto:contact@laser-craft.ro"
+                  href="mailto:lasercraft.contact@gmail.com"
                   className="hover:text-amber-400 transition-colors"
                 >
-                  contact@laser-craft.ro
+                  lasercraft.contact@gmail.com
                 </a>
               </li>
             </ul>

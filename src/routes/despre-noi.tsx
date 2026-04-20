@@ -9,7 +9,7 @@ export const Route = createFileRoute('/despre-noi')({
       description:
         'Descoperiți povestea LaserCraft — peste 10 ani de experiență în servicii profesionale de tăiere și gravare laser în România. 2000+ proiecte realizate.',
       keywords:
-        'despre LaserCraft, echipa laser craft, experienta taiere laser, firma taiere laser București, servicii laser România',
+        'despre LaserCraft, echipa laser craft, experienta taiere laser, firma taiere laser Craiova, servicii laser România',
       image: '/img/og/og-despre-noi.png',
       url: '/despre-noi',
     }),
