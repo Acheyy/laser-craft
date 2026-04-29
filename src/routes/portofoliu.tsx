@@ -27,6 +27,22 @@ const categories = [
 
 const projects = [
   {
+    title: 'Decor Eveniment — Roselle',
+    category: 'Decorațiuni',
+    description:
+      'Litere decorative tăiate laser și montate volumetric pe panouri arcuite — decor de eveniment pentru locația Roselle.',
+    material: 'Acril alb',
+    image: '/img/products/product-letters-roselle-1.jpg',
+  },
+  {
+    title: 'Litere Volumetrice — „Nuntă de Probă"',
+    category: 'Decorațiuni',
+    description:
+      'Litere 3D tăiate laser, montate pe panou cream pentru un decor elegant de eveniment.',
+    material: 'Acril alb',
+    image: '/img/products/product-letters-roselle-2.jpg',
+  },
+  {
     title: 'Plăcuță Adresă — Str. Zorilor 35',
     category: 'Signalistică',
     description:

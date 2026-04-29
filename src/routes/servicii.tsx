@@ -122,10 +122,17 @@ const materials = [
   { name: 'Sticlă (gravură)', category: 'Mineral' },
 ]
 
+const plaquePricing = [
+  { size: '30 × 20 cm', area: '600 cm²', price: '70 RON' },
+  { size: '30 × 15 cm', area: '450 cm²', price: '65 RON' },
+  { size: '25 × 15 cm', area: '375 cm²', price: '60 RON' },
+  { size: '20 × 15 cm', area: '300 cm²', price: '55 RON' },
+]
+
 function ServiciiPage() {
   return (
     <>
-      <section className="bg-slate-900 py-20 sm:py-28">
+      <section className="bg-slate-900 py-16 sm:py-24">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
@@ -134,10 +141,197 @@ function ServiciiPage() {
                 Noastre
               </span>
             </h1>
-            <p className="mt-6 text-lg text-zinc-400 leading-relaxed">
+            <p className="mt-6 text-base sm:text-lg text-zinc-400 leading-relaxed">
               Oferim soluții complete de tăiere și gravare laser pentru orice
               tip de proiect — de la piese unice la producție de serie.
             </p>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-12 sm:py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-700 text-xs font-semibold uppercase tracking-wider mb-3 sm:mb-4">
+              <svg
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={2}
+                className="w-3.5 h-3.5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"
+                />
+              </svg>
+              Prețuri transparente
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-3 sm:mb-4">
+              Tarifele noastre
+            </h2>
+            <p className="text-base sm:text-lg text-zinc-600">
+              Două opțiuni simple, prețuri fixe. Alege pachetul standard pentru
+              plăcuțe sau calculează pe suprafață pentru proiecte custom.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <div className="bg-white rounded-2xl p-5 sm:p-8 border border-zinc-200 flex flex-col">
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold uppercase tracking-wider text-amber-600 mb-1.5 sm:mb-2">
+                    Pachete standard
+                  </div>
+                  <h3 className="text-lg sm:text-2xl font-bold text-zinc-900">
+                    Plăcuțe de adresă
+                  </h3>
+                </div>
+                <div className="flex w-10 h-10 sm:w-12 sm:h-12 bg-amber-500/10 text-amber-600 rounded-xl items-center justify-center shrink-0">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 8.25H7.5a2.25 2.25 0 00-2.25 2.25v9a2.25 2.25 0 002.25 2.25h9a2.25 2.25 0 002.25-2.25v-9a2.25 2.25 0 00-2.25-2.25H15M9 12l2 2 4-4m-7.5 9.5h9"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-sm text-zinc-600 mb-5 sm:mb-6">
+                Mărimi standard în acril. Tăiere și gravare incluse.
+              </p>
+
+              <div className="space-y-2 flex-1">
+                {plaquePricing.map((item) => (
+                  <div
+                    key={item.size}
+                    className="flex items-center justify-between gap-3 px-4 py-3 sm:p-4 rounded-xl bg-zinc-50 border border-zinc-200 hover:border-zinc-300 transition-colors"
+                  >
+                    <div className="flex items-baseline gap-2 sm:gap-3 min-w-0">
+                      <div className="font-semibold text-zinc-900 text-base sm:text-lg whitespace-nowrap">
+                        {item.size}
+                      </div>
+                      <div className="text-xs sm:text-sm text-zinc-500 whitespace-nowrap">
+                        {item.area}
+                      </div>
+                    </div>
+                    <div className="font-bold text-zinc-900 text-base sm:text-lg whitespace-nowrap">
+                      {item.price}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <p className="mt-5 sm:mt-6 text-xs text-zinc-500 leading-relaxed">
+                * Prețurile includ tăierea și gravarea textului. Pentru logo
+                sau design custom, contactează-ne pentru o ofertă.
+              </p>
+            </div>
+
+            <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-5 sm:p-8 shadow-xl flex flex-col">
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="min-w-0">
+                  <div className="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-1.5 sm:mb-2">
+                    Proiecte custom
+                  </div>
+                  <h3 className="text-lg sm:text-2xl font-bold text-white">
+                    Tăiere & gravură pe acril
+                  </h3>
+                </div>
+                <div className="flex w-10 h-10 sm:w-12 sm:h-12 bg-amber-500/10 text-amber-400 rounded-xl items-center justify-center shrink-0">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                    className="w-5 h-5 sm:w-6 sm:h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"
+                    />
+                  </svg>
+                </div>
+              </div>
+              <p className="text-sm text-zinc-400 mb-5 sm:mb-6">
+                Orice formă, orice design — tăiat sau gravat în acril, calculat
+                pe suprafață.
+              </p>
+
+              <div className="bg-white/5 border border-white/10 rounded-xl p-5 sm:p-6 mb-5 sm:mb-6">
+                <div className="flex items-baseline gap-2 flex-wrap">
+                  <span className="text-4xl sm:text-5xl font-extrabold tracking-tight">
+                    0.09
+                  </span>
+                  <span className="text-base sm:text-lg text-zinc-300 font-medium">
+                    RON / cm²
+                  </span>
+                </div>
+                <div className="mt-3 text-xs text-zinc-400">
+                  Exemplu: 100 × 50 mm (50 cm²) ≈{' '}
+                  <span className="text-amber-400 font-semibold">4.5 RON</span>
+                </div>
+              </div>
+
+              <ul className="space-y-2.5 sm:space-y-3 text-sm text-zinc-300 flex-1">
+                <li className="flex items-start gap-2">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    className="w-4 h-4 text-amber-400 shrink-0 mt-0.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                  Forme și dimensiuni la alegere
+                </li>
+                <li className="flex items-start gap-2">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    className="w-4 h-4 text-amber-400 shrink-0 mt-0.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                  Acril transparent, colorat sau oglindă
+                </li>
+                <li className="flex items-start gap-2">
+                  <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth={2}
+                    className="w-4 h-4 text-amber-400 shrink-0 mt-0.5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 12.75l6 6 9-13.5"
+                    />
+                  </svg>
+                  Reduceri pentru cantități mari
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
