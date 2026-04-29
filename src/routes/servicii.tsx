@@ -123,10 +123,10 @@ const materials = [
 ]
 
 const plaquePricing = [
-  { size: '30 × 20 cm', area: '600 cm²', price: '70 RON' },
-  { size: '30 × 15 cm', area: '450 cm²', price: '65 RON' },
-  { size: '25 × 15 cm', area: '375 cm²', price: '60 RON' },
-  { size: '20 × 15 cm', area: '300 cm²', price: '55 RON' },
+  { size: '30 × 20 cm', price: '70 RON' },
+  { size: '30 × 15 cm', price: '65 RON' },
+  { size: '25 × 15 cm', price: '60 RON' },
+  { size: '20 × 15 cm', price: '55 RON' },
 ]
 
 function ServiciiPage() {
@@ -205,7 +205,8 @@ function ServiciiPage() {
                 </div>
               </div>
               <p className="text-sm text-zinc-600 mb-5 sm:mb-6">
-                Mărimi standard în acril. Tăiere și gravare incluse.
+                Mărimi standard din acril, construcție pe 2 straturi (fundal +
+                litere/cifre aplicate).
               </p>
 
               <div className="space-y-2 flex-1">
@@ -214,13 +215,8 @@ function ServiciiPage() {
                     key={item.size}
                     className="flex items-center justify-between gap-3 px-4 py-3 sm:p-4 rounded-xl bg-zinc-50 border border-zinc-200 hover:border-zinc-300 transition-colors"
                   >
-                    <div className="flex items-baseline gap-2 sm:gap-3 min-w-0">
-                      <div className="font-semibold text-zinc-900 text-base sm:text-lg whitespace-nowrap">
-                        {item.size}
-                      </div>
-                      <div className="text-xs sm:text-sm text-zinc-500 whitespace-nowrap">
-                        {item.area}
-                      </div>
+                    <div className="font-semibold text-zinc-900 text-base sm:text-lg whitespace-nowrap">
+                      {item.size}
                     </div>
                     <div className="font-bold text-zinc-900 text-base sm:text-lg whitespace-nowrap">
                       {item.price}
@@ -230,8 +226,9 @@ function ServiciiPage() {
               </div>
 
               <p className="mt-5 sm:mt-6 text-xs text-zinc-500 leading-relaxed">
-                * Prețurile includ tăierea și gravarea textului. Pentru logo
-                sau design custom, contactează-ne pentru o ofertă.
+                * Prețurile includ ambele straturi de acril, tăierea și
+                gravarea textului. Pentru logo sau design custom,
+                contactează-ne pentru o ofertă.
               </p>
             </div>
 
