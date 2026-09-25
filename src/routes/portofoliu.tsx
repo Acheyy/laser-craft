@@ -1,10 +1,20 @@
-import { useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
-import { Link } from '@tanstack/react-router'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import { OrderBlock } from '~/components/Contact'
+import { Icon } from '~/components/Icon'
+import { Highlight, PageHero } from '~/components/PageHero'
+import { IdeaCard } from '~/components/ProductCards'
 import {
   ResponsiveImage,
+  imageMeta,
   type ImageName,
 } from '~/components/ResponsiveImage'
+import { Section, textLink } from '~/components/ui'
+import { SHOW_CHRISTMAS_PROMO } from '~/data/business'
+import {
+  PORTFOLIO_WHATSAPP_MESSAGE,
+  getProduct,
+  type ProductPath,
+} from '~/data/products'
 import { breadcrumbs, seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/portofoliu')({
@@ -21,476 +31,467 @@ export const Route = createFileRoute('/portofoliu')({
   }),
 })
 
-const categories = [
-  'Toate',
-  'Plăcuțe și semnalistică',
-  'Ornamente de Crăciun',
-  'Cadouri personalizate',
-  'Gravură',
-  'Decorațiuni',
-]
+const WHATSAPP_MESSAGE = PORTFOLIO_WHATSAPP_MESSAGE
 
 type ProjectLink = {
-  to:
-    | '/placute-adresa'
-    | '/litere-volumetrice'
-    | '/gravura-laser-craiova'
-    | '/globuri-craciun-personalizate'
-    | '/cadouri-personalizate'
-  label: string
+  to: ProductPath | '/servicii'
+  hash?: string
 }
 
-const plaqueLink: ProjectLink = {
-  to: '/placute-adresa',
-  label: 'Plăcuțe de adresă',
-}
-const lettersLink: ProjectLink = {
-  to: '/litere-volumetrice',
-  label: 'Litere volumetrice',
-}
-const engravingLink: ProjectLink = {
-  to: '/gravura-laser-craiova',
-  label: 'Gravură laser',
-}
-const christmasLink: ProjectLink = {
-  to: '/globuri-craciun-personalizate',
-  label: 'Globuri de Crăciun personalizate',
-}
-const giftsLink: ProjectLink = {
-  to: '/cadouri-personalizate',
-  label: 'Cadouri personalizate',
-}
-
-const projects: Array<{
+type Project = {
   title: string
-  category: string
-  description: string
   material: string
+  // Only when it adds a fact the title and material don't already give
+  description?: string
   image: ImageName
   alt: string
+  // Overrides the category's landing page
   link?: ProjectLink
-}> = [
+}
+
+type Category = {
+  id: string
+  chip: string
+  title: string
+  link: { to: ProductPath; label: string }
+  // Question on the WhatsApp tile that fills the grid's empty slots
+  idea?: string
+  seasonal?: boolean
+  // masonry: CSS columns for categories that mix square, landscape and
+  // portrait photos, so each keeps its own aspect ratio without gaps.
+  // feature: the first (portrait) photo spans two rows beside the others.
+  layout?: 'masonry' | 'feature'
+  projects: Project[]
+}
+
+const categories: Category[] = [
   {
-    title: 'Decor Eveniment — Roselle',
-    category: 'Decorațiuni',
-    description:
-      'Litere decorative din plexiglas tăiate laser și montate volumetric pe panouri arcuite — decor de eveniment pentru locația Roselle.',
-    material: 'Plexiglas alb',
-    image: '/img/products/litere-volumetrice-decor-eveniment-1',
-    alt: 'Litere volumetrice din plexiglas alb montate pe panouri arcuite – decor de eveniment Roselle',
-    link: lettersLink,
+    id: 'placute',
+    chip: 'Plăcuțe de adresă',
+    title: 'Plăcuțe de adresă și semnalistică',
+    link: { to: '/placute-adresa', label: 'Prețuri plăcuțe de adresă' },
+    layout: 'masonry',
+    // Order balances the columns: square + 4:3 in each of the first two
+    // desktop columns, portrait + landscape in the third.
+    projects: [
+      {
+        title: 'Plăcuță de adresă — Str. Zorilor 35',
+        description: 'Cifre aurii volumetrice, montaj cu distanțiere inox.',
+        material: 'Plexiglas negru + auriu',
+        image: '/img/products/placuta-adresa-plexiglas-negru-auriu-1',
+        alt: 'Plăcuță de adresă din plexiglas negru cu litere și cifre aurii volumetrice, prinsă cu distanțiere din inox',
+      },
+      {
+        title: 'Plăcuță de adresă — Str. Mihail Sadoveanu 31G',
+        description: 'Un proiect special: pictograma casei și textul decupate laser.',
+        material: 'Oțel vopsit mat',
+        image: '/img/products/placuta-adresa-metal-decupat',
+        alt: 'Plăcuță de adresă din oțel vopsit negru mat, decupată laser, cu siluetă de casă și text personalizat',
+      },
+      {
+        title: 'Plăcuță de adresă — Str. Caisului 36',
+        description: 'Format orizontal, cu distanțiere aurii.',
+        material: 'Plexiglas negru + auriu',
+        image: '/img/products/placuta-adresa-plexiglas-negru-auriu-2',
+        alt: 'Plăcuță de adresă orizontală din plexiglas negru lucios cu cifre aurii și distanțiere aurii',
+      },
+      {
+        title: 'Plăcuță de adresă — Str. Gloriei 1',
+        description: 'Pictogramă de casă și text auriu, montaj cu distanțiere.',
+        material: 'Plexiglas negru + auriu',
+        image: '/img/products/placuta-adresa-plexiglas-negru-auriu-3',
+        alt: 'Plăcuță de adresă din plexiglas negru lucios cu pictogramă de casă și text auriu',
+      },
+      {
+        title: 'Număr de casă cu model floral',
+        material: 'Plexiglas negru',
+        image: '/img/products/numar-casa-plexiglas-negru-model-floral',
+        alt: 'Număr de casă 32 din plexiglas negru, cu cifre decupate și model floral tăiat laser',
+      },
+      {
+        title: 'Semn luminos LED din plexiglas',
+        description: 'Logo gravat laser și iluminare LED pe margine.',
+        material: 'Plexiglas transparent 8 mm',
+        image: '/img/products/semn-luminos-plexiglas-led',
+        alt: 'Semn luminos LED din plexiglas transparent cu logo gravat laser',
+        link: { to: '/taiere-laser-plexiglas' },
+      },
+    ],
   },
   {
-    title: 'Litere Volumetrice — „Nuntă de Probă"',
-    category: 'Decorațiuni',
-    description:
-      'Litere 3D tăiate laser, montate pe panou cream pentru un decor elegant de eveniment.',
-    material: 'Plexiglas alb',
-    image: '/img/products/litere-volumetrice-decor-eveniment-2',
-    alt: 'Litere volumetrice din plexiglas alb „Nuntă de probă” pe panou crem, cu aranjament floral',
-    link: lettersLink,
+    id: 'globuri',
+    chip: 'Globuri de Crăciun',
+    title: 'Globuri și ornamente de Crăciun',
+    link: {
+      to: '/globuri-craciun-personalizate',
+      label: 'Globuri de Crăciun personalizate',
+    },
+    idea: 'Vreți un glob cu alt nume sau model?',
+    seasonal: true,
+    projects: [
+      {
+        title: 'Glob de Crăciun cu nume — „Cristina”',
+        material: 'Plexiglas roșu',
+        image: '/img/products/glob-craciun-cu-nume-personalizat',
+        alt: 'Glob de Crăciun personalizat din plexiglas roșu cu numele „Cristina”, Moș Crăciun în sanie cu reni și fulgi de nea, tăiat laser',
+      },
+      {
+        title: 'Glob personalizat „Craiova 26”',
+        material: 'Plexiglas verde',
+        image: '/img/products/glob-craciun-personalizat-craiova',
+        alt: 'Glob de Crăciun din plexiglas verde personalizat cu textul „Craiova 26”, cu sanie, reni și fulgi de nea decupați laser',
+      },
+      {
+        title: 'Glob cu sat de iarnă',
+        material: 'Plexiglas negru',
+        image: '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
+        alt: 'Glob de Crăciun din plexiglas negru cu sat de iarnă decupat laser: case, biserică, brazi și stea în vârf',
+      },
+      {
+        title: 'Glob cu sanie și ren',
+        material: 'Plexiglas verde',
+        image: '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
+        alt: 'Glob de Crăciun din plexiglas verde cu Moș Crăciun în sanie trasă de un ren, stele și brazi decupați laser',
+      },
+      {
+        title: 'Bastoane de Crăciun',
+        material: 'Plexiglas roșu',
+        image: '/img/products/ornament-craciun-bastoane-rosii',
+        alt: 'Ornament de Crăciun din plexiglas roșu cu două bastoane legate cu fundă și fulgi de nea decupați laser',
+      },
+      {
+        title: 'Fulg de nea',
+        material: 'Plexiglas alb',
+        image: '/img/products/ornament-craciun-fulg-de-nea-alb',
+        alt: 'Ornament fulg de nea din plexiglas alb tăiat laser, cu orificiu pentru agățare în brad',
+      },
+      {
+        title: 'Inimă geometrică',
+        material: 'Plexiglas roz',
+        image: '/img/products/ornament-craciun-inima-geometrica-roz',
+        alt: 'Ornament inimă geometrică din plexiglas roz tăiat laser, agățat cu o panglică roșie',
+      },
+      {
+        title: 'Spiriduș pe lună',
+        material: 'Plexiglas verde',
+        image: '/img/products/ornament-craciun-spiridus-luna',
+        alt: 'Ornament de Crăciun din plexiglas verde cu un spiriduș pe o semilună și stele decupate laser',
+      },
+      // Last: its photo is less tall than the 3:4 ones
+      {
+        title: 'Ornament „Crăciun Fericit”',
+        material: 'Plexiglas verde',
+        image: '/img/products/glob-craciun-fericit-plexiglas-verde',
+        alt: 'Ornament rotund de Crăciun din plexiglas verde cu textul „Crăciun Fericit” și fulgi de nea, tăiat laser',
+      },
+    ],
   },
   {
-    title: 'Plăcuță Adresă — Str. Zorilor 35',
-    category: 'Plăcuțe și semnalistică',
-    description:
-      'Plăcuță elegantă din plexiglas negru cu litere și cifre aurii volumetrice, montaj cu distanțiere inox.',
-    material: 'Plexiglas negru + auriu',
-    image: '/img/products/placuta-adresa-plexiglas-negru-auriu-1',
-    alt: 'Plăcuță de adresă din plexiglas negru cu litere și cifre aurii volumetrice',
-    link: plaqueLink,
+    id: 'cadouri',
+    chip: 'Cadouri',
+    title: 'Cadouri personalizate',
+    link: { to: '/cadouri-personalizate', label: 'Brelocuri și cadouri cu nume' },
+    idea: 'Aveți o idee de cadou personalizat?',
+    projects: [
+      {
+        title: 'Breloc cu nume pe 2 straturi — „Jonut”',
+        material: 'Plexiglas alb + roz',
+        image: '/img/products/breloc-nume-plexiglas-doua-straturi',
+        alt: 'Breloc cu numele „Jonut” din plexiglas pe două straturi, cu litere albe aplicate pe fundal roz, ținut în palmă',
+      },
+      {
+        title: 'Breloc gravat cu mesaj',
+        material: 'Plexiglas negru',
+        image: '/img/products/breloc-gravat-mesaj-personalizat',
+        alt: 'Breloc rotund din plexiglas negru gravat laser cu mesajul „you are INDISPENSABLE” și un personaj zâmbitor',
+      },
+      {
+        title: 'Decor mamă și copil',
+        description: 'Pe suport, în două culori, cu trandafiri gravați.',
+        material: 'Plexiglas magenta + galben',
+        image: '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
+        alt: 'Decor din plexiglas magenta și galben cu siluetele unei mame și a unui copil cu balon, pe suport',
+      },
+      {
+        title: 'Icoană decorativă',
+        material: 'Plexiglas negru + alb',
+        image: '/img/products/icoana-isus-plexiglas-negru-cu-suport',
+        alt: 'Icoană decorativă cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport pentru masă sau raft',
+      },
+      {
+        title: 'Decor „LOVE” cu pisici',
+        material: 'Plexiglas roz',
+        image: '/img/products/decor-love-pisici-plexiglas-roz',
+        alt: 'Decor „LOVE” din plexiglas roz tăiat laser, cu siluete de pisici integrate în litere',
+      },
+      {
+        title: 'Pisicuță-înger',
+        material: 'Plexiglas roz',
+        image: '/img/products/ornament-pisica-inger-plexiglas-roz',
+        alt: 'Pisicuță-înger din plexiglas roz, așezată pe un nor, cu aureolă, aripi și detalii conturate în negru',
+      },
+      {
+        title: 'Os pentru iubitorii de câini',
+        material: 'Plexiglas roz',
+        image: '/img/products/ornament-os-caine-plexiglas-roz',
+        alt: 'Os din plexiglas roz cu orificiu în formă de inimă, agățat cu o panglică roșie',
+      },
+    ],
   },
   {
-    title: 'Plăcuță Adresă — Str. Caisului 36',
-    category: 'Plăcuțe și semnalistică',
-    description:
-      'Plăcuță de adresă orizontală din plexiglas negru lucios, cu cifre aurii și distanțiere aurii.',
-    material: 'Plexiglas negru + auriu',
-    image: '/img/products/placuta-adresa-plexiglas-negru-auriu-2',
-    alt: 'Plăcuță de adresă orizontală din plexiglas negru lucios cu cifre aurii',
-    link: plaqueLink,
+    id: 'gravura',
+    chip: 'Gravură',
+    title: 'Gravură laser',
+    link: { to: '/gravura-laser-craiova', label: 'Gravură laser în Craiova' },
+    idea: 'Aveți o idee de gravură?',
+    projects: [
+      {
+        title: 'Trofee personalizate',
+        description: 'Gravate laser, pentru competiții sportive.',
+        material: 'Plexiglas transparent 10 mm',
+        image: '/img/products/trofeu-plexiglas-gravat',
+        alt: 'Trofeu din plexiglas gravat laser cu logo și text, pe bază neagră',
+      },
+      {
+        title: 'Set de suporturi de pahar gravate',
+        description: '4 bucăți, cu modele botanice și geometrice.',
+        material: 'Lemn de nuc',
+        image: '/img/products/suporturi-pahar-lemn-gravate',
+        alt: 'Set de 4 suporturi de pahar rotunde din lemn, gravate laser cu modele botanice și geometrice',
+      },
+      {
+        title: 'Jurnal din piele personalizat',
+        description: 'Copertă gravată laser, cu monogramă.',
+        material: 'Piele naturală',
+        image: '/img/products/jurnal-piele-gravat',
+        alt: 'Copertă de jurnal din piele naturală gravată laser cu motiv botanic și monogramă',
+      },
+    ],
   },
   {
-    title: 'Plăcuță Adresă — Mihail Sadoveanu 31G',
-    category: 'Plăcuțe și semnalistică',
-    description:
-      'Plăcuță din metal vopsit mat cu decupaj laser — icon casă și text personalizat.',
-    material: 'Oțel vopsit mat',
-    image: '/img/products/placuta-adresa-metal-decupat',
-    alt: 'Plăcuță de adresă din metal vopsit negru mat, decupată laser, cu siluetă de casă',
-    link: plaqueLink,
-  },
-  {
-    title: 'Plăcuță Adresă — Strada Gloriei Nr. 1',
-    category: 'Plăcuțe și semnalistică',
-    description:
-      'Plăcuță din plexiglas negru lucios cu icon casă și text auriu, montaj cu distanțiere.',
-    material: 'Plexiglas negru + auriu',
-    image: '/img/products/placuta-adresa-plexiglas-negru-auriu-3',
-    alt: 'Plăcuță de adresă din plexiglas negru lucios cu icon casă și text auriu',
-    link: plaqueLink,
-  },
-  {
-    title: 'Număr de Casă cu Model Floral',
-    category: 'Plăcuțe și semnalistică',
-    description:
-      'Număr de casă din plexiglas negru, cu cifrele decupate și un model floral decorativ tăiat laser.',
-    material: 'Plexiglas negru',
-    image: '/img/products/numar-casa-plexiglas-negru-model-floral',
-    alt: 'Număr de casă 32 din plexiglas negru cu model floral decupat laser',
-    link: plaqueLink,
-  },
-  {
-    title: 'Glob de Crăciun cu Nume — „Cristina”',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Glob roșu personalizat cu nume, cu Moș Crăciun în sanie, reni și fulgi de nea, tăiat laser.',
-    material: 'Plexiglas roșu',
-    image: '/img/products/glob-craciun-cu-nume-personalizat',
-    alt: 'Glob de Crăciun roșu din plexiglas personalizat cu numele Cristina, cu sanie și reni',
-    link: christmasLink,
-  },
-  {
-    title: 'Glob Personalizat „Craiova 26”',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Glob verde personalizat cu numele orașului și anul, cu sanie, reni și fulgi de nea.',
-    material: 'Plexiglas verde',
-    image: '/img/products/glob-craciun-personalizat-craiova',
-    alt: 'Glob de Crăciun verde din plexiglas cu textul Craiova 26, sanie și reni',
-    link: christmasLink,
-  },
-  {
-    title: 'Ornament „Crăciun Fericit”',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Ornament rotund cu mesajul „Crăciun Fericit” și fulgi de nea, gata de agățat în brad.',
-    material: 'Plexiglas verde',
-    image: '/img/products/glob-craciun-fericit-plexiglas-verde',
-    alt: 'Ornament de Crăciun rotund din plexiglas verde cu textul Crăciun Fericit',
-    link: christmasLink,
-  },
-  {
-    title: 'Glob cu Sat de Iarnă',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Glob decupat laser cu un sat de iarnă — case, biserică și brad — și o stea în vârf.',
-    material: 'Plexiglas negru',
-    image: '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
-    alt: 'Glob de Crăciun din plexiglas negru cu sat de iarnă, biserică și brad',
-    link: christmasLink,
-  },
-  {
-    title: 'Glob cu Sanie și Reni',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Glob cu sania trasă de reni pe cerul înstelat, deasupra unei păduri de brazi.',
-    material: 'Plexiglas verde',
-    image: '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
-    alt: 'Glob de Crăciun din plexiglas verde cu sanie, reni și brazi',
-    link: christmasLink,
-  },
-  {
-    title: 'Bastoane de Crăciun',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Ornament cu două bastoane de Crăciun, fundă și fulgi de nea.',
-    material: 'Plexiglas roșu',
-    image: '/img/products/ornament-craciun-bastoane-rosii',
-    alt: 'Ornament de Crăciun din plexiglas roșu cu două bastoane și fundă',
-    link: christmasLink,
-  },
-  {
-    title: 'Fulg de Nea',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Fulg de nea decupat laser, cu detalii fine.',
-    material: 'Plexiglas alb',
-    image: '/img/products/ornament-craciun-fulg-de-nea-alb',
-    alt: 'Fulg de nea din plexiglas alb tăiat laser',
-    link: christmasLink,
-  },
-  {
-    title: 'Inimă Geometrică',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Ornament în formă de inimă cu model geometric, agățat cu panglică roșie.',
-    material: 'Plexiglas roz',
-    image: '/img/products/ornament-craciun-inima-geometrica-roz',
-    alt: 'Ornament inimă geometrică din plexiglas roz cu panglică roșie',
-    link: christmasLink,
-  },
-  {
-    title: 'Spiriduș pe Lună',
-    category: 'Ornamente de Crăciun',
-    description:
-      'Ornament cu un spiriduș pe o semilună decorată cu stele.',
-    material: 'Plexiglas verde',
-    image: '/img/products/ornament-craciun-spiridus-luna',
-    alt: 'Ornament de Crăciun din plexiglas verde cu spiriduș pe semilună și stele',
-    link: christmasLink,
-  },
-  {
-    title: 'Breloc cu Nume pe 2 Straturi — „Jonut”',
-    category: 'Cadouri personalizate',
-    description:
-      'Nume cu litere albe aplicate pe un fundal roz, cu orificiu pentru inel de breloc.',
-    material: 'Plexiglas alb + roz',
-    image: '/img/products/breloc-nume-plexiglas-doua-straturi',
-    alt: 'Breloc cu numele Jonut din plexiglas alb pe fundal roz, pe două straturi',
-    link: giftsLink,
-  },
-  {
-    title: 'Breloc Gravat cu Mesaj',
-    category: 'Cadouri personalizate',
-    description:
-      'Breloc rotund gravat laser cu mesajul „you are INDISPENSABLE”, un desen amuzant și inimioare.',
-    material: 'Plexiglas negru',
-    image: '/img/products/breloc-gravat-mesaj-personalizat',
-    alt: 'Breloc rotund din plexiglas negru gravat laser cu mesajul you are indispensable',
-    link: giftsLink,
-  },
-  {
-    title: 'Decor Mamă și Copil',
-    category: 'Cadouri personalizate',
-    description:
-      'Decor pe suport, în două culori, cu siluetele unei mame și a unui copil cu balon și trandafiri gravați.',
-    material: 'Plexiglas roz + galben',
-    image: '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
-    alt: 'Decor din plexiglas roz și galben cu siluetele unei mame și a unui copil cu balon, pe suport',
-    link: giftsLink,
-  },
-  {
-    title: 'Icoană cu Suport',
-    category: 'Cadouri personalizate',
-    description:
-      'Icoană decorativă cu chipul lui Isus, decupată laser pe fundal alb, cu suport pentru așezare.',
-    material: 'Plexiglas negru + alb',
-    image: '/img/products/icoana-isus-plexiglas-negru-cu-suport',
-    alt: 'Icoană cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport',
-    link: giftsLink,
-  },
-  {
-    title: 'Decor „LOVE” cu Pisici',
-    category: 'Cadouri personalizate',
-    description:
-      'Inscripție „LOVE” cu siluete de pisici integrate în litere.',
-    material: 'Plexiglas roz',
-    image: '/img/products/decor-love-pisici-plexiglas-roz',
-    alt: 'Decor LOVE din plexiglas roz cu siluete de pisici',
-    link: giftsLink,
-  },
-  {
-    title: 'Pisicuță-Înger',
-    category: 'Cadouri personalizate',
-    description:
-      'Pisicuță cu aripi și aureolă, pe un nor, cu detalii conturate.',
-    material: 'Plexiglas roz',
-    image: '/img/products/ornament-pisica-inger-plexiglas-roz',
-    alt: 'Pisicuță înger din plexiglas roz cu aripi și aureolă, pe nor',
-    link: giftsLink,
-  },
-  {
-    title: 'Os pentru Cățel',
-    category: 'Cadouri personalizate',
-    description:
-      'Ornament în formă de os, agățat cu panglică roșie — o idee pentru iubitorii de câini.',
-    material: 'Plexiglas roz',
-    image: '/img/products/ornament-os-caine-plexiglas-roz',
-    alt: 'Ornament în formă de os din plexiglas roz cu panglică roșie',
-    link: giftsLink,
-  },
-  {
-    title: 'Trofee Personalizate',
-    category: 'Gravură',
-    description: 'Trofee din plexiglas cu gravură laser pentru competiții sportive',
-    material: 'Plexiglas transparent 10mm',
-    image: '/img/products/trofeu-plexiglas-gravat',
-    alt: 'Trofeu din plexiglas transparent gravat laser',
-    link: engravingLink,
-  },
-  {
-    title: 'Tablouri Laser Cut',
-    category: 'Decorațiuni',
-    description: 'Tablouri artistice din lemn realizate prin tăiere laser',
-    material: 'MDF 6mm',
-    image: '/img/products/tablou-lemn-taiat-laser',
-    alt: 'Tablou decorativ din MDF tăiat laser',
-  },
-  {
-    title: 'Set Coastere Gravate',
-    category: 'Gravură',
-    description:
-      'Set de 4 coastere din lemn cu modele botanice și geometrice gravate laser.',
-    material: 'Lemn de nuc',
-    image: '/img/products/suporturi-pahar-lemn-gravate',
-    alt: 'Set de 4 suporturi de pahar din lemn de nuc gravate laser',
-    link: engravingLink,
-  },
-  {
-    title: 'Jurnal Piele Personalizat',
-    category: 'Gravură',
-    description:
-      'Copertă de jurnal din piele naturală cu gravură laser — artă botanică și monogramă.',
-    material: 'Piele naturală',
-    image: '/img/products/jurnal-piele-gravat',
-    alt: 'Copertă de jurnal din piele naturală gravată laser',
-    link: engravingLink,
-  },
-  {
-    title: 'Semn LED Acril Business',
-    category: 'Plăcuțe și semnalistică',
-    description:
-      'Semn de business din plexiglas edge-lit cu logo gravat laser, iluminare LED.',
-    material: 'Plexiglas transparent 8mm',
-    image: '/img/products/semn-luminos-plexiglas-led',
-    alt: 'Semn luminos LED din plexiglas transparent cu logo gravat laser',
+    id: 'decoratiuni',
+    chip: 'Litere și decor',
+    title: 'Litere volumetrice și decorațiuni',
+    link: { to: '/litere-volumetrice', label: 'Litere volumetrice pentru evenimente' },
+    idea: 'Pregătiți o nuntă sau un eveniment?',
+    layout: 'feature',
+    projects: [
+      {
+        title: 'Decor de eveniment — Roselle',
+        description: 'Litere montate volumetric pe panouri arcuite.',
+        material: 'Plexiglas alb',
+        image: '/img/products/litere-volumetrice-decor-eveniment-1',
+        alt: 'Panouri arcuite cu litere volumetrice din plexiglas alb „Nuntă de probă” și „Roselle”, lângă un aranjament floral',
+      },
+      {
+        title: 'Litere volumetrice — „Nuntă de probă”',
+        material: 'Plexiglas alb',
+        image: '/img/products/litere-volumetrice-decor-eveniment-2',
+        alt: 'Litere 3D din plexiglas alb „Nuntă de probă” tăiate laser, montate pe panou crem, cu flori albe în prim-plan',
+      },
+      {
+        title: 'Tablouri decupate laser',
+        material: 'MDF 6 mm',
+        image: '/img/products/tablou-lemn-taiat-laser',
+        alt: 'Tablou decorativ din MDF tăiat laser',
+        link: { to: '/servicii', hash: 'taiere-laser-lemn' },
+      },
+    ],
   },
 ]
 
+// Christmas ornaments go first while the promo is on (same rule as the menu).
+const sections = SHOW_CHRISTMAS_PROMO
+  ? [...categories.filter((c) => c.seasonal), ...categories.filter((c) => !c.seasonal)]
+  : categories
+
 function PortofoliuPage() {
-  const [activeCategory, setActiveCategory] = useState('Toate')
-
-  const filteredProjects =
-    activeCategory === 'Toate'
-      ? projects
-      : projects.filter((p) => p.category === activeCategory)
-
   return (
     <>
-      <section className="bg-slate-900 py-20 sm:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Portofoliu: lucrări de tăiere și gravură{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-                laser
-              </span>
-            </h1>
-            <p className="mt-6 text-lg text-zinc-400 leading-relaxed">
-              Explorați o selecție din proiectele noastre recente din atelierul
-              din Craiova — plăcuțe de adresă, globuri de Crăciun personalizate,
-              brelocuri cu nume, litere volumetrice, decor pentru evenimente și
-              gravuri. Fiecare lucrare reflectă angajamentul nostru pentru
-              calitate și precizie.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 sm:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap gap-2 mb-12 justify-center">
-            {categories.map((category) => (
-              <button
-                key={category}
-                type="button"
-                aria-pressed={category === activeCategory}
-                onClick={() => setActiveCategory(category)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  category === activeCategory
-                    ? 'bg-amber-500 text-white'
-                    : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
-                }`}
-              >
-                {category}
-              </button>
-            ))}
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project, index) => (
-              <div
-                key={project.title}
-                className="group bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/5 transition-all duration-300"
-              >
-                <div className="aspect-[4/3] bg-gradient-to-br from-slate-100 to-zinc-100 overflow-hidden">
-                  {project.image ? (
-                    <ResponsiveImage
-                      name={project.image}
-                      alt={project.alt}
-                      sizes="(min-width: 1280px) 395px, (min-width: 1024px) 31vw, (min-width: 640px) 48vw, 100vw"
-                      priority={index === 0}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-zinc-400 text-center p-6">
-                      <div>
-                        <svg
-                          viewBox="0 0 24 24"
-                          fill="none"
-                          stroke="currentColor"
-                          strokeWidth={1}
-                          className="w-12 h-12 mx-auto mb-2 text-zinc-300"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909M3.75 21h16.5a1.5 1.5 0 001.5-1.5V4.5a1.5 1.5 0 00-1.5-1.5H3.75a1.5 1.5 0 00-1.5 1.5v15a1.5 1.5 0 001.5 1.5z"
-                          />
-                        </svg>
-                        <p className="text-xs">Foto proiect</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-                <div className="p-6">
-                  <div className="text-xs text-amber-600 font-semibold uppercase tracking-wider mb-2">
-                    {project.category}
-                  </div>
-                  <h3 className="text-lg font-semibold text-zinc-900 mb-2">
-                    {project.title}
-                  </h3>
-                  <p className="text-sm text-zinc-600 mb-3">
-                    {project.description}
-                  </p>
-                  <div className="flex items-center gap-1.5 text-xs text-zinc-500">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      className="w-3.5 h-3.5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3"
-                      />
-                    </svg>
-                    {project.material}
-                  </div>
-                  {project.link && (
-                    <Link
-                      to={project.link.to}
-                      className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-amber-600 hover:text-amber-700 transition-colors"
-                    >
-                      {project.link.label} →
-                    </Link>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-slate-900 py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">
-            Vă place ce vedeți?
-          </h2>
-          <p className="text-zinc-400 text-lg mb-8">
-            Contactați-ne pentru a discuta despre proiectul dumneavoastră.
+      <PageHero
+        crumbs={[{ label: 'Portofoliu' }]}
+        title={
+          <>
+            Portofoliu: lucrări de tăiere și gravură <Highlight>laser</Highlight>
+          </>
+        }
+        intro={
+          <p>
+            Proiecte recente din atelierul nostru din Craiova: plăcuțe de adresă,
+            globuri de Crăciun personalizate, brelocuri cu nume, litere
+            volumetrice, decor pentru evenimente și gravuri.
           </p>
-          <Link
-            to="/contact"
-            className="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-orange-700 transition-all shadow-lg shadow-amber-500/25"
+        }
+        whatsappMessage={WHATSAPP_MESSAGE}
+      />
+
+      <Section>
+        {/* Anchor links: one tap to a category, no JS needed */}
+        <nav
+          aria-label="Categorii de lucrări"
+          className="-mx-4 overflow-x-auto px-4 [scrollbar-width:none] sm:mx-0 sm:px-0"
+        >
+          <ul className="flex w-max gap-2 sm:w-auto sm:flex-wrap">
+            {sections.map((category) => (
+              <li key={category.id}>
+                <a
+                  href={`#${category.id}`}
+                  className="inline-flex min-h-11 items-center gap-2 rounded-full bg-zinc-100 pl-4 pr-2 text-sm font-medium text-zinc-800 transition-colors hover:bg-zinc-200 active:bg-zinc-200"
+                >
+                  {category.chip}
+                  <span className="rounded-full bg-white px-2 py-0.5 text-xs font-semibold text-zinc-600">
+                    {category.projects.length}
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {sections.map((category, sectionIndex) => (
+          <section
+            key={category.id}
+            id={category.id}
+            aria-labelledby={`${category.id}-titlu`}
+            className="mt-10 sm:mt-14"
           >
-            Începe un Proiect
-          </Link>
-        </div>
-      </section>
+            <div className="mb-4 flex flex-col items-start sm:mb-6 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between sm:gap-x-6">
+              <h2
+                id={`${category.id}-titlu`}
+                className="text-2xl font-bold tracking-tight text-zinc-900 text-balance sm:text-3xl"
+              >
+                {category.title}
+              </h2>
+              <Link
+                to={category.link.to}
+                className={`${textLink} inline-flex min-h-11 items-center gap-1.5 text-sm sm:text-base`}
+              >
+                {category.link.label}
+                <Icon name="arrowRight" className="w-4 h-4 shrink-0" />
+              </Link>
+            </div>
+
+            <div
+              className={
+                category.layout === 'masonry'
+                  ? 'columns-2 gap-3 sm:gap-5 lg:columns-3'
+                  : `grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 ${
+                      // The tall feature photo stretches the idea tile's row,
+                      // not the row of photo cards beside it
+                      category.layout === 'feature' ? 'lg:grid-rows-[auto_1fr]' : ''
+                    }`
+              }
+            >
+              {category.projects.map((project, index) => (
+                <ProjectCard
+                  key={project.title}
+                  project={project}
+                  link={project.link ?? category.link}
+                  priority={sectionIndex === 0 && index === 0}
+                  className={
+                    category.layout === 'masonry'
+                      ? 'mb-3 break-inside-avoid sm:mb-5'
+                      : category.layout === 'feature' && index === 0
+                        ? 'row-span-2 h-full'
+                        : 'h-full'
+                  }
+                />
+              ))}
+              {category.layout !== 'masonry' && category.idea && (
+                <IdeaTile category={category} />
+              )}
+            </div>
+          </section>
+        ))}
+      </Section>
+
+      <OrderBlock
+        title="Aveți un proiect asemănător?"
+        intro="Trimiteți-ne poza lucrării care vă place sau ideea dumneavoastră și primiți o ofertă gratuită."
+        whatsappMessage={WHATSAPP_MESSAGE}
+        emailSubject="Cerere ofertă - proiect asemănător din portofoliu"
+      />
     </>
+  )
+}
+
+// The whole card links to the product page; the photo keeps its natural ratio.
+function ProjectCard({
+  project,
+  link,
+  priority,
+  className,
+}: {
+  project: Project
+  link: ProjectLink
+  priority: boolean
+  className: string
+}) {
+  const meta = imageMeta(project.image)
+  return (
+    <Link
+      to={link.to}
+      hash={link.hash}
+      className={`group flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-[border-color,box-shadow] hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/10 active:border-amber-400 ${className}`}
+    >
+      <div
+        className="shrink-0 overflow-hidden bg-zinc-100"
+        style={{ aspectRatio: `${meta.width} / ${meta.height}` }}
+      >
+        <ResponsiveImage
+          name={project.image}
+          alt={project.alt}
+          sizes="(min-width: 1280px) 400px, (min-width: 1024px) 31vw, 50vw"
+          priority={priority}
+          className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+        />
+      </div>
+      <div className="flex flex-1 flex-col p-3 sm:p-4">
+        <h3 className="text-sm font-semibold leading-snug text-zinc-900 text-pretty group-hover:text-amber-800 sm:text-base">
+          {project.title}
+        </h3>
+        {project.description && (
+          <p className="mt-1 text-sm leading-snug text-zinc-600">
+            {project.description}
+          </p>
+        )}
+        {/* Same material style as the ModelCard meta on the product pages */}
+        <p className="mt-auto flex items-end justify-between gap-2 pt-2">
+          <span className="text-xs font-semibold uppercase tracking-wider text-amber-800">
+            {project.material}
+          </span>
+          <Icon name="arrowRight" className="w-4 h-4 shrink-0 text-amber-600" />
+        </p>
+      </div>
+    </Link>
+  )
+}
+
+// Fills the empty cells of a category's last row (2 columns below lg, 3 from
+// lg) with a WhatsApp prompt for that product, so no card is left alone.
+// Hidden where the row is already full.
+function IdeaTile({ category }: { category: Category }) {
+  // The feature photo takes two cells
+  const cells = category.projects.length + (category.layout === 'feature' ? 1 : 0)
+  const mobileGap = cells % 2
+  const desktopGap = (3 - (cells % 3)) % 3
+  if (!mobileGap && !desktopGap) return null
+  // A two-cell tile centres its text so the wide box doesn't look empty
+  const placement = [
+    mobileGap ? '' : 'max-lg:hidden',
+    desktopGap === 0
+      ? 'lg:hidden'
+      : desktopGap === 2
+        ? 'lg:col-span-2 lg:items-center lg:text-center'
+        : '',
+  ].join(' ')
+
+  return (
+    <IdeaCard
+      title={category.idea}
+      text="Trimiteți-ne o poză sau o schiță și vă spunem prețul."
+      whatsappMessage={getProduct(category.link.to).whatsappMessage}
+      className={placement}
+    />
   )
 }

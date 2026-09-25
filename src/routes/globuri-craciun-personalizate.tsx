@@ -1,14 +1,21 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { Link } from '@tanstack/react-router'
-import { CTASection } from '~/components/CTASection'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import type * as React from 'react'
+import { OrderBlock } from '~/components/Contact'
 import { Faq } from '~/components/Faq'
-import { Highlight, PageHero } from '~/components/PageHero'
+import { Icon, WhatsAppIcon } from '~/components/Icon'
+import { Highlight, PageHero, type HeroImage } from '~/components/PageHero'
+import { IdeaCard, ModelCard, type ModelItem } from '~/components/ProductCards'
+import { type ImageName } from '~/components/ResponsiveImage'
 import {
-  ResponsiveImage,
-  type ImageName,
-} from '~/components/ResponsiveImage'
-import { EMAIL, PHONE_DISPLAY, PHONE_HREF } from '~/data/business'
+  CheckList,
+  Section,
+  SectionHeader,
+  buttonClass,
+  textLink,
+} from '~/components/ui'
+import { DELIVERY, whatsappHref } from '~/data/business'
 import images from '~/data/images.gen.json'
+import { getProduct } from '~/data/products'
 import {
   BUSINESS_ID,
   SITE_URL,
@@ -37,6 +44,8 @@ export const Route = createFileRoute('/globuri-craciun-personalizate')({
         'Globuri de Crăciun personalizate din plexiglas, tăiate laser în Craiova: cu nume, oraș, an sau mesaj, în culoarea dorită. Preț la cerere, ofertă gratuită.',
       path: '/globuri-craciun-personalizate',
       image: '/img/og/og-globuri-craciun.jpg',
+      imageAlt:
+        'Glob de Crăciun din plexiglas roșu personalizat cu numele „Cristina”, cu sanie și reni, LaserCraft Craiova',
     }),
     scripts: [
       breadcrumbs([
@@ -62,173 +71,122 @@ export const Route = createFileRoute('/globuri-craciun-personalizate')({
   }),
 })
 
-const linkClass =
-  'font-medium text-amber-700 underline decoration-amber-500/40 underline-offset-4 hover:text-amber-800 hover:decoration-amber-600 transition-colors'
+const product = getProduct('/globuri-craciun-personalizate')
 
-const ornaments: Array<{
-  image: ImageName
-  alt: string
-  title: string
-  description: string
-  material: string
-}> = [
+const ornaments: ModelItem[] = [
   {
     image: '/img/products/glob-craciun-cu-nume-personalizat',
-    alt: 'Glob de Crăciun personalizat din plexiglas roșu cu numele „Cristina”, Moș Crăciun în sanie cu reni și fulgi de nea, tăiat laser',
+    alt: 'Glob de Crăciun din plexiglas roșu personalizat cu numele „Cristina”, cu Moș Crăciun în sanie, reni și fulgi de nea',
     title: 'Glob personalizat cu nume',
-    description:
-      'Numele „Cristina” pe o bandă centrală, cu Moș Crăciun în sanie cu reni și fulgi de nea.',
-    material: 'Plexiglas roșu',
+    description: 'Numele dorit, pe banda centrală.',
+    meta: 'Plexiglas roșu',
   },
   {
     image: '/img/products/glob-craciun-personalizat-craiova',
     alt: 'Glob de Crăciun din plexiglas verde personalizat cu textul „Craiova 26”, cu sanie, reni și fulgi de nea decupați laser',
     title: 'Glob cu numele orașului și anul',
-    description:
-      'Inscripția „Craiova” și anul „26”, cu sanie, reni și fulgi de nea. Orașul și anul se pot schimba.',
-    material: 'Plexiglas verde',
-  },
-  {
-    image: '/img/products/glob-craciun-fericit-plexiglas-verde',
-    alt: 'Ornament rotund de Crăciun din plexiglas verde cu textul „Crăciun Fericit” și fulgi de nea, tăiat laser',
-    title: 'Ornament „Crăciun Fericit”',
-    description:
-      'Ornament rotund cu urarea „Crăciun Fericit” în litere cursive și trei fulgi de nea decupați.',
-    material: 'Plexiglas verde',
+    description: 'Orașul și anul se pot schimba.',
+    meta: 'Plexiglas verde',
   },
   {
     image: '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
     alt: 'Glob de Crăciun din plexiglas negru cu sat de iarnă decupat laser: case, biserică, brazi și stea în vârf',
     title: 'Glob cu sat de iarnă',
-    description:
-      'Case, o biserică și brazi pe dealuri înzăpezite, cu o stea în vârful globului.',
-    material: 'Plexiglas negru',
+    meta: 'Plexiglas negru',
   },
   {
     image: '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
     alt: 'Glob de Crăciun din plexiglas verde cu Moș Crăciun în sanie trasă de un ren, stele și brazi decupați laser',
     title: 'Glob cu sanie și ren',
-    description:
-      'Moș Crăciun în sanie trasă de un ren, sub un cer cu stele, deasupra unui șir de brazi.',
-    material: 'Plexiglas verde',
+    meta: 'Plexiglas verde',
   },
   {
     image: '/img/products/ornament-craciun-bastoane-rosii',
     alt: 'Ornament de Crăciun din plexiglas roșu cu două bastoane legate cu fundă și fulgi de nea decupați laser',
     title: 'Bastoane de Crăciun',
-    description:
-      'Două bastoane cu dungi, legate cu o fundă, cu câte un fulg de nea decupat în fiecare.',
-    material: 'Plexiglas roșu',
+    meta: 'Plexiglas roșu',
   },
   {
     image: '/img/products/ornament-craciun-fulg-de-nea-alb',
     alt: 'Ornament fulg de nea din plexiglas alb tăiat laser, cu orificiu pentru agățare în brad',
     title: 'Fulg de nea',
-    description:
-      'Fulg de nea cu brațe ramificate și un mic orificiu în vârf pentru agățare.',
-    material: 'Plexiglas alb',
+    meta: 'Plexiglas alb',
   },
   {
     image: '/img/products/ornament-craciun-inima-geometrica-roz',
     alt: 'Ornament inimă geometrică din plexiglas roz tăiat laser, agățat cu o panglică roșie',
     title: 'Inimă geometrică',
-    description:
-      'Inimă cu model geometric decupat și o inimioară plină în interior, agățată aici cu o panglică roșie.',
-    material: 'Plexiglas roz',
+    meta: 'Plexiglas roz',
   },
   {
     image: '/img/products/ornament-craciun-spiridus-luna',
     alt: 'Ornament de Crăciun din plexiglas verde cu un spiriduș pe o semilună și stele decupate laser',
     title: 'Spiriduș pe lună',
-    description:
-      'Un spiriduș cu căciulă și pantofi cu vârful răsucit, pe o semilună cu stele și puncte decupate.',
-    material: 'Plexiglas verde',
+    meta: 'Plexiglas verde',
+  },
+  {
+    image: '/img/products/glob-craciun-fericit-plexiglas-verde',
+    alt: 'Ornament rotund de Crăciun din plexiglas verde cu textul „Crăciun Fericit” și fulgi de nea, tăiat laser',
+    title: 'Ornament „Crăciun Fericit”',
+    meta: 'Plexiglas verde',
   },
 ]
 
-const personalizationOptions = [
+// Hero photos reuse the gallery alts; the first one loads with priority.
+const heroPhotos: Array<Omit<HeroImage, 'alt'>> = [
+  { name: '/img/products/glob-craciun-cu-nume-personalizat' },
+  // keeps „Craiova 26” inside the desktop collage crop
   {
-    title: 'Un nume',
-    description:
-      'Numele celui care primește globul, ca pe modelul „Cristina”.',
+    name: '/img/products/glob-craciun-personalizat-craiova',
+    position: '50% 60%',
   },
+  { name: '/img/products/glob-craciun-sanie-reni-plexiglas-verde' },
+]
+
+const heroMedia: HeroImage[] = heroPhotos.map((photo) => ({
+  ...photo,
+  alt: ornaments.find((ornament) => ornament.image === photo.name)!.alt,
+}))
+
+const personalizationOptions: Array<{
+  title: string
+  detail: React.ReactNode
+}> = [
+  { title: 'Un nume', detail: 'ca pe modelul „Cristina”' },
+  { title: 'Orașul și anul', detail: 'ca pe globul „Craiova 26”' },
+  { title: 'O urare', detail: '„Crăciun Fericit” sau textul dorit' },
+  // The gallery cards already name each model's colour.
+  { title: 'Culoarea', detail: 'plexiglas transparent, colorat sau oglindă' },
   {
-    title: 'Orașul și anul',
-    description:
-      'Numele orașului și anul, ca pe globul verde din galerie.',
-  },
-  {
-    title: 'Un mesaj de sărbători',
-    description:
-      'O urare precum „Crăciun Fericit” sau textul ales de dumneavoastră.',
-  },
-  {
-    title: 'Culoarea plexiglasului',
-    description:
-      'Plexiglas transparent, colorat sau oglindă; în galerie: roșu, verde, negru, alb și roz.',
-  },
-  {
-    title: 'Motivul decorativ',
-    description:
-      'Sanie cu reni, fulgi de nea, sat de iarnă sau un design trimis de dumneavoastră.',
+    title: 'Motivul',
+    detail: 'sanie cu reni, fulgi de nea, sat de iarnă sau designul propriu',
   },
   {
     title: 'Detalii gravate',
-    description:
-      'Gravură laser pe plexiglas, până la 1200 DPI, pentru texte și detalii fine.',
+    detail: (
+      <>
+        prin{' '}
+        <Link to="/gravura-laser-craiova" className={textLink}>
+          gravură laser pe plexiglas
+        </Link>
+        , până la 1200 DPI
+      </>
+    ),
   },
 ]
 
-const useIdeas = [
-  {
-    title: 'Pentru bradul dumneavoastră',
-    description:
-      'Câte un glob cu numele fiecărui membru al familiei, într-un set de aceeași culoare.',
-  },
-  {
-    title: 'Cadouri pentru familie și prieteni',
-    description:
-      'Un glob cu numele celui drag, o idee de cadou personal pentru sărbători.',
-  },
-  {
-    title: 'Cadouri pentru colegi și clienți',
-    description:
-      'Ornamente cu numele firmei sau cu o urare, cu reduceri pentru cantități mari.',
-  },
+const ideas = [
+  'Un set pentru bradul familiei, cu numele fiecăruia, în aceeași culoare',
+  'Un cadou de sărbători cu numele celui drag',
+  'Ornamente cu numele firmei sau cu o urare, pentru colegi și clienți',
 ]
 
-const orderSteps = [
-  {
-    title: 'Modelul și textul',
-    description:
-      'Modelul ales din galerie sau ideea dumneavoastră, plus numele, orașul, anul sau mesajul dorit.',
-  },
-  {
-    title: 'Materialul și culoarea',
-    description:
-      'Tipul de plexiglas și culoarea dorită. Dacă aveți nelămuriri, vă ajutăm gratuit să alegeți materialul potrivit.',
-  },
-  {
-    title: 'Dimensiunile și cantitatea',
-    description:
-      'Mărimea dorită și numărul de bucăți, de la un singur glob la producție de serie.',
-  },
-  {
-    title: 'Fișierele de design și termenul',
-    description:
-      'Fișierele de design, dacă există, și data până la care aveți nevoie de ornamente.',
-  },
-]
-
-const priceFactors = [
-  'modelul ales sau designul propriu;',
-  'dimensiunile ornamentelor;',
-  'numărul de bucăți.',
-]
-
-const offerIncludes = [
-  'Consultanță gratuită pentru alegerea materialului',
-  'Reduceri pentru cantități mari',
+const quoteChecklist = [
+  'Modelul din galerie sau ideea dumneavoastră, plus numele sau urarea dorită',
+  'Culoarea plexiglasului: transparent, colorat sau oglindă (vă ajutăm să alegeți)',
+  'Dimensiunile și cantitatea, de la un singur glob la producție de serie',
+  'Fișierele de design, dacă există',
+  'Data la care vreți globurile',
 ]
 
 const faqItems = [
@@ -240,12 +198,12 @@ const faqItems = [
   {
     question: 'Cât costă un glob de Crăciun personalizat?',
     answer:
-      'Prețul este la cerere și depinde de model, dimensiuni și cantitate. Oferta este gratuită, iar pentru cantități mari oferim reduceri.',
+      'Prețul este la cerere și depinde de model, dimensiuni și cantitate. Oferta este gratuită.',
   },
   {
     question: 'Pot comanda globuri personalizate pentru colegi sau clienți?',
     answer:
-      'Da. Lucrăm de la piese unice la producție de serie, iar pentru cantități mari oferim reduceri. Trimiteți-ne textul pentru fiecare glob și numărul de bucăți.',
+      'Da. Lucrăm de la piese unice la producție de serie. Trimiteți-ne textul pentru fiecare glob și numărul de bucăți.',
   },
   {
     question: 'Pot trimite propriul design?',
@@ -255,33 +213,18 @@ const faqItems = [
   {
     question: 'Când ar trebui să comand globurile?',
     answer:
-      'Vă recomandăm să ne contactați din timp înainte de sărbători. Pentru comenzi urgente, termenele de execuție pornesc de la 24 de ore.',
+      'Vă recomandăm să ne contactați din timp înainte de sărbători, mai ales pentru comenzile cu multe bucăți. La nevoie, oferim execuție urgentă de la 24 de ore.',
   },
   {
     question: 'Cum se agață globurile în brad?',
     answer:
       'Modelele din galerie au în partea de sus un mic orificiu pentru agățare, prin care puteți trece o panglică sau un șnur.',
   },
+  {
+    question: 'Livrați globurile și în alte orașe?',
+    answer: `Da. ${DELIVERY}`,
+  },
 ]
-
-function CheckIcon({ className }: { className: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={2}
-      aria-hidden="true"
-      className={className}
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        d="M4.5 12.75l6 6 9-13.5"
-      />
-    </svg>
-  )
-}
 
 function GloburiCraciunPage() {
   return (
@@ -297,321 +240,156 @@ function GloburiCraciunPage() {
             plexiglas, în Craiova
           </>
         }
-      >
-        <p>
-          Realizăm globuri de Crăciun personalizate din plexiglas în atelierul
-          nostru de tăiere laser din Craiova: ornamente pentru brad cu un nume,
-          cu numele orașului și anul sau cu un mesaj de sărbători, în culoarea
-          dorită de dumneavoastră.
-        </p>
-        <p>
-          Globurile sunt tăiate laser din plexiglas colorat, cu margini curate
-          și lustruite, iar modelele din galerie au în partea de sus un
-          orificiu pentru agățare. Lucrăm atât piese unice, cât și producție de
-          serie, iar oferta este gratuită.
-        </p>
-        <div className="flex flex-col sm:flex-row gap-4 pt-4">
-          <Link
-            to="/contact"
-            className="inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-base font-semibold rounded-xl hover:from-amber-600 hover:to-orange-700 transition-all shadow-lg shadow-amber-500/25"
-          >
-            Solicitați o ofertă gratuită
-          </Link>
-          <a
-            href={PHONE_HREF}
-            className="inline-flex items-center justify-center px-6 py-3 border border-zinc-700 text-zinc-300 text-base font-semibold rounded-xl hover:bg-white/5 hover:border-zinc-600 transition-all"
-          >
-            Sunați: {PHONE_DISPLAY}
-          </a>
-        </div>
-      </PageHero>
+        intro={
+          <p>
+            Realizăm în atelierul nostru din Craiova globuri de Crăciun
+            personalizate din plexiglas, tăiate laser: ornamente pentru brad cu
+            un nume, cu orașul și anul sau cu o urare, în culoarea dorită.
+          </p>
+        }
+        chips={[
+          'Preț la cerere · ofertă gratuită',
+          'Livrare prin curier în toată România',
+        ]}
+        whatsappMessage={product.whatsappMessage}
+        media={heroMedia}
+      />
 
-      <section className="py-16 sm:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900">
-              Modele de globuri și ornamente de Crăciun din plexiglas
-            </h2>
-            <p className="mt-4 text-zinc-600 leading-relaxed">
-              Lucrări reale, tăiate laser în atelierul nostru. Pornind de la
-              oricare model, putem adapta textul, culoarea sau motivul
-              decorativ. Alte proiecte găsiți în{' '}
-              <Link to="/portofoliu" className={linkClass}>
+      <Section>
+        <SectionHeader
+          title="Modele de globuri și ornamente de Crăciun din plexiglas"
+          intro={
+            <p>
+              Lucrări reale, tăiate laser în atelierul nostru din Craiova, cu
+              orificiu pentru agățare. Putem adapta textul, culoarea sau
+              motivul oricărui model. Vedeți și{' '}
+              <Link to="/portofoliu" className={textLink}>
                 portofoliul LaserCraft
               </Link>
               .
             </p>
-          </div>
-          <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {ornaments.map((ornament, index) => (
-              <article
-                key={ornament.image}
-                className="bg-white rounded-2xl border border-zinc-200 overflow-hidden"
-              >
-                <div className="aspect-square bg-zinc-100 overflow-hidden">
-                  <ResponsiveImage
-                    name={ornament.image}
-                    alt={ornament.alt}
-                    sizes="(min-width: 1280px) 389px, (min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-                    className="w-full h-full object-cover"
-                    priority={index === 0}
-                  />
-                </div>
-                <div className="p-6 border-t border-zinc-100">
-                  <h3 className="text-lg font-semibold text-zinc-900">
-                    {ornament.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
-                    {ornament.description}
-                  </p>
-                  <div className="mt-3 text-xs font-semibold uppercase tracking-wider text-amber-600">
-                    {ornament.material}
-                  </div>
-                </div>
-              </article>
-            ))}
+          }
+        />
+        <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+          {ornaments.map((ornament) => (
+            <li key={ornament.image}>
+              <ModelCard
+                item={ornament}
+                whatsappMessage={product.whatsappMessage}
+              />
+            </li>
+          ))}
+          {/* Fills the last slot of the 2-column grid; 9 models already make
+              a full 3×3 grid on desktop. */}
+          <li className="lg:hidden">
+            <IdeaCard
+              text="Trimiteți-ne o poză sau o schiță a ornamentului dorit."
+              whatsappMessage={product.whatsappMessage}
+              className="h-full"
+            />
+          </li>
+        </ul>
+      </Section>
+
+      <Section tone="muted">
+        <div className="lg:flex lg:items-center lg:justify-between lg:gap-12">
+          <SectionHeader
+            title="Cât costă globurile de Crăciun personalizate"
+            intro={
+              <p>
+                <strong className="font-semibold text-zinc-900">
+                  Preț la cerere
+                </strong>
+                . Prețul depinde de modelul ales sau designul propriu, de
+                dimensiunile ornamentelor și de numărul de bucăți. Pentru
+                cantități mari oferim reduceri.
+              </p>
+            }
+            className="mb-0!"
+          />
+          {/* Mobile has the sticky WhatsApp bar; desktop gets a direct CTA */}
+          <div className="hidden shrink-0 lg:block">
+            <a
+              href={whatsappHref(product.whatsappMessage)}
+              target="_blank"
+              rel="noopener"
+              data-placement="price"
+              className={buttonClass('primary', 'lg')}
+            >
+              <WhatsAppIcon className="w-5 h-5" />
+              Cereți ofertă
+            </a>
           </div>
         </div>
-      </section>
+      </Section>
 
-      <section className="py-16 sm:py-24 bg-zinc-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4">
-              Ce puteți personaliza pe un glob de Crăciun
-            </h2>
-            <p className="text-zinc-600 leading-relaxed">
-              Pe globurile personalizate cu nume, textul este decupat laser
-              direct în plexiglas, ca parte a ornamentului. Personalizarea este
-              completă, iar dumneavoastră alegeți:
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {personalizationOptions.map((option) => (
-              <div
-                key={option.title}
-                className="bg-white rounded-2xl p-6 border border-zinc-200"
-              >
-                <h3 className="text-lg font-semibold text-zinc-900 mb-2">
-                  {option.title}
-                </h3>
-                <p className="text-sm text-zinc-600 leading-relaxed">
-                  {option.description}
+      <Section>
+        <div className="grid gap-10 lg:grid-cols-5 lg:gap-16">
+          <div className="lg:col-span-3">
+            <SectionHeader
+              title="Ce puteți personaliza pe un glob de Crăciun"
+              intro={
+                <p>
+                  Ornamentele sunt realizate prin{' '}
+                  <Link to="/taiere-laser-plexiglas" className={textLink}>
+                    tăiere laser a plexiglasului
+                  </Link>
+                  , cu margini lustruite, iar textul este decupat direct în
+                  glob.
                 </p>
-              </div>
-            ))}
+              }
+            />
+            <CheckList
+              items={personalizationOptions.map((option) => (
+                <>
+                  <span className="block font-semibold leading-snug text-zinc-900">
+                    {option.title}
+                  </span>
+                  <span className="mt-0.5 block text-sm leading-snug text-zinc-600">
+                    {option.detail}
+                  </span>
+                </>
+              ))}
+              className="grid-cols-2 gap-y-4"
+            />
           </div>
 
-          <p className="mt-10 max-w-3xl text-zinc-600 leading-relaxed">
-            Mai multe detalii tehnice găsiți pe pagina despre{' '}
-            <Link to="/taiere-laser-plexiglas" className={linkClass}>
-              tăierea laser a plexiglasului
-            </Link>
-            , iar pentru texte fine sau un logo, vedeți{' '}
-            <Link to="/gravura-laser-craiova" className={linkClass}>
-              gravura laser pe plexiglas
-            </Link>
-            .
-          </p>
-        </div>
-      </section>
-
-      <section className="py-16 sm:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-10">
-            <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4">
+          <div className="lg:col-span-2 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-6 lg:self-start">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-balance text-zinc-900">
               Idei pentru ornamentele de brad personalizate
             </h2>
-            <p className="text-zinc-600 leading-relaxed">
-              Decorațiunile de Crăciun din plexiglas pot împodobi bradul sau pot
-              deveni un cadou. Câteva sugestii:
+            <CheckList items={ideas} className="mt-4" />
+            <p className="mt-4 text-zinc-600 leading-relaxed">
+              Alte idei:{' '}
+              <Link to="/cadouri-personalizate" className={textLink}>
+                cadouri personalizate din plexiglas
+              </Link>
+              , de la brelocuri cu nume la decoruri pe suport.
             </p>
           </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-            {useIdeas.map((idea) => (
-              <div
-                key={idea.title}
-                className="bg-zinc-50 rounded-2xl p-6 border border-zinc-200"
-              >
-                <h3 className="text-lg font-semibold text-zinc-900 mb-2">
-                  {idea.title}
-                </h3>
-                <p className="text-sm text-zinc-600 leading-relaxed">
-                  {idea.description}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <p className="mt-10 max-w-3xl text-zinc-600 leading-relaxed">
-            Căutați și alte idei? Vedeți{' '}
-            <Link to="/cadouri-personalizate" className={linkClass}>
-              cadourile personalizate din plexiglas
-            </Link>
-            , de la brelocuri cu nume la decoruri pe suport.
-          </p>
         </div>
-      </section>
+      </Section>
 
-      <section className="py-16 sm:py-24 bg-zinc-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-10 lg:gap-16">
-            <div className="lg:col-span-3">
-              <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900">
-                Cum comandați globuri de Crăciun personalizate
-              </h2>
-              <p className="mt-4 text-zinc-600 leading-relaxed">
-                Oferta este gratuită. Pentru a o primi cât mai rapid,
-                trimiteți-ne:
-              </p>
-              <ol className="mt-8 space-y-6">
-                {orderSteps.map((step, index) => (
-                  <li key={step.title} className="flex gap-4">
-                    <span className="flex w-9 h-9 shrink-0 items-center justify-center rounded-full bg-amber-500/10 text-amber-700 font-bold">
-                      {index + 1}
-                    </span>
-                    <div>
-                      <h3 className="font-semibold text-zinc-900">
-                        {step.title}
-                      </h3>
-                      <p className="mt-1 text-zinc-600 leading-relaxed">
-                        {step.description}
-                      </p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <div className="lg:col-span-2 space-y-6">
-              <div className="bg-white rounded-2xl border border-zinc-200 p-6 sm:p-8">
-                <h3 className="text-lg font-bold text-zinc-900">
-                  Comandați din timp înainte de sărbători
-                </h3>
-                <p className="mt-3 text-sm text-zinc-600 leading-relaxed">
-                  Vă recomandăm să ne contactați din timp, mai ales pentru
-                  comenzile cu multe bucăți. Pentru comenzi urgente, termenele
-                  de execuție pornesc de la 24 de ore.
-                </p>
-              </div>
-              <div className="bg-white rounded-2xl border border-zinc-200 p-6 sm:p-8">
-                <h3 className="text-lg font-bold text-zinc-900">
-                  Contactați-ne
-                </h3>
-                <dl className="mt-5 space-y-4 text-sm">
-                  <div>
-                    <dt className="text-zinc-500">Telefon</dt>
-                    <dd>
-                      <a
-                        href={PHONE_HREF}
-                        className="font-semibold text-zinc-900 hover:text-amber-700 transition-colors"
-                      >
-                        {PHONE_DISPLAY}
-                      </a>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-zinc-500">Email</dt>
-                    <dd>
-                      <a
-                        href={`mailto:${EMAIL}`}
-                        className="font-semibold text-zinc-900 hover:text-amber-700 transition-colors break-all"
-                      >
-                        {EMAIL}
-                      </a>
-                    </dd>
-                  </div>
-                  <div>
-                    <dt className="text-zinc-500">Program</dt>
-                    <dd className="text-zinc-900">
-                      Luni–Vineri 08:00–17:00, Sâmbătă 09:00–14:00, Duminică
-                      închis
-                    </dd>
-                  </div>
-                </dl>
-                <p className="mt-5 text-sm text-zinc-600 leading-relaxed">
-                  Atelierul nostru este în Craiova și vă răspundem în maximum
-                  24 de ore lucrătoare. Puteți folosi și{' '}
-                  <Link to="/contact" className={linkClass}>
-                    pagina de contact
-                  </Link>
-                  .
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-16 sm:py-24 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
-            <div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4">
-                Cât costă globurile de Crăciun personalizate
-              </h2>
-              <p className="text-zinc-600 leading-relaxed mb-4">
-                Pentru ornamentele de Crăciun din plexiglas, prețul este la
-                cerere. Vă pregătim o ofertă gratuită, în funcție de:
-              </p>
-              <ul className="space-y-2 text-zinc-700 mb-6">
-                {priceFactors.map((factor) => (
-                  <li key={factor} className="flex items-start gap-2">
-                    <CheckIcon className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-                    {factor}
-                  </li>
-                ))}
-              </ul>
-              <p className="text-zinc-600 leading-relaxed">
-                Pe lângă decorațiunile de sărbători, realizăm și{' '}
-                <Link to="/placute-adresa" className={linkClass}>
-                  plăcuțe de adresă din plexiglas
-                </Link>{' '}
-                și{' '}
-                <Link to="/litere-volumetrice" className={linkClass}>
-                  litere volumetrice pentru evenimente
-                </Link>
-                . Vedeți toate{' '}
-                <Link to="/servicii" className={linkClass}>
-                  serviciile de tăiere și gravură laser
-                </Link>
-                .
-              </p>
-            </div>
-
-            <div className="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-6 sm:p-8 shadow-xl">
-              <div className="text-xs font-semibold uppercase tracking-wider text-amber-400 mb-2">
-                Preț la cerere
-              </div>
-              <div className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-                Ofertă gratuită
-              </div>
-              <p className="mt-4 text-sm text-zinc-400 leading-relaxed">
-                Vă răspundem în maximum 24 de ore lucrătoare.
-              </p>
-              <ul className="mt-6 space-y-3 text-zinc-300">
-                {offerIncludes.map((item) => (
-                  <li key={item} className="flex items-start gap-2">
-                    <CheckIcon className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/contact"
-                className="mt-6 inline-flex items-center gap-2 text-amber-400 font-semibold hover:text-amber-300 transition-colors"
-              >
-                Solicitați oferta pentru globuri →
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+      <OrderBlock
+        title="Cum comandați globuri de Crăciun personalizate"
+        intro="Scrieți-ne pe WhatsApp sau pe email cu aceste detalii:"
+        checklist={quoteChecklist}
+        checklistTitle={null}
+        whatsappMessage={product.whatsappMessage}
+        emailSubject="Cerere ofertă - globuri de Crăciun personalizate"
+      >
+        <p className="mt-8 flex gap-3 rounded-xl bg-amber-400/10 p-4 text-sm leading-relaxed text-zinc-200 ring-1 ring-inset ring-amber-400/30">
+          <Icon name="clock" className="w-5 h-5 shrink-0 text-amber-400" />
+          <span>
+            <strong className="font-semibold text-white">
+              Comandați din timp înainte de sărbători.
+            </strong>{' '}
+            Execuție urgentă de la 24 de ore.
+          </span>
+        </p>
+      </OrderBlock>
 
       <Faq items={faqItems} />
-
-      <CTASection />
     </>
   )
 }

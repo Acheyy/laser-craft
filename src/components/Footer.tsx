@@ -1,172 +1,156 @@
 import { Link } from '@tanstack/react-router'
+import { Icon, WhatsAppIcon } from '~/components/Icon'
+import { Logo } from '~/components/Logo'
+import { Container } from '~/components/ui'
+import {
+  COMPANY,
+  DELIVERY,
+  EMAIL,
+  HOURS_SHORT,
+  PHONE_DISPLAY,
+  PHONE_HREF,
+  emailHref,
+  openingHours,
+  whatsappHref,
+} from '~/data/business'
+import { products } from '~/data/products'
+import { openConsentSettings } from '~/utils/analytics'
+
+const infoLinks = [
+  { to: '/servicii', label: 'Servicii și prețuri' },
+  { to: '/portofoliu', label: 'Portofoliu' },
+  { to: '/despre-noi', label: 'Despre noi' },
+  { to: '/contact', label: 'Contact' },
+  { to: '/politica-de-confidentialitate', label: 'Confidențialitate' },
+] as const
+
+const linkClass =
+  'inline-block py-1.5 text-sm text-zinc-300 transition-colors hover:text-amber-300'
+const headingClass = 'text-xs font-semibold uppercase tracking-wider text-zinc-400'
 
 export function Footer() {
   return (
-    <footer className="bg-slate-900 text-zinc-400 border-t border-slate-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
-          <div className="sm:col-span-2 lg:col-span-1">
-            <Link to="/" className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 bg-gradient-to-br from-amber-400 to-orange-600 rounded-lg flex items-center justify-center">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  className="w-5 h-5 text-white"
+    <footer className="border-t border-white/10 bg-slate-900 text-zinc-300">
+      <Container className="py-8 sm:py-14">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-12 lg:gap-y-10">
+          <div className="col-span-2 lg:col-span-4">
+            <Logo />
+            <p className="mt-3 max-w-xs text-sm leading-relaxed text-zinc-400">
+              Atelier de tăiere și gravură laser în Craiova, județul Dolj.
+            </p>
+            <ul className="mt-4 space-y-1 text-sm">
+              <li>
+                <a
+                  href={whatsappHref()}
+                  target="_blank"
+                  rel="noopener"
+                  className="inline-flex items-center gap-2 py-1 font-semibold text-white hover:text-amber-300"
                 >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
-                  />
-                </svg>
+                  <WhatsAppIcon className="w-5 h-5 text-amber-400" />
+                  WhatsApp: {PHONE_DISPLAY}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={PHONE_HREF}
+                  className="inline-flex items-center gap-2 py-1 font-semibold text-white hover:text-amber-300"
+                >
+                  <Icon name="phone" className="w-5 h-5 text-amber-400" />
+                  {PHONE_DISPLAY}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={emailHref()}
+                  className="inline-flex items-center gap-2 py-1 hover:text-amber-300"
+                >
+                  <Icon name="mail" className="w-5 h-5 text-amber-400" />
+                  {EMAIL}
+                </a>
+              </li>
+              <li className="flex items-start gap-2 py-1">
+                <Icon name="mapPin" className="w-5 h-5 shrink-0 text-amber-400" />
+                Craiova, jud. Dolj, România
+              </li>
+            </ul>
+          </div>
+
+          <div className="lg:col-span-3">
+            <p className={headingClass}>Produse</p>
+            <ul className="mt-3">
+              {products.map((product) => (
+                <li key={product.to}>
+                  <Link to={product.to} className={linkClass}>
+                    {product.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <Link to="/servicii" hash="taiere-laser-lemn" className={linkClass}>
+                  Tăiere laser lemn și MDF
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="lg:col-span-2">
+            <p className={headingClass}>Informații</p>
+            <ul className="mt-3">
+              {infoLinks.map((link) => (
+                <li key={link.to}>
+                  <Link to={link.to} className={linkClass}>
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="col-span-2 lg:col-span-3">
+            <p className={headingClass}>Program</p>
+            <p className="mt-3 text-sm text-white lg:hidden">
+              {HOURS_SHORT}, duminică închis
+            </p>
+            <dl className="mt-3 hidden space-y-1.5 text-sm lg:block">
+              {openingHours.map((row) => (
+                <div key={row.label} className="flex justify-between gap-4 max-w-xs">
+                  <dt>{row.label}</dt>
+                  <dd className="font-medium text-white">
+                    {row.opens} – {row.closes}
+                  </dd>
+                </div>
+              ))}
+              <div className="flex justify-between gap-4 max-w-xs">
+                <dt>Duminică</dt>
+                <dd className="text-zinc-400">Închis</dd>
               </div>
-              <span className="text-xl font-bold text-white">
-                Laser<span className="text-amber-500">Craft</span>
-              </span>
-            </Link>
-            <p className="text-sm leading-relaxed">
-              Atelier de tăiere și gravură laser în Craiova. Precizie, calitate
-              și rapiditate pentru proiectele dumneavoastră.
+            </dl>
+            <p className="mt-3 flex max-w-xs gap-2 text-sm leading-relaxed text-zinc-400 lg:mt-4">
+              <Icon name="truck" className="w-5 h-5 shrink-0 text-amber-400" />
+              {DELIVERY}
             </p>
-          </div>
-
-          <div>
-            <p className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
-              Navigare
-            </p>
-            <ul className="space-y-2">
-              {[
-                { to: '/', label: 'Acasă' },
-                { to: '/despre-noi', label: 'Despre Noi' },
-                { to: '/servicii', label: 'Servicii' },
-                { to: '/portofoliu', label: 'Portofoliu' },
-                { to: '/contact', label: 'Contact' },
-              ].map((link) => (
-                <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    className="text-sm hover:text-amber-400 transition-colors inline-block py-1"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
-              Servicii
-            </p>
-            <ul className="space-y-2">
-              {[
-                { to: '/placute-adresa', label: 'Plăcuțe de adresă' },
-                { to: '/taiere-laser-plexiglas', label: 'Tăiere laser plexiglas' },
-                { to: '/gravura-laser-craiova', label: 'Gravură laser Craiova' },
-                { to: '/litere-volumetrice', label: 'Litere volumetrice' },
-                {
-                  to: '/globuri-craciun-personalizate',
-                  label: 'Globuri de Crăciun personalizate',
-                },
-                { to: '/cadouri-personalizate', label: 'Cadouri personalizate' },
-                { to: '/servicii', label: 'Toate serviciile și prețurile' },
-              ].map((link) => (
-                <li key={link.to}>
-                  <Link
-                    to={link.to}
-                    className="text-sm hover:text-amber-400 transition-colors inline-block py-1"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <p className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
-              Contact
-            </p>
-            <ul className="space-y-3 text-sm">
-              <li className="flex items-start gap-2">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  className="w-5 h-5 text-amber-500 shrink-0 mt-0.5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                  />
-                </svg>
-                <span>Craiova, jud. Dolj, România</span>
-              </li>
-              <li className="flex items-start gap-2">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  className="w-5 h-5 text-amber-500 shrink-0 mt-0.5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
-                  />
-                </svg>
-                <a
-                  href="tel:+40754497243"
-                  className="hover:text-amber-400 transition-colors"
-                >
-                  +40 754 497 243
-                </a>
-              </li>
-              <li className="flex items-start gap-2">
-                <svg
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth={1.5}
-                  className="w-5 h-5 text-amber-500 shrink-0 mt-0.5"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                  />
-                </svg>
-                <a
-                  href="mailto:lasercraft.contact@gmail.com"
-                  className="hover:text-amber-400 transition-colors"
-                >
-                  lasercraft.contact@gmail.com
-                </a>
-              </li>
-            </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <p className="text-xs">
-            &copy; {new Date().getFullYear()} LaserCraft. Toate drepturile
-            rezervate.
+        <div className="mt-8 flex flex-col gap-2 border-t border-white/10 pt-5 sm:mt-10 sm:gap-3 sm:pt-6 pb-[calc(4.5rem+env(safe-area-inset-bottom))] text-xs text-zinc-400 sm:flex-row sm:items-center sm:justify-between lg:pb-0">
+          <p>
+            © <span suppressHydrationWarning>{new Date().getFullYear()}</span> LaserCraft
+            {COMPANY && (
+              <>
+                {' '}
+                · {COMPANY.name} · CUI {COMPANY.cui} · {COMPANY.regCom}
+              </>
+            )}
           </p>
-          <div className="flex items-center gap-6 text-xs">
-            <span>laser-craft.ro</span>
-          </div>
+          <button
+            type="button"
+            onClick={openConsentSettings}
+            className="self-start py-1 text-left hover:text-amber-300 sm:self-auto"
+          >
+            Setări cookie
+          </button>
         </div>
-      </div>
+      </Container>
     </footer>
   )
 }

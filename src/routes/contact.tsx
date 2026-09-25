@@ -1,20 +1,33 @@
-import { createFileRoute } from '@tanstack/react-router'
-import { EMAIL, PHONE_DISPLAY, PHONE_HREF } from '~/data/business'
+import { Link, createFileRoute } from '@tanstack/react-router'
+import { CopyEmail, defaultOrderChecklist } from '~/components/Contact'
+import { Icon, WhatsAppIcon } from '~/components/Icon'
+import { Highlight, PageHero } from '~/components/PageHero'
+import { ResponsiveImage } from '~/components/ResponsiveImage'
+import { CheckList, Section, SectionHeader, buttonClass, textLink } from '~/components/ui'
+import {
+  DELIVERY,
+  PHONE_DISPLAY,
+  PHONE_HREF,
+  RESPONSE_TIME,
+  emailHref,
+  openingHours,
+  whatsappHref,
+} from '~/data/business'
+import { products } from '~/data/products'
 import { breadcrumbs, seo } from '~/utils/seo'
 
-const EMAIL_HREF = `mailto:${EMAIL}?subject=${encodeURIComponent(
-  'Cerere ofertă - LaserCraft',
-)}&body=${encodeURIComponent(
+const EMAIL_SUBJECT = 'Cerere ofertă - LaserCraft'
+const EMAIL_HREF = emailHref(
+  EMAIL_SUBJECT,
   'Bună ziua,\n\nAș dori o ofertă pentru următorul proiect:\n\n- Material:\n- Dimensiuni / cantitate:\n- Termen dorit:\n- Detalii suplimentare:\n\nVă mulțumesc!',
-)}`
+)
 
 export const Route = createFileRoute('/contact')({
   component: ContactPage,
   head: () => ({
     ...seo({
       title: 'Contact LaserCraft Craiova – Cere Ofertă Tăiere și Gravură Laser',
-      description:
-        'Cereți o ofertă gratuită pentru tăiere sau gravură laser în Craiova. Sunați la 0754 497 243 sau scrieți-ne pe email — răspundem în maximum 24 de ore.',
+      description: `Ofertă gratuită pentru tăiere și gravură laser în Craiova: WhatsApp sau telefon ${PHONE_DISPLAY}, ori email. Răspundem în maximum 24 de ore lucrătoare.`,
       path: '/contact',
       image: '/img/og/og-contact.jpg',
     }),
@@ -22,307 +35,187 @@ export const Route = createFileRoute('/contact')({
   }),
 })
 
+const cardTitle = 'text-xs font-semibold uppercase tracking-wider'
+
 function ContactPage() {
   return (
     <>
-      <section className="bg-slate-900 py-20 sm:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Contactați-
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-                ne
-              </span>
-            </h1>
-            <p className="mt-6 text-lg text-zinc-400 leading-relaxed">
-              Suntem aici pentru a vă ajuta cu proiectul dumneavoastră de tăiere
-              sau gravură laser în Craiova. Sunați-ne direct sau trimiteți-ne un
-              email — vă răspundem în cel mult 24 de ore.
-            </p>
-          </div>
-        </div>
-      </section>
+      <PageHero
+        crumbs={[{ label: 'Contact' }]}
+        title={
+          <>
+            Contactați-<Highlight>ne</Highlight>
+          </>
+        }
+        intro={
+          <p>
+            Cereți o ofertă gratuită de tăiere sau gravură laser în Craiova: pe
+            WhatsApp, la telefon sau pe email.
+          </p>
+        }
+        actions={false}
+      />
 
-      <section className="py-20 sm:py-28">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            <div className="lg:col-span-2 space-y-6">
-              <div>
-                <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-3">
-                  Cum ne puteți contacta
-                </h2>
-                <p className="text-zinc-600">
-                  Alegeți modalitatea care vă convine cel mai mult. Vă răspundem
-                  rapid, cu o ofertă personalizată pentru proiectul dumneavoastră.
-                </p>
-              </div>
+      <Section tone="muted">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-8">
+          <div className="lg:col-span-2">
+            <SectionHeader title="Cum ne puteți contacta" />
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <a
-                  href={PHONE_HREF}
-                  className="group relative overflow-hidden bg-slate-900 rounded-2xl p-8 hover:shadow-xl hover:shadow-amber-500/10 transition-all"
-                >
-                  <div className="absolute -top-12 -right-12 w-40 h-40 bg-amber-500/10 rounded-full blur-2xl group-hover:bg-amber-500/20 transition-colors" />
-                  <div className="relative">
-                    <div className="w-14 h-14 bg-amber-500/10 text-amber-400 rounded-2xl flex items-center justify-center mb-6 group-hover:bg-amber-500 group-hover:text-white transition-colors">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={1.5}
-                        className="w-7 h-7"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="text-xs uppercase tracking-wider text-amber-400 font-semibold mb-2">
-                      Sunați-ne
-                    </div>
-                    <h3 className="text-2xl font-bold text-white mb-2">
-                      {PHONE_DISPLAY}
-                    </h3>
-                    <p className="text-sm text-zinc-400 mb-6">
-                      Cea mai rapidă cale pentru a discuta despre proiectul
-                      dumneavoastră.
-                    </p>
-                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-amber-400 group-hover:gap-3 transition-all">
-                      Apelează acum
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </a>
+            {/* The cards are big buttons: same colours and radius as buttonClass */}
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+              <a
+                href={whatsappHref()}
+                target="_blank"
+                rel="noopener"
+                data-placement="contact-page"
+                className={buttonClass('primary', 'md', 'group gap-4 p-5 sm:col-span-2 sm:p-6')}
+              >
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-slate-950/10 sm:size-14">
+                  <WhatsAppIcon className="w-7 h-7" />
+                </span>
+                <div className="min-w-0 flex-1 text-left">
+                  <h3 className={cardTitle}>WhatsApp</h3>
+                  <p className="mt-0.5 text-2xl font-extrabold tracking-tight">
+                    {PHONE_DISPLAY}
+                  </p>
+                  <p className="mt-1 text-sm font-medium">
+                    Scrieți-ne pe WhatsApp. Ne puteți trimite și poze sau schițe.
+                  </p>
+                </div>
+                <Icon
+                  name="arrowRight"
+                  className="hidden w-6 h-6 shrink-0 transition-transform group-hover:translate-x-1 sm:block"
+                />
+              </a>
 
-                <a
-                  href={EMAIL_HREF}
-                  className="group relative overflow-hidden bg-gradient-to-br from-amber-500 to-orange-600 rounded-2xl p-8 hover:shadow-xl hover:shadow-amber-500/30 transition-all"
-                >
-                  <div className="absolute -bottom-12 -left-12 w-40 h-40 bg-white/10 rounded-full blur-2xl" />
-                  <div className="relative">
-                    <div className="w-14 h-14 bg-white/15 text-white rounded-2xl flex items-center justify-center mb-6 group-hover:bg-white group-hover:text-amber-600 transition-colors">
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={1.5}
-                        className="w-7 h-7"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                        />
-                      </svg>
-                    </div>
-                    <div className="text-xs uppercase tracking-wider text-white/80 font-semibold mb-2">
-                      Trimiteți-ne email
-                    </div>
-                    <h3 className="text-xl font-bold text-white mb-2 break-all">
-                      {EMAIL}
-                    </h3>
-                    <p className="text-sm text-white/80 mb-6">
-                      Pentru cereri detaliate, fișiere sau proiecte complexe.
-                    </p>
-                    <span className="inline-flex items-center gap-2 text-sm font-semibold text-white group-hover:gap-3 transition-all">
-                      Scrie-ne
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        className="w-4 h-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"
-                        />
-                      </svg>
-                    </span>
-                  </div>
-                </a>
-              </div>
+              <a
+                href={PHONE_HREF}
+                data-placement="contact-page"
+                className={buttonClass('dark', 'md', 'gap-4 p-5 sm:p-6')}
+              >
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-amber-400/10 text-amber-400">
+                  <Icon name="phone" className="w-6 h-6" />
+                </span>
+                <div className="min-w-0 flex-1 text-left">
+                  <h3 className={`${cardTitle} text-amber-400`}>Telefon</h3>
+                  <p className="mt-0.5 text-xl font-bold tracking-tight">{PHONE_DISPLAY}</p>
+                  <p className="mt-1 text-sm font-normal text-zinc-300">
+                    Sunați în timpul programului.
+                  </p>
+                </div>
+              </a>
 
-              <div className="bg-zinc-50 border border-zinc-200 rounded-2xl p-8">
-                <h3 className="text-lg font-semibold text-zinc-900 mb-4">
-                  Ce informații să includeți
-                </h3>
-                <p className="text-sm text-zinc-600 mb-5">
-                  Pentru a vă putea oferi o estimare cât mai precisă, ne ajută
-                  dacă ne transmiteți următoarele detalii:
-                </p>
-                <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {[
-                    'Tipul materialului dorit',
-                    'Dimensiunile și cantitatea',
-                    'Fișiere de design (dacă există)',
-                    'Termenul de execuție dorit',
-                  ].map((item) => (
-                    <li
-                      key={item}
-                      className="flex items-start gap-2 text-sm text-zinc-700"
-                    >
-                      <svg
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                        className="w-4 h-4 text-amber-500 shrink-0 mt-0.5"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M4.5 12.75l6 6 9-13.5"
-                        />
-                      </svg>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
+              <a
+                href={EMAIL_HREF}
+                data-placement="contact-page"
+                className="flex items-center gap-4 rounded-xl bg-white p-5 ring-1 ring-inset ring-zinc-200 transition-[box-shadow,transform] hover:ring-amber-300 active:scale-[0.98] sm:p-6"
+              >
+                <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700">
+                  <Icon name="mail" className="w-6 h-6" />
+                </span>
+                <div className="min-w-0 flex-1">
+                  <h3 className={`${cardTitle} text-amber-800`}>Email</h3>
+                  <p className="mt-0.5 text-xl font-bold tracking-tight text-zinc-900">
+                    Scrieți-ne
+                  </p>
+                  <p className="mt-1 text-sm text-zinc-600">
+                    Pentru cereri detaliate, fișiere sau proiecte complexe.
+                  </p>
+                </div>
+              </a>
 
-            <div className="space-y-8">
-              <div className="bg-slate-900 rounded-2xl p-8">
-                <h3 className="text-lg font-semibold text-white mb-6">
-                  Date de Contact
-                </h3>
-                <ul className="space-y-5">
-                  <li className="flex items-start gap-3">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      className="w-5 h-5 text-amber-500 shrink-0 mt-0.5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                      />
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
-                      />
-                    </svg>
-                    <div>
-                      <div className="text-sm font-medium text-white">
-                        Adresă
-                      </div>
-                      <div className="text-sm text-zinc-400 mt-1">
-                        Craiova, jud. Dolj, România
-                      </div>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      className="w-5 h-5 text-amber-500 shrink-0 mt-0.5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
-                      />
-                    </svg>
-                    <div>
-                      <div className="text-sm font-medium text-white">
-                        Telefon
-                      </div>
-                      <a
-                        href={PHONE_HREF}
-                        className="text-sm text-zinc-400 mt-1 hover:text-amber-400 transition-colors"
-                      >
-                        {PHONE_DISPLAY}
-                      </a>
-                    </div>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <svg
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth={1.5}
-                      className="w-5 h-5 text-amber-500 shrink-0 mt-0.5"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"
-                      />
-                    </svg>
-                    <div className="min-w-0">
-                      <div className="text-sm font-medium text-white">
-                        Email
-                      </div>
-                      <a
-                        href={EMAIL_HREF}
-                        className="text-sm text-zinc-400 mt-1 hover:text-amber-400 transition-colors break-all"
-                      >
-                        {EMAIL}
-                      </a>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="bg-slate-900 rounded-2xl p-8">
-                <h3 className="text-lg font-semibold text-white mb-4">
-                  Program de Lucru
-                </h3>
-                <ul className="space-y-3 text-sm">
-                  <li className="flex justify-between">
-                    <span className="text-zinc-400">Luni - Vineri</span>
-                    <span className="text-white font-medium">
-                      08:00 - 17:00
-                    </span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span className="text-zinc-400">Sâmbătă</span>
-                    <span className="text-white font-medium">
-                      09:00 - 14:00
-                    </span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span className="text-zinc-400">Duminică</span>
-                    <span className="text-zinc-500">Închis</span>
-                  </li>
-                </ul>
-              </div>
-
-              <div className="bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20 rounded-2xl p-8">
-                <h3 className="text-lg font-semibold text-zinc-900 mb-2">
-                  Răspuns Rapid
-                </h3>
-                <p className="text-sm text-zinc-600">
-                  Garantăm un răspuns la mesajul dumneavoastră în maximum 24 de
-                  ore lucrătoare.
-                </p>
+              {/* The card above opens the email template. The visible address
+                  gets the full row: in a half-width column or inside a padded
+                  card it would be shortened. */}
+              <div className="sm:col-span-2">
+                <CopyEmail subject={EMAIL_SUBJECT} dark={false} />
               </div>
             </div>
           </div>
+
+          <div className="rounded-2xl bg-white p-5 ring-1 ring-inset ring-zinc-200 sm:p-6 lg:row-span-2 lg:self-start">
+            <h2 className="flex items-center gap-2 text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">
+              <Icon name="clock" className="w-5 h-5 text-amber-600" />
+              Program de lucru
+            </h2>
+            <dl className="mt-3 divide-y divide-zinc-100 text-sm">
+              {openingHours.map((row) => (
+                <div key={row.label} className="flex justify-between gap-4 py-2.5">
+                  <dt className="text-zinc-600">{row.label}</dt>
+                  <dd className="font-semibold text-zinc-900">
+                    {row.opens} – {row.closes}
+                  </dd>
+                </div>
+              ))}
+              <div className="flex justify-between gap-4 py-2.5">
+                <dt className="text-zinc-600">Duminică</dt>
+                <dd className="text-zinc-600">Închis</dd>
+              </div>
+            </dl>
+            <p className="mt-2 text-sm text-zinc-600">{RESPONSE_TIME}</p>
+            <ul className="mt-5 space-y-3 border-t border-zinc-200 pt-5 text-sm text-zinc-700">
+              <li className="flex gap-2.5">
+                <Icon name="mapPin" className="mt-0.5 w-5 h-5 shrink-0 text-amber-600" />
+                <span>
+                  <strong className="font-semibold text-zinc-900">Craiova, jud. Dolj</strong>,
+                  România
+                </span>
+              </li>
+              <li className="flex gap-2.5">
+                <Icon name="truck" className="mt-0.5 w-5 h-5 shrink-0 text-amber-600" />
+                <span>{DELIVERY}</span>
+              </li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl bg-white p-5 ring-1 ring-inset ring-zinc-200 sm:p-6 lg:col-span-2">
+            <h2 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">
+              Ce informații să includeți
+            </h2>
+            <CheckList columns={2} className="mt-4" items={defaultOrderChecklist} />
+          </div>
         </div>
-      </section>
+      </Section>
+
+      <Section>
+        <SectionHeader title="Ce realizăm" />
+        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+          {products.map((product) => (
+            <li key={product.to}>
+              <Link
+                to={product.to}
+                className="group flex h-full items-center gap-3 rounded-xl border border-zinc-200 bg-white p-2 pr-3 transition-colors hover:border-amber-300 active:border-amber-400"
+              >
+                <ResponsiveImage
+                  name={product.image}
+                  alt={product.alt}
+                  sizes="56px"
+                  className="size-14 shrink-0 rounded-lg bg-zinc-100 object-cover"
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="block font-semibold leading-snug text-zinc-900 group-hover:text-amber-800">
+                    {product.label}
+                  </span>
+                  <span className="block text-sm font-semibold text-amber-800">
+                    {product.hint}
+                  </span>
+                </span>
+                <Icon name="chevronRight" className="w-5 h-5 shrink-0 text-zinc-400" />
+              </Link>
+            </li>
+          ))}
+        </ul>
+        <p className="mt-4">
+          <Link
+            to="/servicii"
+            hash="preturi"
+            className={`${textLink} inline-flex min-h-11 items-center gap-1.5`}
+          >
+            Toate serviciile și prețurile
+            <Icon name="arrowRight" className="w-4 h-4 shrink-0" />
+          </Link>
+        </p>
+      </Section>
     </>
   )
 }

@@ -1,108 +1,87 @@
 import { Link } from '@tanstack/react-router'
+import { Icon } from '~/components/Icon'
 import { ResponsiveImage, type ImageName } from '~/components/ResponsiveImage'
+import { Section, SectionHeader, buttonClass } from '~/components/ui'
+import type { ProductPath } from '~/data/products'
 
+// Real 3:4 workshop photos, none of them repeated from the product tiles, the
+// hero collage or the Christmas strip. Phones show the first 4 (2 × 2), larger
+// screens all 6.
 const works: Array<{
   image: ImageName
   alt: string
   label: string
-  to:
-    | '/globuri-craciun-personalizate'
-    | '/placute-adresa'
-    | '/cadouri-personalizate'
-    | '/litere-volumetrice'
-    | '/gravura-laser-craiova'
+  to: ProductPath
 }> = [
   {
-    image: '/img/products/glob-craciun-cu-nume-personalizat',
-    alt: 'Glob de Crăciun roșu din plexiglas personalizat cu numele Cristina',
-    label: 'Glob de Crăciun cu nume',
-    to: '/globuri-craciun-personalizate',
-  },
-  {
-    image: '/img/products/placuta-adresa-plexiglas-negru-auriu-3',
-    alt: 'Plăcuță de adresă din plexiglas negru lucios cu pictogramă de casă și text auriu',
-    label: 'Plăcuță de adresă',
-    to: '/placute-adresa',
-  },
-  {
-    image: '/img/products/breloc-nume-plexiglas-doua-straturi',
-    alt: 'Breloc cu numele Jonut din plexiglas alb pe fundal roz, pe două straturi',
-    label: 'Breloc cu nume',
+    image: '/img/products/icoana-isus-plexiglas-negru-cu-suport',
+    alt: 'Icoană cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport',
+    label: 'Icoană decorativă',
     to: '/cadouri-personalizate',
   },
   {
-    image: '/img/products/litere-volumetrice-decor-eveniment-2',
-    alt: 'Litere volumetrice din plexiglas alb pe panou crem, decor de eveniment',
-    label: 'Litere volumetrice',
-    to: '/litere-volumetrice',
-  },
-  {
-    image: '/img/products/glob-craciun-personalizat-craiova',
-    alt: 'Glob de Crăciun verde din plexiglas cu textul Craiova 26',
-    label: 'Glob „Craiova 26”',
+    image: '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
+    alt: 'Glob de Crăciun din plexiglas negru cu sat de iarnă decupat laser: case, biserică, brazi și stea în vârf',
+    label: 'Glob cu sat de iarnă',
     to: '/globuri-craciun-personalizate',
   },
   {
-    image: '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
-    alt: 'Decor din plexiglas roz și galben cu siluetele unei mame și a unui copil, pe suport',
-    label: 'Decor personalizat',
+    image: '/img/products/decor-love-pisici-plexiglas-roz',
+    alt: 'Decor „LOVE” din plexiglas roz tăiat laser, cu siluete de pisici integrate în litere',
+    label: 'Decor „LOVE” cu pisici',
     to: '/cadouri-personalizate',
   },
   {
-    image: '/img/products/numar-casa-plexiglas-negru-model-floral',
-    alt: 'Număr de casă din plexiglas negru cu model floral decupat laser',
-    label: 'Număr de casă',
-    to: '/placute-adresa',
+    image: '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
+    alt: 'Glob de Crăciun din plexiglas verde cu Moș Crăciun în sanie trasă de un ren, stele și brazi decupați laser',
+    label: 'Glob cu sanie și ren',
+    to: '/globuri-craciun-personalizate',
   },
   {
-    image: '/img/products/breloc-gravat-mesaj-personalizat',
-    alt: 'Breloc rotund din plexiglas negru gravat laser cu mesaj personalizat',
-    label: 'Breloc gravat',
-    to: '/gravura-laser-craiova',
+    image: '/img/products/ornament-pisica-inger-plexiglas-roz',
+    alt: 'Pisicuță-înger din plexiglas roz, așezată pe un nor, cu aureolă, aripi și detalii conturate în negru',
+    label: 'Pisicuță-înger',
+    to: '/cadouri-personalizate',
+  },
+  {
+    image: '/img/products/ornament-craciun-spiridus-luna',
+    alt: 'Ornament de Crăciun din plexiglas verde cu un spiriduș pe o semilună și stele decupate laser',
+    label: 'Spiriduș pe lună',
+    to: '/globuri-craciun-personalizate',
   },
 ]
 
 export function RecentWork() {
   return (
-    <section className="py-20 sm:py-28">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-zinc-900 tracking-tight">
-            Lucrări Recente din Atelier
-          </h2>
-          <p className="mt-4 text-lg text-zinc-600">
-            Piese reale tăiate și gravate laser în atelierul nostru din
-            Craiova — de la globuri de Crăciun cu nume la plăcuțe de adresă.
-          </p>
-        </div>
+    <Section tone="muted">
+      <SectionHeader title="Lucrări recente din atelierul din Craiova" />
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6">
-          {works.map((work) => (
-            <Link key={work.image} to={work.to} className="group block">
-              <div className="aspect-square rounded-2xl overflow-hidden bg-zinc-100">
+      <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-6">
+        {works.map((work, index) => (
+          <li key={work.image} className={index >= 4 ? 'hidden sm:block' : ''}>
+            <Link to={work.to} className="group block">
+              <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-zinc-200">
                 <ResponsiveImage
                   name={work.image}
                   alt={work.alt}
-                  sizes="(min-width: 1280px) 296px, (min-width: 640px) 25vw, 50vw"
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  sizes="(min-width: 1280px) 190px, (min-width: 1024px) 16vw, (min-width: 640px) 31vw, 50vw"
+                  className="h-full w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105"
                 />
               </div>
-              <div className="mt-3 text-sm font-semibold text-zinc-900 group-hover:text-amber-700 transition-colors">
+              <p className="mt-2 text-sm font-semibold text-zinc-900 group-hover:text-amber-800">
                 {work.label}
-              </div>
+              </p>
             </Link>
-          ))}
-        </div>
+          </li>
+        ))}
+      </ul>
 
-        <div className="text-center mt-12">
-          <Link
-            to="/portofoliu"
-            className="inline-flex items-center gap-2 text-amber-600 font-semibold hover:text-amber-700 transition-colors"
-          >
-            Vezi tot portofoliul →
-          </Link>
-        </div>
+      <div className="mt-8 text-center">
+        <Link to="/portofoliu" className={buttonClass('outlineLight')}>
+          Vedeți tot portofoliul
+          <Icon name="arrowRight" className="w-5 h-5" />
+        </Link>
       </div>
-    </section>
+    </Section>
   )
 }

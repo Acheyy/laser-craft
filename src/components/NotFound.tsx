@@ -1,23 +1,32 @@
 import { Link } from '@tanstack/react-router'
+import { ContactActions } from '~/components/Contact'
+import { Icon } from '~/components/Icon'
+import { ProductTiles } from '~/components/ProductCards'
+import { Section, textLink } from '~/components/ui'
 
 export function NotFound() {
   return (
-    <div className="min-h-[60vh] flex items-center justify-center px-4">
-      <div className="text-center max-w-md">
-        <p className="text-6xl sm:text-8xl font-bold text-amber-500 mb-4">404</p>
-        <h1 className="text-2xl font-semibold text-zinc-900 mb-4">
+    <Section>
+      <div className="mx-auto max-w-xl text-center">
+        <p aria-hidden="true" className="text-6xl font-extrabold text-amber-700 sm:text-7xl">
+          404
+        </p>
+        <h1 className="mt-3 text-2xl font-bold text-zinc-900 sm:text-3xl">
           Pagina nu a fost găsită
         </h1>
-        <p className="text-zinc-600 text-lg mb-8">
-          Ne pare rău, pagina pe care o căutați nu există sau a fost mutată.
+        <p className="mt-3 text-lg text-zinc-600">
+          Pagina căutată nu există sau a fost mutată. Poate căutați unul dintre
+          produsele de mai jos.
         </p>
-        <Link
-          to="/"
-          className="inline-block px-8 py-3 bg-amber-500 text-white font-semibold rounded-lg hover:bg-amber-600 transition-colors"
-        >
+        <ContactActions dark={false} className="mt-6 sm:justify-center" />
+        <Link to="/" className={`mt-3 inline-flex min-h-11 items-center gap-1.5 ${textLink}`}>
           Înapoi la pagina principală
+          <Icon name="arrowRight" className="w-4 h-4" />
         </Link>
       </div>
-    </div>
+      <div className="mt-12">
+        <ProductTiles headingLevel="h2" />
+      </div>
+    </Section>
   )
 }

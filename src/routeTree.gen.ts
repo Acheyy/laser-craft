@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as TaiereLaserPlexiglasRouteImport } from './routes/taiere-laser-plexiglas'
 import { Route as ServiciiRouteImport } from './routes/servicii'
 import { Route as PortofoliuRouteImport } from './routes/portofoliu'
+import { Route as PoliticaDeConfidentialitateRouteImport } from './routes/politica-de-confidentialitate'
 import { Route as PlacuteAdresaRouteImport } from './routes/placute-adresa'
 import { Route as LitereVolumetriceRouteImport } from './routes/litere-volumetrice'
 import { Route as GravuraLaserCraiovaRouteImport } from './routes/gravura-laser-craiova'
@@ -36,6 +37,12 @@ const PortofoliuRoute = PortofoliuRouteImport.update({
   path: '/portofoliu',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PoliticaDeConfidentialitateRoute =
+  PoliticaDeConfidentialitateRouteImport.update({
+    id: '/politica-de-confidentialitate',
+    path: '/politica-de-confidentialitate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const PlacuteAdresaRoute = PlacuteAdresaRouteImport.update({
   id: '/placute-adresa',
   path: '/placute-adresa',
@@ -87,6 +94,7 @@ export interface FileRoutesByFullPath {
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
   '/litere-volumetrice': typeof LitereVolumetriceRoute
   '/placute-adresa': typeof PlacuteAdresaRoute
+  '/politica-de-confidentialitate': typeof PoliticaDeConfidentialitateRoute
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
   '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
@@ -100,6 +108,7 @@ export interface FileRoutesByTo {
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
   '/litere-volumetrice': typeof LitereVolumetriceRoute
   '/placute-adresa': typeof PlacuteAdresaRoute
+  '/politica-de-confidentialitate': typeof PoliticaDeConfidentialitateRoute
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
   '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
@@ -114,6 +123,7 @@ export interface FileRoutesById {
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
   '/litere-volumetrice': typeof LitereVolumetriceRoute
   '/placute-adresa': typeof PlacuteAdresaRoute
+  '/politica-de-confidentialitate': typeof PoliticaDeConfidentialitateRoute
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
   '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
@@ -129,6 +139,7 @@ export interface FileRouteTypes {
     | '/gravura-laser-craiova'
     | '/litere-volumetrice'
     | '/placute-adresa'
+    | '/politica-de-confidentialitate'
     | '/portofoliu'
     | '/servicii'
     | '/taiere-laser-plexiglas'
@@ -142,6 +153,7 @@ export interface FileRouteTypes {
     | '/gravura-laser-craiova'
     | '/litere-volumetrice'
     | '/placute-adresa'
+    | '/politica-de-confidentialitate'
     | '/portofoliu'
     | '/servicii'
     | '/taiere-laser-plexiglas'
@@ -155,6 +167,7 @@ export interface FileRouteTypes {
     | '/gravura-laser-craiova'
     | '/litere-volumetrice'
     | '/placute-adresa'
+    | '/politica-de-confidentialitate'
     | '/portofoliu'
     | '/servicii'
     | '/taiere-laser-plexiglas'
@@ -169,6 +182,7 @@ export interface RootRouteChildren {
   GravuraLaserCraiovaRoute: typeof GravuraLaserCraiovaRoute
   LitereVolumetriceRoute: typeof LitereVolumetriceRoute
   PlacuteAdresaRoute: typeof PlacuteAdresaRoute
+  PoliticaDeConfidentialitateRoute: typeof PoliticaDeConfidentialitateRoute
   PortofoliuRoute: typeof PortofoliuRoute
   ServiciiRoute: typeof ServiciiRoute
   TaiereLaserPlexiglasRoute: typeof TaiereLaserPlexiglasRoute
@@ -195,6 +209,13 @@ declare module '@tanstack/react-router' {
       path: '/portofoliu'
       fullPath: '/portofoliu'
       preLoaderRoute: typeof PortofoliuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/politica-de-confidentialitate': {
+      id: '/politica-de-confidentialitate'
+      path: '/politica-de-confidentialitate'
+      fullPath: '/politica-de-confidentialitate'
+      preLoaderRoute: typeof PoliticaDeConfidentialitateRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/placute-adresa': {
@@ -265,6 +286,7 @@ const rootRouteChildren: RootRouteChildren = {
   GravuraLaserCraiovaRoute: GravuraLaserCraiovaRoute,
   LitereVolumetriceRoute: LitereVolumetriceRoute,
   PlacuteAdresaRoute: PlacuteAdresaRoute,
+  PoliticaDeConfidentialitateRoute: PoliticaDeConfidentialitateRoute,
   PortofoliuRoute: PortofoliuRoute,
   ServiciiRoute: ServiciiRoute,
   TaiereLaserPlexiglasRoute: TaiereLaserPlexiglasRoute,

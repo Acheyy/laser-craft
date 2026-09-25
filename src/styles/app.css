@@ -2,15 +2,42 @@
 @import '@fontsource-variable/inter';
 
 @theme {
+  --font-sans: 'Inter Variable', system-ui, sans-serif;
   --font-display: 'Inter Variable', system-ui, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
   -webkit-text-size-adjust: 100%;
 }
 
 a,
-button {
+button,
+summary {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Keyboard focus is always visible (tap highlight is off, so this matters). */
+:focus-visible {
+  outline: 2px solid var(--color-amber-400);
+  outline-offset: 2px;
+}
+
+/* The mobile contact bar yields to the open menu and the cookie banner. */
+html[data-menu='open'] [data-mobile-bar],
+html[data-consent='pending'] [data-mobile-bar] {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
