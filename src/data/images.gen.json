@@ -1,4 +1,94 @@
 {
+  "/img/products/breloc-gravat-mesaj-personalizat": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/breloc-nume-plexiglas-doua-straturi": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/decor-love-pisici-plexiglas-roz": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/decor-mama-si-copil-plexiglas-cu-suport": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/glob-craciun-cu-nume-personalizat": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/glob-craciun-fericit-plexiglas-verde": {
+    "width": 1200,
+    "height": 1374,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/glob-craciun-personalizat-craiova": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/glob-craciun-plexiglas-negru-sat-iarna": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/glob-craciun-sanie-reni-plexiglas-verde": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/icoana-isus-plexiglas-negru-cu-suport": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
   "/img/products/jurnal-piele-gravat": {
     "width": 1200,
     "height": 670,
@@ -23,6 +113,69 @@
       400,
       800,
       1024
+    ]
+  },
+  "/img/products/numar-casa-plexiglas-negru-model-floral": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/ornament-craciun-bastoane-rosii": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/ornament-craciun-fulg-de-nea-alb": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/ornament-craciun-inima-geometrica-roz": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/ornament-craciun-spiridus-luna": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/ornament-os-caine-plexiglas-roz": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/ornament-pisica-inger-plexiglas-roz": {
+    "width": 1200,
+    "height": 1600,
+    "widths": [
+      400,
+      800,
+      1200
     ]
   },
   "/img/products/placuta-adresa-metal-decupat": {

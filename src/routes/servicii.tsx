@@ -76,6 +76,26 @@ export const Route = createFileRoute('/servicii')({
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Service',
+              name: 'Globuri de Crăciun personalizate din plexiglas',
+              url: `${SITE_URL}/globuri-craciun-personalizate`,
+              provider: { '@id': BUSINESS_ID },
+              areaServed: 'Craiova',
+            },
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Cadouri personalizate din plexiglas',
+              url: `${SITE_URL}/cadouri-personalizate`,
+              provider: { '@id': BUSINESS_ID },
+              areaServed: 'Craiova',
+            },
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
               name: 'Gravură laser',
               url: `${SITE_URL}/gravura-laser-craiova`,
               provider: { '@id': BUSINESS_ID },
@@ -198,6 +218,47 @@ const services: Array<{
         />
       </svg>
     ),
+  },
+]
+
+const productPages: Array<{
+  to:
+    | '/placute-adresa'
+    | '/litere-volumetrice'
+    | '/globuri-craciun-personalizate'
+    | '/cadouri-personalizate'
+  title: string
+  description: string
+  image: ImageName
+  alt: string
+}> = [
+  {
+    to: '/placute-adresa',
+    title: 'Plăcuțe de adresă',
+    description: 'Plexiglas pe 2 straturi, prețuri fixe de la 55 lei.',
+    image: '/img/products/placuta-adresa-plexiglas-negru-auriu-3',
+    alt: 'Plăcuță de adresă din plexiglas negru lucios cu text auriu',
+  },
+  {
+    to: '/litere-volumetrice',
+    title: 'Litere volumetrice',
+    description: 'Nume și inscripții 3D pentru evenimente și firme.',
+    image: '/img/products/litere-volumetrice-decor-eveniment-2',
+    alt: 'Litere volumetrice din plexiglas alb pe panou de eveniment',
+  },
+  {
+    to: '/globuri-craciun-personalizate',
+    title: 'Globuri de Crăciun personalizate',
+    description: 'Ornamente din plexiglas colorat, cu nume sau mesaj.',
+    image: '/img/products/glob-craciun-cu-nume-personalizat',
+    alt: 'Glob de Crăciun roșu din plexiglas cu numele Cristina',
+  },
+  {
+    to: '/cadouri-personalizate',
+    title: 'Cadouri personalizate',
+    description: 'Brelocuri cu nume, decor cu suport și cadouri gravate.',
+    image: '/img/products/breloc-nume-plexiglas-doua-straturi',
+    alt: 'Breloc cu nume din plexiglas pe două straturi',
   },
 ]
 
@@ -498,6 +559,44 @@ function ServiciiPage() {
       </section>
 
       <section className="py-20 sm:py-28 bg-zinc-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4 text-center">
+            Produse personalizate din plexiglas
+          </h2>
+          <p className="text-lg text-zinc-600 text-center mb-12 max-w-2xl mx-auto">
+            Cele mai cerute lucrări din atelierul nostru din Craiova, fiecare cu
+            pagina ei de detalii și exemple reale.
+          </p>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+            {productPages.map((page) => (
+              <Link
+                key={page.to}
+                to={page.to}
+                className="group block bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/5 transition-all duration-300"
+              >
+                <div className="aspect-square overflow-hidden bg-zinc-100">
+                  <ResponsiveImage
+                    name={page.image}
+                    alt={page.alt}
+                    sizes="(min-width: 1280px) 296px, (min-width: 1024px) 25vw, 50vw"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+                <div className="p-4 sm:p-5">
+                  <h3 className="font-semibold text-zinc-900 group-hover:text-amber-700 transition-colors">
+                    {page.title}
+                  </h3>
+                  <p className="mt-1 text-sm text-zinc-600">
+                    {page.description}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 sm:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <h2 className="text-2xl sm:text-3xl font-bold text-zinc-900 mb-4 text-center">
             Materiale Prelucrate

@@ -121,13 +121,27 @@ export function ServicesPreview() {
             className="font-medium text-zinc-900 underline decoration-amber-500/50 underline-offset-4 hover:text-amber-700"
           >
             plăcuțe de adresă din plexiglas
-          </Link>{' '}
-          și{' '}
+          </Link>
+          ,{' '}
           <Link
             to="/litere-volumetrice"
             className="font-medium text-zinc-900 underline decoration-amber-500/50 underline-offset-4 hover:text-amber-700"
           >
             litere volumetrice
+          </Link>
+          ,{' '}
+          <Link
+            to="/cadouri-personalizate"
+            className="font-medium text-zinc-900 underline decoration-amber-500/50 underline-offset-4 hover:text-amber-700"
+          >
+            cadouri personalizate
+          </Link>{' '}
+          și{' '}
+          <Link
+            to="/globuri-craciun-personalizate"
+            className="font-medium text-zinc-900 underline decoration-amber-500/50 underline-offset-4 hover:text-amber-700"
+          >
+            globuri de Crăciun cu nume
           </Link>
           .
         </p>

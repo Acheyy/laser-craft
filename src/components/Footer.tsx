@@ -66,6 +66,11 @@ export function Footer() {
                 { to: '/taiere-laser-plexiglas', label: 'Tăiere laser plexiglas' },
                 { to: '/gravura-laser-craiova', label: 'Gravură laser Craiova' },
                 { to: '/litere-volumetrice', label: 'Litere volumetrice' },
+                {
+                  to: '/globuri-craciun-personalizate',
+                  label: 'Globuri de Crăciun personalizate',
+                },
+                { to: '/cadouri-personalizate', label: 'Cadouri personalizate' },
                 { to: '/servicii', label: 'Toate serviciile și prețurile' },
               ].map((link) => (
                 <li key={link.to}>

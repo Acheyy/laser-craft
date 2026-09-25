@@ -1,5 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Hero } from '~/components/Hero'
+import { RecentWork } from '~/components/RecentWork'
 import { ServicesPreview } from '~/components/ServicesPreview'
 import { WhyUs } from '~/components/WhyUs'
 import { CTASection } from '~/components/CTASection'
@@ -21,6 +22,7 @@ function HomePage() {
   return (
     <>
       <Hero />
+      <RecentWork />
       <ServicesPreview />
       <WhyUs />
       <CTASection />

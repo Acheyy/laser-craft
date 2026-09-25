@@ -13,7 +13,7 @@ export const Route = createFileRoute('/portofoliu')({
     ...seo({
       title: 'Portofoliu Lucrări Laser Craiova – Plăcuțe, Litere | LaserCraft',
       description:
-        'Lucrări de tăiere și gravură laser realizate în Craiova: plăcuțe de adresă din plexiglas și metal, litere volumetrice, decor pentru evenimente și gravuri.',
+        'Lucrări laser realizate în Craiova: plăcuțe de adresă, globuri de Crăciun personalizate, brelocuri cu nume, litere volumetrice, decor și gravuri pe plexiglas.',
       path: '/portofoliu',
       image: '/img/og/og-portofoliu.jpg',
     }),
@@ -24,12 +24,19 @@ export const Route = createFileRoute('/portofoliu')({
 const categories = [
   'Toate',
   'Plăcuțe și semnalistică',
+  'Ornamente de Crăciun',
+  'Cadouri personalizate',
   'Gravură',
   'Decorațiuni',
 ]
 
 type ProjectLink = {
-  to: '/placute-adresa' | '/litere-volumetrice' | '/gravura-laser-craiova'
+  to:
+    | '/placute-adresa'
+    | '/litere-volumetrice'
+    | '/gravura-laser-craiova'
+    | '/globuri-craciun-personalizate'
+    | '/cadouri-personalizate'
   label: string
 }
 
@@ -44,6 +51,14 @@ const lettersLink: ProjectLink = {
 const engravingLink: ProjectLink = {
   to: '/gravura-laser-craiova',
   label: 'Gravură laser',
+}
+const christmasLink: ProjectLink = {
+  to: '/globuri-craciun-personalizate',
+  label: 'Globuri de Crăciun personalizate',
+}
+const giftsLink: ProjectLink = {
+  to: '/cadouri-personalizate',
+  label: 'Cadouri personalizate',
 }
 
 const projects: Array<{
@@ -116,6 +131,176 @@ const projects: Array<{
     link: plaqueLink,
   },
   {
+    title: 'Număr de Casă cu Model Floral',
+    category: 'Plăcuțe și semnalistică',
+    description:
+      'Număr de casă din plexiglas negru, cu cifrele decupate și un model floral decorativ tăiat laser.',
+    material: 'Plexiglas negru',
+    image: '/img/products/numar-casa-plexiglas-negru-model-floral',
+    alt: 'Număr de casă 32 din plexiglas negru cu model floral decupat laser',
+    link: plaqueLink,
+  },
+  {
+    title: 'Glob de Crăciun cu Nume — „Cristina”',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Glob roșu personalizat cu nume, cu Moș Crăciun în sanie, reni și fulgi de nea, tăiat laser.',
+    material: 'Plexiglas roșu',
+    image: '/img/products/glob-craciun-cu-nume-personalizat',
+    alt: 'Glob de Crăciun roșu din plexiglas personalizat cu numele Cristina, cu sanie și reni',
+    link: christmasLink,
+  },
+  {
+    title: 'Glob Personalizat „Craiova 26”',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Glob verde personalizat cu numele orașului și anul, cu sanie, reni și fulgi de nea.',
+    material: 'Plexiglas verde',
+    image: '/img/products/glob-craciun-personalizat-craiova',
+    alt: 'Glob de Crăciun verde din plexiglas cu textul Craiova 26, sanie și reni',
+    link: christmasLink,
+  },
+  {
+    title: 'Ornament „Crăciun Fericit”',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Ornament rotund cu mesajul „Crăciun Fericit” și fulgi de nea, gata de agățat în brad.',
+    material: 'Plexiglas verde',
+    image: '/img/products/glob-craciun-fericit-plexiglas-verde',
+    alt: 'Ornament de Crăciun rotund din plexiglas verde cu textul Crăciun Fericit',
+    link: christmasLink,
+  },
+  {
+    title: 'Glob cu Sat de Iarnă',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Glob decupat laser cu un sat de iarnă — case, biserică și brad — și o stea în vârf.',
+    material: 'Plexiglas negru',
+    image: '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
+    alt: 'Glob de Crăciun din plexiglas negru cu sat de iarnă, biserică și brad',
+    link: christmasLink,
+  },
+  {
+    title: 'Glob cu Sanie și Reni',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Glob cu sania trasă de reni pe cerul înstelat, deasupra unei păduri de brazi.',
+    material: 'Plexiglas verde',
+    image: '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
+    alt: 'Glob de Crăciun din plexiglas verde cu sanie, reni și brazi',
+    link: christmasLink,
+  },
+  {
+    title: 'Bastoane de Crăciun',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Ornament cu două bastoane de Crăciun, fundă și fulgi de nea.',
+    material: 'Plexiglas roșu',
+    image: '/img/products/ornament-craciun-bastoane-rosii',
+    alt: 'Ornament de Crăciun din plexiglas roșu cu două bastoane și fundă',
+    link: christmasLink,
+  },
+  {
+    title: 'Fulg de Nea',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Fulg de nea decupat laser, cu detalii fine.',
+    material: 'Plexiglas alb',
+    image: '/img/products/ornament-craciun-fulg-de-nea-alb',
+    alt: 'Fulg de nea din plexiglas alb tăiat laser',
+    link: christmasLink,
+  },
+  {
+    title: 'Inimă Geometrică',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Ornament în formă de inimă cu model geometric, agățat cu panglică roșie.',
+    material: 'Plexiglas roz',
+    image: '/img/products/ornament-craciun-inima-geometrica-roz',
+    alt: 'Ornament inimă geometrică din plexiglas roz cu panglică roșie',
+    link: christmasLink,
+  },
+  {
+    title: 'Spiriduș pe Lună',
+    category: 'Ornamente de Crăciun',
+    description:
+      'Ornament cu un spiriduș pe o semilună decorată cu stele.',
+    material: 'Plexiglas verde',
+    image: '/img/products/ornament-craciun-spiridus-luna',
+    alt: 'Ornament de Crăciun din plexiglas verde cu spiriduș pe semilună și stele',
+    link: christmasLink,
+  },
+  {
+    title: 'Breloc cu Nume pe 2 Straturi — „Jonut”',
+    category: 'Cadouri personalizate',
+    description:
+      'Nume cu litere albe aplicate pe un fundal roz, cu orificiu pentru inel de breloc.',
+    material: 'Plexiglas alb + roz',
+    image: '/img/products/breloc-nume-plexiglas-doua-straturi',
+    alt: 'Breloc cu numele Jonut din plexiglas alb pe fundal roz, pe două straturi',
+    link: giftsLink,
+  },
+  {
+    title: 'Breloc Gravat cu Mesaj',
+    category: 'Cadouri personalizate',
+    description:
+      'Breloc rotund gravat laser cu mesajul „you are INDISPENSABLE”, un desen amuzant și inimioare.',
+    material: 'Plexiglas negru',
+    image: '/img/products/breloc-gravat-mesaj-personalizat',
+    alt: 'Breloc rotund din plexiglas negru gravat laser cu mesajul you are indispensable',
+    link: giftsLink,
+  },
+  {
+    title: 'Decor Mamă și Copil',
+    category: 'Cadouri personalizate',
+    description:
+      'Decor pe suport, în două culori, cu siluetele unei mame și a unui copil cu balon și trandafiri gravați.',
+    material: 'Plexiglas roz + galben',
+    image: '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
+    alt: 'Decor din plexiglas roz și galben cu siluetele unei mame și a unui copil cu balon, pe suport',
+    link: giftsLink,
+  },
+  {
+    title: 'Icoană cu Suport',
+    category: 'Cadouri personalizate',
+    description:
+      'Icoană decorativă cu chipul lui Isus, decupată laser pe fundal alb, cu suport pentru așezare.',
+    material: 'Plexiglas negru + alb',
+    image: '/img/products/icoana-isus-plexiglas-negru-cu-suport',
+    alt: 'Icoană cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport',
+    link: giftsLink,
+  },
+  {
+    title: 'Decor „LOVE” cu Pisici',
+    category: 'Cadouri personalizate',
+    description:
+      'Inscripție „LOVE” cu siluete de pisici integrate în litere.',
+    material: 'Plexiglas roz',
+    image: '/img/products/decor-love-pisici-plexiglas-roz',
+    alt: 'Decor LOVE din plexiglas roz cu siluete de pisici',
+    link: giftsLink,
+  },
+  {
+    title: 'Pisicuță-Înger',
+    category: 'Cadouri personalizate',
+    description:
+      'Pisicuță cu aripi și aureolă, pe un nor, cu detalii conturate.',
+    material: 'Plexiglas roz',
+    image: '/img/products/ornament-pisica-inger-plexiglas-roz',
+    alt: 'Pisicuță înger din plexiglas roz cu aripi și aureolă, pe nor',
+    link: giftsLink,
+  },
+  {
+    title: 'Os pentru Cățel',
+    category: 'Cadouri personalizate',
+    description:
+      'Ornament în formă de os, agățat cu panglică roșie — o idee pentru iubitorii de câini.',
+    material: 'Plexiglas roz',
+    image: '/img/products/ornament-os-caine-plexiglas-roz',
+    alt: 'Ornament în formă de os din plexiglas roz cu panglică roșie',
+    link: giftsLink,
+  },
+  {
     title: 'Trofee Personalizate',
     category: 'Gravură',
     description: 'Trofee din plexiglas cu gravură laser pentru competiții sportive',
@@ -184,9 +369,10 @@ function PortofoliuPage() {
             </h1>
             <p className="mt-6 text-lg text-zinc-400 leading-relaxed">
               Explorați o selecție din proiectele noastre recente din atelierul
-              din Craiova — plăcuțe de adresă, litere volumetrice, decor pentru
-              evenimente și gravuri. Fiecare lucrare reflectă angajamentul
-              nostru pentru calitate și precizie.
+              din Craiova — plăcuțe de adresă, globuri de Crăciun personalizate,
+              brelocuri cu nume, litere volumetrice, decor pentru evenimente și
+              gravuri. Fiecare lucrare reflectă angajamentul nostru pentru
+              calitate și precizie.
             </p>
           </div>
         </div>

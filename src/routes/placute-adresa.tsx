@@ -124,6 +124,14 @@ const models: Array<{
       'Un proiect special din portofoliu: plăcuță din oțel vopsit mat, cu pictograma casei și textul personalizat decupate laser.',
     material: 'Oțel vopsit mat',
   },
+  {
+    image: '/img/products/numar-casa-plexiglas-negru-model-floral',
+    alt: 'Număr de casă 32 din plexiglas negru, cu cifre decupate și model floral tăiat laser',
+    title: 'Număr de casă cu model floral',
+    description:
+      'Design personalizat: cifrele casei decupate într-o bandă din plexiglas negru, completate de un model floral tăiat laser.',
+    material: 'Plexiglas negru',
+  },
 ]
 
 const orderSteps = [

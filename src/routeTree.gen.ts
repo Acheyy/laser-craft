@@ -15,8 +15,10 @@ import { Route as PortofoliuRouteImport } from './routes/portofoliu'
 import { Route as PlacuteAdresaRouteImport } from './routes/placute-adresa'
 import { Route as LitereVolumetriceRouteImport } from './routes/litere-volumetrice'
 import { Route as GravuraLaserCraiovaRouteImport } from './routes/gravura-laser-craiova'
+import { Route as GloburiCraciunPersonalizateRouteImport } from './routes/globuri-craciun-personalizate'
 import { Route as DespreNoiRouteImport } from './routes/despre-noi'
 import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CadouriPersonalizateRouteImport } from './routes/cadouri-personalizate'
 import { Route as IndexRouteImport } from './routes/index'
 
 const TaiereLaserPlexiglasRoute = TaiereLaserPlexiglasRouteImport.update({
@@ -49,6 +51,12 @@ const GravuraLaserCraiovaRoute = GravuraLaserCraiovaRouteImport.update({
   path: '/gravura-laser-craiova',
   getParentRoute: () => rootRouteImport,
 } as any)
+const GloburiCraciunPersonalizateRoute =
+  GloburiCraciunPersonalizateRouteImport.update({
+    id: '/globuri-craciun-personalizate',
+    path: '/globuri-craciun-personalizate',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const DespreNoiRoute = DespreNoiRouteImport.update({
   id: '/despre-noi',
   path: '/despre-noi',
@@ -59,6 +67,11 @@ const ContactRoute = ContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CadouriPersonalizateRoute = CadouriPersonalizateRouteImport.update({
+  id: '/cadouri-personalizate',
+  path: '/cadouri-personalizate',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -67,8 +80,10 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cadouri-personalizate': typeof CadouriPersonalizateRoute
   '/contact': typeof ContactRoute
   '/despre-noi': typeof DespreNoiRoute
+  '/globuri-craciun-personalizate': typeof GloburiCraciunPersonalizateRoute
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
   '/litere-volumetrice': typeof LitereVolumetriceRoute
   '/placute-adresa': typeof PlacuteAdresaRoute
@@ -78,8 +93,10 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cadouri-personalizate': typeof CadouriPersonalizateRoute
   '/contact': typeof ContactRoute
   '/despre-noi': typeof DespreNoiRoute
+  '/globuri-craciun-personalizate': typeof GloburiCraciunPersonalizateRoute
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
   '/litere-volumetrice': typeof LitereVolumetriceRoute
   '/placute-adresa': typeof PlacuteAdresaRoute
@@ -90,8 +107,10 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cadouri-personalizate': typeof CadouriPersonalizateRoute
   '/contact': typeof ContactRoute
   '/despre-noi': typeof DespreNoiRoute
+  '/globuri-craciun-personalizate': typeof GloburiCraciunPersonalizateRoute
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
   '/litere-volumetrice': typeof LitereVolumetriceRoute
   '/placute-adresa': typeof PlacuteAdresaRoute
@@ -103,8 +122,10 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/cadouri-personalizate'
     | '/contact'
     | '/despre-noi'
+    | '/globuri-craciun-personalizate'
     | '/gravura-laser-craiova'
     | '/litere-volumetrice'
     | '/placute-adresa'
@@ -114,8 +135,10 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/cadouri-personalizate'
     | '/contact'
     | '/despre-noi'
+    | '/globuri-craciun-personalizate'
     | '/gravura-laser-craiova'
     | '/litere-volumetrice'
     | '/placute-adresa'
@@ -125,8 +148,10 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/cadouri-personalizate'
     | '/contact'
     | '/despre-noi'
+    | '/globuri-craciun-personalizate'
     | '/gravura-laser-craiova'
     | '/litere-volumetrice'
     | '/placute-adresa'
@@ -137,8 +162,10 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CadouriPersonalizateRoute: typeof CadouriPersonalizateRoute
   ContactRoute: typeof ContactRoute
   DespreNoiRoute: typeof DespreNoiRoute
+  GloburiCraciunPersonalizateRoute: typeof GloburiCraciunPersonalizateRoute
   GravuraLaserCraiovaRoute: typeof GravuraLaserCraiovaRoute
   LitereVolumetriceRoute: typeof LitereVolumetriceRoute
   PlacuteAdresaRoute: typeof PlacuteAdresaRoute
@@ -191,6 +218,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GravuraLaserCraiovaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/globuri-craciun-personalizate': {
+      id: '/globuri-craciun-personalizate'
+      path: '/globuri-craciun-personalizate'
+      fullPath: '/globuri-craciun-personalizate'
+      preLoaderRoute: typeof GloburiCraciunPersonalizateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/despre-noi': {
       id: '/despre-noi'
       path: '/despre-noi'
@@ -205,6 +239,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContactRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cadouri-personalizate': {
+      id: '/cadouri-personalizate'
+      path: '/cadouri-personalizate'
+      fullPath: '/cadouri-personalizate'
+      preLoaderRoute: typeof CadouriPersonalizateRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -217,8 +258,10 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CadouriPersonalizateRoute: CadouriPersonalizateRoute,
   ContactRoute: ContactRoute,
   DespreNoiRoute: DespreNoiRoute,
+  GloburiCraciunPersonalizateRoute: GloburiCraciunPersonalizateRoute,
   GravuraLaserCraiovaRoute: GravuraLaserCraiovaRoute,
   LitereVolumetriceRoute: LitereVolumetriceRoute,
   PlacuteAdresaRoute: PlacuteAdresaRoute,
