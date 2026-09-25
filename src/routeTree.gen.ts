@@ -9,12 +9,21 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TaiereLaserPlexiglasRouteImport } from './routes/taiere-laser-plexiglas'
 import { Route as ServiciiRouteImport } from './routes/servicii'
 import { Route as PortofoliuRouteImport } from './routes/portofoliu'
+import { Route as PlacuteAdresaRouteImport } from './routes/placute-adresa'
+import { Route as LitereVolumetriceRouteImport } from './routes/litere-volumetrice'
+import { Route as GravuraLaserCraiovaRouteImport } from './routes/gravura-laser-craiova'
 import { Route as DespreNoiRouteImport } from './routes/despre-noi'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as IndexRouteImport } from './routes/index'
 
+const TaiereLaserPlexiglasRoute = TaiereLaserPlexiglasRouteImport.update({
+  id: '/taiere-laser-plexiglas',
+  path: '/taiere-laser-plexiglas',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ServiciiRoute = ServiciiRouteImport.update({
   id: '/servicii',
   path: '/servicii',
@@ -23,6 +32,21 @@ const ServiciiRoute = ServiciiRouteImport.update({
 const PortofoliuRoute = PortofoliuRouteImport.update({
   id: '/portofoliu',
   path: '/portofoliu',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlacuteAdresaRoute = PlacuteAdresaRouteImport.update({
+  id: '/placute-adresa',
+  path: '/placute-adresa',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LitereVolumetriceRoute = LitereVolumetriceRouteImport.update({
+  id: '/litere-volumetrice',
+  path: '/litere-volumetrice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GravuraLaserCraiovaRoute = GravuraLaserCraiovaRouteImport.update({
+  id: '/gravura-laser-craiova',
+  path: '/gravura-laser-craiova',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DespreNoiRoute = DespreNoiRouteImport.update({
@@ -45,48 +69,93 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/despre-noi': typeof DespreNoiRoute
+  '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
+  '/litere-volumetrice': typeof LitereVolumetriceRoute
+  '/placute-adresa': typeof PlacuteAdresaRoute
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
+  '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/despre-noi': typeof DespreNoiRoute
+  '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
+  '/litere-volumetrice': typeof LitereVolumetriceRoute
+  '/placute-adresa': typeof PlacuteAdresaRoute
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
+  '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/contact': typeof ContactRoute
   '/despre-noi': typeof DespreNoiRoute
+  '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
+  '/litere-volumetrice': typeof LitereVolumetriceRoute
+  '/placute-adresa': typeof PlacuteAdresaRoute
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
+  '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contact' | '/despre-noi' | '/portofoliu' | '/servicii'
+  fullPaths:
+    | '/'
+    | '/contact'
+    | '/despre-noi'
+    | '/gravura-laser-craiova'
+    | '/litere-volumetrice'
+    | '/placute-adresa'
+    | '/portofoliu'
+    | '/servicii'
+    | '/taiere-laser-plexiglas'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contact' | '/despre-noi' | '/portofoliu' | '/servicii'
+  to:
+    | '/'
+    | '/contact'
+    | '/despre-noi'
+    | '/gravura-laser-craiova'
+    | '/litere-volumetrice'
+    | '/placute-adresa'
+    | '/portofoliu'
+    | '/servicii'
+    | '/taiere-laser-plexiglas'
   id:
     | '__root__'
     | '/'
     | '/contact'
     | '/despre-noi'
+    | '/gravura-laser-craiova'
+    | '/litere-volumetrice'
+    | '/placute-adresa'
     | '/portofoliu'
     | '/servicii'
+    | '/taiere-laser-plexiglas'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ContactRoute: typeof ContactRoute
   DespreNoiRoute: typeof DespreNoiRoute
+  GravuraLaserCraiovaRoute: typeof GravuraLaserCraiovaRoute
+  LitereVolumetriceRoute: typeof LitereVolumetriceRoute
+  PlacuteAdresaRoute: typeof PlacuteAdresaRoute
   PortofoliuRoute: typeof PortofoliuRoute
   ServiciiRoute: typeof ServiciiRoute
+  TaiereLaserPlexiglasRoute: typeof TaiereLaserPlexiglasRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/taiere-laser-plexiglas': {
+      id: '/taiere-laser-plexiglas'
+      path: '/taiere-laser-plexiglas'
+      fullPath: '/taiere-laser-plexiglas'
+      preLoaderRoute: typeof TaiereLaserPlexiglasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/servicii': {
       id: '/servicii'
       path: '/servicii'
@@ -99,6 +168,27 @@ declare module '@tanstack/react-router' {
       path: '/portofoliu'
       fullPath: '/portofoliu'
       preLoaderRoute: typeof PortofoliuRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/placute-adresa': {
+      id: '/placute-adresa'
+      path: '/placute-adresa'
+      fullPath: '/placute-adresa'
+      preLoaderRoute: typeof PlacuteAdresaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/litere-volumetrice': {
+      id: '/litere-volumetrice'
+      path: '/litere-volumetrice'
+      fullPath: '/litere-volumetrice'
+      preLoaderRoute: typeof LitereVolumetriceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/gravura-laser-craiova': {
+      id: '/gravura-laser-craiova'
+      path: '/gravura-laser-craiova'
+      fullPath: '/gravura-laser-craiova'
+      preLoaderRoute: typeof GravuraLaserCraiovaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/despre-noi': {
@@ -129,8 +219,12 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ContactRoute: ContactRoute,
   DespreNoiRoute: DespreNoiRoute,
+  GravuraLaserCraiovaRoute: GravuraLaserCraiovaRoute,
+  LitereVolumetriceRoute: LitereVolumetriceRoute,
+  PlacuteAdresaRoute: PlacuteAdresaRoute,
   PortofoliuRoute: PortofoliuRoute,
   ServiciiRoute: ServiciiRoute,
+  TaiereLaserPlexiglasRoute: TaiereLaserPlexiglasRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,18 +1,17 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { seo } from '~/utils/seo'
+import { breadcrumbs, seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/despre-noi')({
   component: DespreNoiPage,
   head: () => ({
-    meta: seo({
-      title: 'Despre Noi - LaserCraft | Experiență în Servicii Laser',
+    ...seo({
+      title: 'Despre LaserCraft – Atelier de Tăiere și Gravură Laser Craiova',
       description:
-        'Descoperiți povestea LaserCraft — peste 10 ani de experiență în servicii profesionale de tăiere și gravare laser în România. 2000+ proiecte realizate.',
-      keywords:
-        'despre LaserCraft, echipa laser craft, experienta taiere laser, firma taiere laser Craiova, servicii laser România',
-      image: '/img/og/og-despre-noi.png',
-      url: '/despre-noi',
+        'Descoperiți povestea LaserCraft, atelier de tăiere și gravare laser din Craiova — peste 10 ani de experiență și peste 2000 de proiecte realizate.',
+      path: '/despre-noi',
+      image: '/img/og/og-despre-noi.jpg',
     }),
+    scripts: [breadcrumbs([{ name: 'Despre noi', path: '/despre-noi' }])],
   }),
 })
 
@@ -98,8 +97,9 @@ function DespreNoiPage() {
               </span>
             </h1>
             <p className="mt-6 text-lg text-zinc-400 leading-relaxed">
-              Suntem o echipă de profesioniști pasionați de tehnologia laser, cu
-              o experiență de peste 10 ani în industria prelucrării materialelor.
+              Suntem o echipă de profesioniști din Craiova pasionați de
+              tehnologia laser, cu o experiență de peste 10 ani în industria
+              prelucrării materialelor.
             </p>
           </div>
         </div>

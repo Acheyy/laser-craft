@@ -1,0 +1,127 @@
+{
+  "/img/products/jurnal-piele-gravat": {
+    "width": 1200,
+    "height": 670,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/litere-volumetrice-decor-eveniment-1": {
+    "width": 768,
+    "height": 1024,
+    "widths": [
+      400,
+      768
+    ]
+  },
+  "/img/products/litere-volumetrice-decor-eveniment-2": {
+    "width": 1024,
+    "height": 682,
+    "widths": [
+      400,
+      800,
+      1024
+    ]
+  },
+  "/img/products/placuta-adresa-metal-decupat": {
+    "width": 1200,
+    "height": 900,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/placuta-adresa-plexiglas-negru-auriu-1": {
+    "width": 1066,
+    "height": 1066,
+    "widths": [
+      400,
+      800,
+      1066
+    ]
+  },
+  "/img/products/placuta-adresa-plexiglas-negru-auriu-2": {
+    "width": 1066,
+    "height": 1066,
+    "widths": [
+      400,
+      800,
+      1066
+    ]
+  },
+  "/img/products/placuta-adresa-plexiglas-negru-auriu-3": {
+    "width": 1200,
+    "height": 900,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/semn-luminos-plexiglas-led": {
+    "width": 1200,
+    "height": 670,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/suporturi-pahar-lemn-gravate": {
+    "width": 1200,
+    "height": 670,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/tablou-lemn-taiat-laser": {
+    "width": 1200,
+    "height": 670,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/trofeu-plexiglas-gravat": {
+    "width": 1200,
+    "height": 670,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/services/gravura-laser": {
+    "width": 1200,
+    "height": 670,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/services/taiere-laser-lemn": {
+    "width": 1200,
+    "height": 670,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/services/taiere-laser-plexiglas": {
+    "width": 1200,
+    "height": 670,
+    "widths": [
+      400,
+      800,
+      1200
+    ]
+  }
+}

@@ -7,17 +7,14 @@ import { seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/')({
   component: HomePage,
-  head: () => ({
-    meta: seo({
-      title: 'LaserCraft - Servicii Profesionale de Tăiere și Gravare Laser',
+  head: () =>
+    seo({
+      title: 'Tăiere și Gravură Laser Craiova – Plexiglas, Lemn | LaserCraft',
       description:
-        'LaserCraft oferă servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în Craiova, România.',
-      keywords:
-        'taiere laser, gravare laser, taiere acril, taiere lemn, laser craft, servicii laser, Craiova, gravura laser, plexiglas',
-      image: '/img/og/og-home.png',
-      url: '/',
+        'Atelier de tăiere și gravură laser în Craiova: plăcuțe de adresă din plexiglas de la 55 lei, litere volumetrice, decor de evenimente, gravură pe lemn și sticlă.',
+      path: '/',
+      image: '/img/og/og-home.jpg',
     }),
-  }),
 })
 
 function HomePage() {

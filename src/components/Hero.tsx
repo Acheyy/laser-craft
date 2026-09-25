@@ -17,17 +17,18 @@ export function Hero() {
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white leading-tight tracking-tight">
-            Tăiere & Gravare{' '}
+            Tăiere și Gravură{' '}
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
               Laser
             </span>{' '}
-            de Înaltă Precizie
+            în Craiova
           </h1>
 
           <p className="mt-6 text-lg sm:text-xl text-zinc-400 leading-relaxed max-w-2xl">
-            Transformăm ideile dumneavoastră în realitate cu tehnologie laser de
-            ultimă generație. Acril, lemn, piele, textile — orice material,
-            rezultate impecabile.
+            Atelier de tăiere și gravură laser de înaltă precizie în Craiova.
+            Plăcuțe de adresă din plexiglas, litere volumetrice, decor pentru
+            evenimente și gravură pe lemn, sticlă și piele — de la o singură
+            piesă la serii mari.
           </p>
 
           <div className="mt-10 flex flex-col sm:flex-row gap-4">

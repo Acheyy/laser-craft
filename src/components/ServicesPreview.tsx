@@ -1,10 +1,18 @@
+import type * as React from 'react'
 import { Link } from '@tanstack/react-router'
 
-const services = [
+const services: Array<{
+  title: string
+  to: '/taiere-laser-plexiglas' | '/servicii' | '/gravura-laser-craiova'
+  hash?: string
+  description: string
+  icon: React.ReactNode
+}> = [
   {
-    title: 'Tăiere Laser Acril',
+    title: 'Tăiere Laser Plexiglas',
+    to: '/taiere-laser-plexiglas',
     description:
-      'Tăiere de precizie în acril (plexiglas) cu margini curate și lustruite. Ideal pentru signalistică, plăcuțe de adresă și decorațiuni.',
+      'Tăiere și debitare de precizie în plexiglas (acril) cu margini curate și lustruite. Ideal pentru semnalistică, plăcuțe de adresă și decorațiuni.',
     icon: (
       <svg
         viewBox="0 0 24 24"
@@ -28,6 +36,8 @@ const services = [
   },
   {
     title: 'Tăiere Laser Lemn',
+    to: '/servicii',
+    hash: 'taiere-laser-lemn',
     description:
       'Decupări complexe în lemn, placaj, MDF și HDF. Perfect pentru decorațiuni, mobilier personalizat și elemente arhitecturale.',
     icon: (
@@ -48,6 +58,7 @@ const services = [
   },
   {
     title: 'Gravură Laser',
+    to: '/gravura-laser-craiova',
     description:
       'Gravuri detaliate pe lemn, sticlă, piele și acril. Personalizare premium pentru cadouri, trofee și branding.',
     icon: (
@@ -74,7 +85,7 @@ export function ServicesPreview() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-zinc-900 tracking-tight">
-            Serviciile Noastre
+            Servicii de Tăiere și Gravură Laser
           </h2>
           <p className="mt-4 text-lg text-zinc-600">
             Oferim o gamă completă de servicii de prelucrare laser pentru orice
@@ -84,9 +95,11 @@ export function ServicesPreview() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {services.map((service) => (
-            <div
+            <Link
               key={service.title}
-              className="group bg-white rounded-2xl p-6 border border-zinc-200 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/5 transition-all duration-300"
+              to={service.to}
+              hash={service.hash}
+              className="group block bg-white rounded-2xl p-6 border border-zinc-200 hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/5 transition-all duration-300"
             >
               <div className="w-12 h-12 bg-amber-500/10 text-amber-600 rounded-xl flex items-center justify-center mb-5 group-hover:bg-amber-500 group-hover:text-white transition-colors duration-300">
                 {service.icon}
@@ -97,11 +110,29 @@ export function ServicesPreview() {
               <p className="text-sm text-zinc-600 leading-relaxed">
                 {service.description}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
 
-        <div className="text-center mt-12">
+        <p className="text-center mt-10 text-sm text-zinc-600">
+          Cele mai cerute:{' '}
+          <Link
+            to="/placute-adresa"
+            className="font-medium text-zinc-900 underline decoration-amber-500/50 underline-offset-4 hover:text-amber-700"
+          >
+            plăcuțe de adresă din plexiglas
+          </Link>{' '}
+          și{' '}
+          <Link
+            to="/litere-volumetrice"
+            className="font-medium text-zinc-900 underline decoration-amber-500/50 underline-offset-4 hover:text-amber-700"
+          >
+            litere volumetrice
+          </Link>
+          .
+        </p>
+
+        <div className="text-center mt-8">
           <Link
             to="/servicii"
             className="inline-flex items-center gap-2 text-amber-600 font-semibold hover:text-amber-700 transition-colors"

@@ -1,9 +1,9 @@
 /// <reference types="vite/client" />
 import {
   HeadContent,
-  Outlet,
   Scripts,
   createRootRoute,
+  redirect,
 } from '@tanstack/react-router'
 import * as React from 'react'
 import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary'
@@ -11,27 +11,35 @@ import { NotFound } from '~/components/NotFound'
 import { Header } from '~/components/Header'
 import { Footer } from '~/components/Footer'
 import appCss from '~/styles/app.css?url'
-import { seo, SITE_URL } from '~/utils/seo'
+import interLatin from '@fontsource-variable/inter/files/inter-latin-wght-normal.woff2?url'
+import { BUSINESS_ID, SITE_URL } from '~/utils/seo'
+import { EMAIL, PHONE_E164 } from '~/data/business'
 
 const structuredData = {
   '@context': 'https://schema.org',
   '@graph': [
     {
       '@type': 'LocalBusiness',
-      '@id': `${SITE_URL}/#business`,
+      '@id': BUSINESS_ID,
       name: 'LaserCraft',
+      alternateName: 'LaserCraft Craiova',
       description:
-        'Servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în Craiova, România.',
-      url: SITE_URL,
-      telephone: '+40754497243',
-      email: 'lasercraft.contact@gmail.com',
-      image: `${SITE_URL}/img/og/og-home.png`,
-      logo: `${SITE_URL}/img/logo.svg`,
+        'Atelier de tăiere și gravură laser în Craiova: plăcuțe de adresă din plexiglas, tăiere laser plexiglas și lemn, litere volumetrice, gravură pe lemn, sticlă și piele.',
+      url: `${SITE_URL}/`,
+      telephone: PHONE_E164,
+      email: EMAIL,
+      image: `${SITE_URL}/img/og/og-home.jpg`,
+      logo: `${SITE_URL}/img/logo-512.png`,
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Craiova',
+        addressRegion: 'Dolj',
         addressCountry: 'RO',
       },
+      areaServed: [
+        { '@type': 'City', name: 'Craiova' },
+        { '@type': 'AdministrativeArea', name: 'Județul Dolj' },
+      ],
       openingHoursSpecification: [
         {
           '@type': 'OpeningHoursSpecification',
@@ -47,72 +55,64 @@ const structuredData = {
         },
       ],
       priceRange: '$$',
+      currenciesAccepted: 'RON',
     },
     {
       '@type': 'WebSite',
       '@id': `${SITE_URL}/#website`,
-      url: SITE_URL,
+      url: `${SITE_URL}/`,
       name: 'LaserCraft',
       inLanguage: 'ro',
+      publisher: { '@id': BUSINESS_ID },
     },
   ],
 }
 
 export const Route = createRootRoute({
-  head: () => ({
+  // One URL per page: 301 upper-case and trailing-slash variants (the router
+  // matches both case-insensitively and with a trailing slash, which would
+  // otherwise serve duplicate pages).
+  beforeLoad: ({ location }) => {
+    const { pathname } = location
+    if (/[^\x21-\x7e]/.test(pathname)) return
+    let normalized = pathname.toLowerCase()
+    if (normalized.length > 1) normalized = normalized.replace(/\/+$/, '') || '/'
+    if (normalized !== pathname) {
+      throw redirect({
+        href: `${normalized}${location.searchStr}`,
+        statusCode: 301,
+      })
+    }
+  },
+  head: ({ match }) => ({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      ...seo({
-        title: 'LaserCraft - Servicii Profesionale de Tăiere și Gravare Laser',
-        description:
-          'LaserCraft oferă servicii profesionale de tăiere laser și gravare laser. Acril, lemn, piele — precizie, calitate și rapiditate în Craiova, România.',
-        keywords:
-          'taiere laser, gravare laser, taiere acril, taiere lemn, laser craft, servicii laser, Craiova',
-        image: '/img/og/og-home.png',
-        url: '/',
-      }),
+      ...(match.globalNotFound
+        ? [
+            { title: 'Pagina nu a fost găsită | LaserCraft' },
+            { name: 'robots', content: 'noindex' },
+          ]
+        : []),
     ],
     links: [
-      { rel: 'stylesheet', href: appCss },
-      { rel: 'icon', href: '/favicon.ico' },
-      { rel: 'apple-touch-icon', href: '/img/logo.svg' },
-      { rel: 'canonical', href: SITE_URL },
       {
-        rel: 'preconnect',
-        href: 'https://fonts.googleapis.com',
-      },
-      {
-        rel: 'preconnect',
-        href: 'https://fonts.gstatic.com',
+        rel: 'preload',
+        href: interLatin,
+        as: 'font',
+        type: 'font/woff2',
         crossOrigin: 'anonymous',
       },
-      {
-        rel: 'stylesheet',
-        href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap',
-      },
+      { rel: 'stylesheet', href: appCss },
+      { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
+      { rel: 'icon', href: '/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
     ],
   }),
-  errorComponent: (props) => (
-    <RootDocument>
-      <DefaultCatchBoundary {...props} />
-    </RootDocument>
-  ),
-  notFoundComponent: () => (
-    <RootDocument>
-      <NotFound />
-    </RootDocument>
-  ),
-  component: RootComponent,
+  shellComponent: RootDocument,
+  errorComponent: DefaultCatchBoundary,
+  notFoundComponent: () => <NotFound />,
 })
-
-function RootComponent() {
-  return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
-  )
-}
 
 function RootDocument({ children }: { children: React.ReactNode }) {
   return (
@@ -134,7 +134,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
           }}
         />
       </head>
-      <body className="bg-white text-zinc-900 font-[Inter,system-ui,sans-serif] antialiased">
+      <body className="bg-white text-zinc-900 font-[Inter_Variable,system-ui,sans-serif] antialiased">
         <div className="min-h-screen flex flex-col">
           <Header />
           <main className="flex-1">{children}</main>

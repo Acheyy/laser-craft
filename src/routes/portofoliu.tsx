@@ -1,92 +1,136 @@
 import { useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
-import { seo } from '~/utils/seo'
+import {
+  ResponsiveImage,
+  type ImageName,
+} from '~/components/ResponsiveImage'
+import { breadcrumbs, seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/portofoliu')({
   component: PortofoliuPage,
   head: () => ({
-    meta: seo({
-      title: 'Portofoliu - LaserCraft | Proiecte Tăiere și Gravură Laser',
+    ...seo({
+      title: 'Portofoliu Lucrări Laser Craiova – Plăcuțe, Litere | LaserCraft',
       description:
-        'Explorați portofoliul LaserCraft — proiecte de tăiere laser și gravură laser realizate pentru clienții noștri. Signalistică, decorațiuni și gravuri.',
-      keywords:
-        'portofoliu taiere laser, proiecte laser, placute adresa laser, signalistica laser, gravura laser proiecte, decoratiuni laser',
-      image: '/img/og/og-portofoliu.png',
-      url: '/portofoliu',
+        'Lucrări de tăiere și gravură laser realizate în Craiova: plăcuțe de adresă din plexiglas și metal, litere volumetrice, decor pentru evenimente și gravuri.',
+      path: '/portofoliu',
+      image: '/img/og/og-portofoliu.jpg',
     }),
+    scripts: [breadcrumbs([{ name: 'Portofoliu', path: '/portofoliu' }])],
   }),
 })
 
 const categories = [
   'Toate',
-  'Signalistică',
+  'Plăcuțe și semnalistică',
   'Gravură',
   'Decorațiuni',
 ]
 
-const projects = [
+type ProjectLink = {
+  to: '/placute-adresa' | '/litere-volumetrice' | '/gravura-laser-craiova'
+  label: string
+}
+
+const plaqueLink: ProjectLink = {
+  to: '/placute-adresa',
+  label: 'Plăcuțe de adresă',
+}
+const lettersLink: ProjectLink = {
+  to: '/litere-volumetrice',
+  label: 'Litere volumetrice',
+}
+const engravingLink: ProjectLink = {
+  to: '/gravura-laser-craiova',
+  label: 'Gravură laser',
+}
+
+const projects: Array<{
+  title: string
+  category: string
+  description: string
+  material: string
+  image: ImageName
+  alt: string
+  link?: ProjectLink
+}> = [
   {
     title: 'Decor Eveniment — Roselle',
     category: 'Decorațiuni',
     description:
-      'Litere decorative tăiate laser și montate volumetric pe panouri arcuite — decor de eveniment pentru locația Roselle.',
-    material: 'Acril alb',
-    image: '/img/products/product-letters-roselle-1.jpg',
+      'Litere decorative din plexiglas tăiate laser și montate volumetric pe panouri arcuite — decor de eveniment pentru locația Roselle.',
+    material: 'Plexiglas alb',
+    image: '/img/products/litere-volumetrice-decor-eveniment-1',
+    alt: 'Litere volumetrice din plexiglas alb montate pe panouri arcuite – decor de eveniment Roselle',
+    link: lettersLink,
   },
   {
     title: 'Litere Volumetrice — „Nuntă de Probă"',
     category: 'Decorațiuni',
     description:
       'Litere 3D tăiate laser, montate pe panou cream pentru un decor elegant de eveniment.',
-    material: 'Acril alb',
-    image: '/img/products/product-letters-roselle-2.jpg',
+    material: 'Plexiglas alb',
+    image: '/img/products/litere-volumetrice-decor-eveniment-2',
+    alt: 'Litere volumetrice din plexiglas alb „Nuntă de probă” pe panou crem, cu aranjament floral',
+    link: lettersLink,
   },
   {
     title: 'Plăcuță Adresă — Str. Zorilor 35',
-    category: 'Signalistică',
+    category: 'Plăcuțe și semnalistică',
     description:
-      'Plăcuță elegantă din acril negru cu litere și cifre aurii volumetrice, montaj cu distanțiere inox.',
-    material: 'Acril negru + auriu',
-    image: '/img/products/Product 1.png',
+      'Plăcuță elegantă din plexiglas negru cu litere și cifre aurii volumetrice, montaj cu distanțiere inox.',
+    material: 'Plexiglas negru + auriu',
+    image: '/img/products/placuta-adresa-plexiglas-negru-auriu-1',
+    alt: 'Plăcuță de adresă din plexiglas negru cu litere și cifre aurii volumetrice',
+    link: plaqueLink,
   },
   {
     title: 'Plăcuță Adresă — Str. Caisului 36',
-    category: 'Signalistică',
+    category: 'Plăcuțe și semnalistică',
     description:
-      'Plăcuță de adresă orizontală din acril negru lucios, cu cifre aurii și distanțiere aurii.',
-    material: 'Acril negru + auriu',
-    image: '/img/products/Product 2.png',
+      'Plăcuță de adresă orizontală din plexiglas negru lucios, cu cifre aurii și distanțiere aurii.',
+    material: 'Plexiglas negru + auriu',
+    image: '/img/products/placuta-adresa-plexiglas-negru-auriu-2',
+    alt: 'Plăcuță de adresă orizontală din plexiglas negru lucios cu cifre aurii',
+    link: plaqueLink,
   },
   {
     title: 'Plăcuță Adresă — Mihail Sadoveanu 31G',
-    category: 'Signalistică',
+    category: 'Plăcuțe și semnalistică',
     description:
       'Plăcuță din metal vopsit mat cu decupaj laser — icon casă și text personalizat.',
     material: 'Oțel vopsit mat',
-    image: '/img/products/Product 3.jpg',
+    image: '/img/products/placuta-adresa-metal-decupat',
+    alt: 'Plăcuță de adresă din metal vopsit negru mat, decupată laser, cu siluetă de casă',
+    link: plaqueLink,
   },
   {
     title: 'Plăcuță Adresă — Strada Gloriei Nr. 1',
-    category: 'Signalistică',
+    category: 'Plăcuțe și semnalistică',
     description:
-      'Plăcuță din acril negru lucios cu icon casă și text auriu, montaj cu distanțiere.',
-    material: 'Acril negru + auriu',
-    image: '/img/products/Product 4.jpg',
+      'Plăcuță din plexiglas negru lucios cu icon casă și text auriu, montaj cu distanțiere.',
+    material: 'Plexiglas negru + auriu',
+    image: '/img/products/placuta-adresa-plexiglas-negru-auriu-3',
+    alt: 'Plăcuță de adresă din plexiglas negru lucios cu icon casă și text auriu',
+    link: plaqueLink,
   },
   {
     title: 'Trofee Personalizate',
     category: 'Gravură',
-    description: 'Trofee din acril cu gravură laser pentru competiții sportive',
-    material: 'Acril transparent 10mm',
-    image: '/img/products/product-acrylic-trophy.jpg',
+    description: 'Trofee din plexiglas cu gravură laser pentru competiții sportive',
+    material: 'Plexiglas transparent 10mm',
+    image: '/img/products/trofeu-plexiglas-gravat',
+    alt: 'Trofeu din plexiglas transparent gravat laser',
+    link: engravingLink,
   },
   {
     title: 'Tablouri Laser Cut',
     category: 'Decorațiuni',
     description: 'Tablouri artistice din lemn realizate prin tăiere laser',
     material: 'MDF 6mm',
-    image: '/img/products/product-wood-panel.jpg',
+    image: '/img/products/tablou-lemn-taiat-laser',
+    alt: 'Tablou decorativ din MDF tăiat laser',
   },
   {
     title: 'Set Coastere Gravate',
@@ -94,7 +138,9 @@ const projects = [
     description:
       'Set de 4 coastere din lemn cu modele botanice și geometrice gravate laser.',
     material: 'Lemn de nuc',
-    image: '/img/products/product-wood-coasters.jpg',
+    image: '/img/products/suporturi-pahar-lemn-gravate',
+    alt: 'Set de 4 suporturi de pahar din lemn de nuc gravate laser',
+    link: engravingLink,
   },
   {
     title: 'Jurnal Piele Personalizat',
@@ -102,15 +148,18 @@ const projects = [
     description:
       'Copertă de jurnal din piele naturală cu gravură laser — artă botanică și monogramă.',
     material: 'Piele naturală',
-    image: '/img/products/product-leather-journal.jpg',
+    image: '/img/products/jurnal-piele-gravat',
+    alt: 'Copertă de jurnal din piele naturală gravată laser',
+    link: engravingLink,
   },
   {
     title: 'Semn LED Acril Business',
-    category: 'Signalistică',
+    category: 'Plăcuțe și semnalistică',
     description:
-      'Semn de business din acril edge-lit cu logo gravat laser, iluminare LED.',
-    material: 'Acril transparent 8mm',
-    image: '/img/products/product-acrylic-led-sign.jpg',
+      'Semn de business din plexiglas edge-lit cu logo gravat laser, iluminare LED.',
+    material: 'Plexiglas transparent 8mm',
+    image: '/img/products/semn-luminos-plexiglas-led',
+    alt: 'Semn luminos LED din plexiglas transparent cu logo gravat laser',
   },
 ]
 
@@ -128,14 +177,16 @@ function PortofoliuPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Portofoliul{' '}
+              Portofoliu: lucrări de tăiere și gravură{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-                Nostru
+                laser
               </span>
             </h1>
             <p className="mt-6 text-lg text-zinc-400 leading-relaxed">
-              Explorați o selecție din proiectele noastre recente. Fiecare
-              lucrare reflectă angajamentul nostru pentru calitate și precizie.
+              Explorați o selecție din proiectele noastre recente din atelierul
+              din Craiova — plăcuțe de adresă, litere volumetrice, decor pentru
+              evenimente și gravuri. Fiecare lucrare reflectă angajamentul
+              nostru pentru calitate și precizie.
             </p>
           </div>
         </div>
@@ -147,6 +198,8 @@ function PortofoliuPage() {
             {categories.map((category) => (
               <button
                 key={category}
+                type="button"
+                aria-pressed={category === activeCategory}
                 onClick={() => setActiveCategory(category)}
                 className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                   category === activeCategory
@@ -160,17 +213,18 @@ function PortofoliuPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
+            {filteredProjects.map((project, index) => (
               <div
                 key={project.title}
                 className="group bg-white rounded-2xl border border-zinc-200 overflow-hidden hover:border-amber-500/50 hover:shadow-lg hover:shadow-amber-500/5 transition-all duration-300"
               >
                 <div className="aspect-[4/3] bg-gradient-to-br from-slate-100 to-zinc-100 overflow-hidden">
-                  {'image' in project && project.image ? (
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      loading="lazy"
+                  {project.image ? (
+                    <ResponsiveImage
+                      name={project.image}
+                      alt={project.alt}
+                      sizes="(min-width: 1280px) 395px, (min-width: 1024px) 31vw, (min-width: 640px) 48vw, 100vw"
+                      priority={index === 0}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
@@ -220,6 +274,14 @@ function PortofoliuPage() {
                     </svg>
                     {project.material}
                   </div>
+                  {project.link && (
+                    <Link
+                      to={project.link.to}
+                      className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-amber-600 hover:text-amber-700 transition-colors"
+                    >
+                      {project.link.label} →
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}

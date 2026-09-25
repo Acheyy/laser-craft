@@ -1,34 +1,118 @@
+import type * as React from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { Link } from '@tanstack/react-router'
-import { seo } from '~/utils/seo'
+import {
+  ResponsiveImage,
+  type ImageName,
+} from '~/components/ResponsiveImage'
+import {
+  ACRYLIC_PRICE_PER_CM2,
+  formatLei,
+  plaquePricing,
+} from '~/data/business'
+import { BUSINESS_ID, SITE_URL, breadcrumbs, jsonLd, seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/servicii')({
   component: ServiciiPage,
   head: () => ({
-    meta: seo({
-      title: 'Servicii de Tăiere și Gravare Laser - LaserCraft',
+    ...seo({
+      title: 'Servicii și Prețuri Tăiere și Gravură Laser Craiova | LaserCraft',
       description:
-        'Servicii complete de tăiere laser acril, lemn, gravură laser și personalizare. Descoperă soluțiile LaserCraft pentru proiectul tău.',
-      keywords:
-        'taiere laser acril, taiere laser lemn, gravura laser, personalizare laser, taiere plexiglas, servicii laser Craiova, gravare sticla, taiere piele',
-      image: '/img/og/og-servicii.png',
-      url: '/servicii',
+        'Tăiere laser plexiglas de la 0,09 lei/cm², plăcuțe de adresă de la 55 lei, tăiere laser lemn și MDF, gravură laser pe lemn, sticlă și piele. Atelier în Craiova.',
+      path: '/servicii',
+      image: '/img/og/og-servicii.jpg',
     }),
+    scripts: [
+      breadcrumbs([{ name: 'Servicii', path: '/servicii' }]),
+      jsonLd({
+        '@context': 'https://schema.org',
+        '@type': 'OfferCatalog',
+        name: 'Servicii de tăiere și gravură laser – LaserCraft Craiova',
+        url: `${SITE_URL}/servicii`,
+        itemListElement: [
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Tăiere și gravură laser plexiglas',
+              url: `${SITE_URL}/taiere-laser-plexiglas`,
+              provider: { '@id': BUSINESS_ID },
+              areaServed: 'Craiova',
+            },
+            priceSpecification: {
+              '@type': 'UnitPriceSpecification',
+              price: ACRYLIC_PRICE_PER_CM2,
+              priceCurrency: 'RON',
+              unitText: 'cm²',
+            },
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Plăcuțe de adresă din plexiglas',
+              url: `${SITE_URL}/placute-adresa`,
+              provider: { '@id': BUSINESS_ID },
+              areaServed: 'Craiova',
+            },
+            priceSpecification: {
+              '@type': 'PriceSpecification',
+              minPrice: Math.min(...plaquePricing.map((item) => item.price)),
+              maxPrice: Math.max(...plaquePricing.map((item) => item.price)),
+              priceCurrency: 'RON',
+            },
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Tăiere laser lemn, placaj și MDF',
+              url: `${SITE_URL}/servicii#taiere-laser-lemn`,
+              provider: { '@id': BUSINESS_ID },
+              areaServed: 'Craiova',
+            },
+          },
+          {
+            '@type': 'Offer',
+            itemOffered: {
+              '@type': 'Service',
+              name: 'Gravură laser',
+              url: `${SITE_URL}/gravura-laser-craiova`,
+              provider: { '@id': BUSINESS_ID },
+              areaServed: 'Craiova',
+            },
+          },
+        ],
+      }),
+    ],
   }),
 })
 
-const services = [
+const services: Array<{
+  id: string
+  title: string
+  image: ImageName
+  description: string
+  features: string[]
+  link?: { to: '/taiere-laser-plexiglas' | '/gravura-laser-craiova'; label: string }
+  icon: React.ReactNode
+}> = [
   {
-    title: 'Tăiere Laser Acril',
-    image: '/img/acril-laser-cut.jpg',
+    id: 'taiere-laser-plexiglas',
+    title: 'Tăiere Laser Plexiglas (Acril)',
+    image: '/img/services/taiere-laser-plexiglas',
     description:
-      'Tăiere de precizie în acril (plexiglas) pentru signalistică, decorațiuni, plăcuțe de adresă și aplicații comerciale. Margini curate și lustruite.',
+      'Tăiere și debitare de precizie în plexiglas (acril) pentru semnalistică, decorațiuni, plăcuțe de adresă și aplicații comerciale. Margini curate și lustruite.',
+    link: {
+      to: '/taiere-laser-plexiglas',
+      label: 'Detalii și prețuri tăiere plexiglas',
+    },
     features: [
-      'Acril (plexiglas) până la 25mm',
+      'Plexiglas (acril) până la 25mm',
       'Margini curate, lustruite',
       'Toleranțe de ±0.05mm',
-      'Acril transparent, colorat sau oglindă',
-      'Ideal pentru signalistică',
+      'Plexiglas transparent, colorat sau oglindă',
+      'Ideal pentru semnalistică',
       'Personalizare completă',
     ],
     icon: (
@@ -53,8 +137,9 @@ const services = [
     ),
   },
   {
+    id: 'taiere-laser-lemn',
     title: 'Tăiere Laser Lemn',
-    image: '/img/wood-laser-cut.jpg',
+    image: '/img/services/taiere-laser-lemn',
     description:
       'Decupări complexe în lemn, placaj, MDF și alte materiale organice. Perfect pentru decorațiuni, mobilier personalizat și elemente arhitecturale.',
     features: [
@@ -82,10 +167,15 @@ const services = [
     ),
   },
   {
+    id: 'gravura-laser',
     title: 'Gravură Laser',
-    image: '/img/laser-engraving.jpg',
+    image: '/img/services/gravura-laser',
     description:
       'Gravuri de înaltă rezoluție pe diverse materiale, perfecte pentru personalizare, branding și elemente decorative de excepție.',
+    link: {
+      to: '/gravura-laser-craiova',
+      label: 'Detalii despre gravura laser',
+    },
     features: [
       'Gravură pe acril și plastic',
       'Gravură pe lemn și bambus',
@@ -112,7 +202,7 @@ const services = [
 ]
 
 const materials = [
-  { name: 'Acril (Plexiglas)', category: 'Plastic' },
+  { name: 'Plexiglas (Acril)', category: 'Plastic' },
   { name: 'Policarbonat', category: 'Plastic' },
   { name: 'Lemn Masiv', category: 'Organic' },
   { name: 'Placaj / MDF', category: 'Organic' },
@@ -122,13 +212,6 @@ const materials = [
   { name: 'Sticlă (gravură)', category: 'Mineral' },
 ]
 
-const plaquePricing = [
-  { size: '30 × 20 cm', price: '70 RON' },
-  { size: '30 × 15 cm', price: '65 RON' },
-  { size: '25 × 15 cm', price: '60 RON' },
-  { size: '20 × 15 cm', price: '55 RON' },
-]
-
 function ServiciiPage() {
   return (
     <>
@@ -136,14 +219,16 @@ function ServiciiPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl">
             <h1 className="text-4xl sm:text-5xl font-extrabold text-white tracking-tight">
-              Serviciile{' '}
+              Servicii și{' '}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-500">
-                Noastre
-              </span>
+                prețuri
+              </span>{' '}
+              de tăiere și gravură laser în Craiova
             </h1>
             <p className="mt-6 text-base sm:text-lg text-zinc-400 leading-relaxed">
               Oferim soluții complete de tăiere și gravare laser pentru orice
-              tip de proiect — de la piese unice la producție de serie.
+              tip de proiect — de la piese unice la producție de serie — în
+              atelierul nostru din Craiova.
             </p>
           </div>
         </div>
@@ -185,7 +270,12 @@ function ServiciiPage() {
                     Pachete standard
                   </div>
                   <h3 className="text-lg sm:text-2xl font-bold text-zinc-900">
-                    Plăcuțe de adresă
+                    <Link
+                      to="/placute-adresa"
+                      className="hover:text-amber-700 transition-colors"
+                    >
+                      Plăcuțe de adresă
+                    </Link>
                   </h3>
                 </div>
                 <div className="flex w-10 h-10 sm:w-12 sm:h-12 bg-amber-500/10 text-amber-600 rounded-xl items-center justify-center shrink-0">
@@ -205,8 +295,8 @@ function ServiciiPage() {
                 </div>
               </div>
               <p className="text-sm text-zinc-600 mb-5 sm:mb-6">
-                Mărimi standard din acril, construcție pe 2 straturi (fundal +
-                litere/cifre aplicate).
+                Mărimi standard din plexiglas (acril), construcție pe 2 straturi
+                (fundal + litere/cifre aplicate).
               </p>
 
               <div className="space-y-2 flex-1">
@@ -219,14 +309,14 @@ function ServiciiPage() {
                       {item.size}
                     </div>
                     <div className="font-bold text-zinc-900 text-base sm:text-lg whitespace-nowrap">
-                      {item.price}
+                      {formatLei(item.price)}
                     </div>
                   </div>
                 ))}
               </div>
 
               <p className="mt-5 sm:mt-6 text-xs text-zinc-500 leading-relaxed">
-                * Prețurile includ ambele straturi de acril, tăierea și
+                * Prețurile includ ambele straturi de plexiglas, tăierea și
                 gravarea textului. Pentru logo sau design custom,
                 contactează-ne pentru o ofertă.
               </p>
@@ -239,7 +329,12 @@ function ServiciiPage() {
                     Proiecte custom
                   </div>
                   <h3 className="text-lg sm:text-2xl font-bold text-white">
-                    Tăiere & gravură pe acril
+                    <Link
+                      to="/taiere-laser-plexiglas"
+                      className="hover:text-amber-400 transition-colors"
+                    >
+                      Tăiere & gravură pe plexiglas
+                    </Link>
                   </h3>
                 </div>
                 <div className="flex w-10 h-10 sm:w-12 sm:h-12 bg-amber-500/10 text-amber-400 rounded-xl items-center justify-center shrink-0">
@@ -259,22 +354,24 @@ function ServiciiPage() {
                 </div>
               </div>
               <p className="text-sm text-zinc-400 mb-5 sm:mb-6">
-                Orice formă, orice design — tăiat sau gravat în acril, calculat
-                pe suprafață.
+                Orice formă, orice design — tăiat sau gravat în plexiglas (acril),
+                calculat pe suprafață.
               </p>
 
               <div className="bg-white/5 border border-white/10 rounded-xl p-5 sm:p-6 mb-5 sm:mb-6">
                 <div className="flex items-baseline gap-2 flex-wrap">
                   <span className="text-4xl sm:text-5xl font-extrabold tracking-tight">
-                    0.09
+                    {formatLei(ACRYLIC_PRICE_PER_CM2).replace(' lei', '')}
                   </span>
                   <span className="text-base sm:text-lg text-zinc-300 font-medium">
-                    RON / cm²
+                    lei / cm²
                   </span>
                 </div>
                 <div className="mt-3 text-xs text-zinc-400">
                   Exemplu: 100 × 50 mm (50 cm²) ≈{' '}
-                  <span className="text-amber-400 font-semibold">4.5 RON</span>
+                  <span className="text-amber-400 font-semibold">
+                    {formatLei(50 * ACRYLIC_PRICE_PER_CM2)}
+                  </span>
                 </div>
               </div>
 
@@ -309,7 +406,7 @@ function ServiciiPage() {
                       d="M4.5 12.75l6 6 9-13.5"
                     />
                   </svg>
-                  Acril transparent, colorat sau oglindă
+                  Plexiglas transparent, colorat sau oglindă
                 </li>
                 <li className="flex items-start gap-2">
                   <svg
@@ -338,7 +435,8 @@ function ServiciiPage() {
           {services.map((service, index) => (
             <div
               key={service.title}
-              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center"
+              id={service.id}
+              className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center scroll-mt-24"
             >
               <div className={index % 2 === 1 ? 'lg:order-2' : ''}>
                 <div className="w-16 h-16 bg-amber-500/10 text-amber-600 rounded-2xl flex items-center justify-center mb-6">
@@ -373,16 +471,24 @@ function ServiciiPage() {
                     </li>
                   ))}
                 </ul>
+                {service.link && (
+                  <Link
+                    to={service.link.to}
+                    className="mt-6 inline-flex items-center gap-2 text-amber-600 font-semibold hover:text-amber-700 transition-colors"
+                  >
+                    {service.link.label} →
+                  </Link>
+                )}
               </div>
               <div
                 className={`rounded-2xl aspect-[4/3] overflow-hidden ${
                   index % 2 === 1 ? 'lg:order-1' : ''
                 }`}
               >
-                <img
-                  src={service.image}
+                <ResponsiveImage
+                  name={service.image}
                   alt={service.title}
-                  loading="lazy"
+                  sizes="(min-width: 1280px) 616px, (min-width: 1024px) 50vw, 100vw"
                   className="w-full h-full object-cover rounded-2xl"
                 />
               </div>

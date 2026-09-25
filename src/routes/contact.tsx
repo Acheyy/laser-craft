@@ -1,9 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { seo } from '~/utils/seo'
+import { EMAIL, PHONE_DISPLAY, PHONE_HREF } from '~/data/business'
+import { breadcrumbs, seo } from '~/utils/seo'
 
-const PHONE_DISPLAY = '+40 754 497 243'
-const PHONE_HREF = 'tel:+40754497243'
-const EMAIL = 'lasercraft.contact@gmail.com'
 const EMAIL_HREF = `mailto:${EMAIL}?subject=${encodeURIComponent(
   'Cerere ofertă - LaserCraft',
 )}&body=${encodeURIComponent(
@@ -13,15 +11,14 @@ const EMAIL_HREF = `mailto:${EMAIL}?subject=${encodeURIComponent(
 export const Route = createFileRoute('/contact')({
   component: ContactPage,
   head: () => ({
-    meta: seo({
-      title: 'Contact - LaserCraft | Solicită o Ofertă Gratuită',
+    ...seo({
+      title: 'Contact LaserCraft Craiova – Cere Ofertă Tăiere și Gravură Laser',
       description:
-        'Contactați LaserCraft pentru o ofertă gratuită. Sunați-ne sau trimiteți-ne un email — răspundem în maximum 24 de ore. Craiova, România.',
-      keywords:
-        'contact LaserCraft, oferta taiere laser, pret taiere laser, contact servicii laser Craiova, cerere oferta laser',
-      image: '/img/og/og-contact.png',
-      url: '/contact',
+        'Cereți o ofertă gratuită pentru tăiere sau gravură laser în Craiova. Sunați la 0754 497 243 sau scrieți-ne pe email — răspundem în maximum 24 de ore.',
+      path: '/contact',
+      image: '/img/og/og-contact.jpg',
     }),
+    scripts: [breadcrumbs([{ name: 'Contact', path: '/contact' }])],
   }),
 })
 
@@ -38,9 +35,9 @@ function ContactPage() {
               </span>
             </h1>
             <p className="mt-6 text-lg text-zinc-400 leading-relaxed">
-              Suntem aici pentru a vă ajuta cu proiectul dumneavoastră. Sunați-ne
-              direct sau trimiteți-ne un email — vă răspundem în cel mult 24 de
-              ore.
+              Suntem aici pentru a vă ajuta cu proiectul dumneavoastră de tăiere
+              sau gravură laser în Craiova. Sunați-ne direct sau trimiteți-ne un
+              email — vă răspundem în cel mult 24 de ore.
             </p>
           </div>
         </div>
@@ -230,7 +227,7 @@ function ContactPage() {
                         Adresă
                       </div>
                       <div className="text-sm text-zinc-400 mt-1">
-                        Craiova, România
+                        Craiova, jud. Dolj, România
                       </div>
                     </div>
                   </li>

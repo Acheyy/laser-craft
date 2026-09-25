@@ -27,15 +27,15 @@ export function Footer() {
               </span>
             </Link>
             <p className="text-sm leading-relaxed">
-              Servicii profesionale de tăiere și gravare laser. Precizie,
-              calitate și rapiditate pentru proiectele dumneavoastră.
+              Atelier de tăiere și gravură laser în Craiova. Precizie, calitate
+              și rapiditate pentru proiectele dumneavoastră.
             </p>
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
+            <p className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
               Navigare
-            </h4>
+            </p>
             <ul className="space-y-2">
               {[
                 { to: '/', label: 'Acasă' },
@@ -57,22 +57,33 @@ export function Footer() {
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
+            <p className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
               Servicii
-            </h4>
-            <ul className="space-y-2 text-sm">
-              <li>Tăiere Laser Acril</li>
-              <li>Tăiere Laser Lemn</li>
-              <li>Gravură Laser</li>
-              <li>Personalizare</li>
-              <li>Signalistică</li>
+            </p>
+            <ul className="space-y-2">
+              {[
+                { to: '/placute-adresa', label: 'Plăcuțe de adresă' },
+                { to: '/taiere-laser-plexiglas', label: 'Tăiere laser plexiglas' },
+                { to: '/gravura-laser-craiova', label: 'Gravură laser Craiova' },
+                { to: '/litere-volumetrice', label: 'Litere volumetrice' },
+                { to: '/servicii', label: 'Toate serviciile și prețurile' },
+              ].map((link) => (
+                <li key={link.to}>
+                  <Link
+                    to={link.to}
+                    className="text-sm hover:text-amber-400 transition-colors inline-block py-1"
+                  >
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
           <div>
-            <h4 className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
+            <p className="text-white font-semibold mb-4 text-sm uppercase tracking-wider">
               Contact
-            </h4>
+            </p>
             <ul className="space-y-3 text-sm">
               <li className="flex items-start gap-2">
                 <svg
@@ -93,7 +104,7 @@ export function Footer() {
                     d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
                   />
                 </svg>
-                <span>Craiova, România</span>
+                <span>Craiova, jud. Dolj, România</span>
               </li>
               <li className="flex items-start gap-2">
                 <svg

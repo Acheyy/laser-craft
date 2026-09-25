@@ -43,7 +43,9 @@ export function Header() {
           <Link to="/" className="flex items-center gap-2 group">
             <img
               src="/img/logo.svg"
-              alt="LaserCraft"
+              alt=""
+              width={44}
+              height={44}
               className={`w-auto transition-all duration-300 ${scrolled ? 'h-7 sm:h-8' : 'h-9 sm:h-11'}`}
             />
             <span
@@ -76,9 +78,12 @@ export function Header() {
           </nav>
 
           <button
+            type="button"
             onClick={() => setMobileOpen(!mobileOpen)}
             className="md:hidden p-2 text-zinc-300 hover:text-white transition-colors"
             aria-label="Meniu"
+            aria-expanded={mobileOpen}
+            aria-controls="mobile-menu"
           >
             <svg
               viewBox="0 0 24 24"
@@ -105,7 +110,10 @@ export function Header() {
         </div>
       </div>
 
-      <div
+      <nav
+        id="mobile-menu"
+        aria-label="Meniu mobil"
+        inert={!mobileOpen}
         className={`md:hidden bg-slate-900 border-t border-slate-800 overflow-hidden transition-all duration-300 ease-in-out ${
           mobileOpen ? 'max-h-screen opacity-100' : 'max-h-0 opacity-0'
         }`}
@@ -131,7 +139,7 @@ export function Header() {
             Solicită Ofertă
           </Link>
         </div>
-      </div>
+      </nav>
     </header>
   )
 }
