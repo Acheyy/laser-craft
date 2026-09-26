@@ -196,7 +196,7 @@ const categories: Category[] = [
         title: 'Breloc cu nume pe 2 straturi — „Jonut”',
         material: 'Plexiglas alb + roz',
         image: '/img/products/breloc-nume-plexiglas-doua-straturi',
-        alt: 'Breloc cu numele „Jonut” din plexiglas pe două straturi, cu litere albe aplicate pe fundal roz, ținut în palmă',
+        alt: 'Breloc cu numele „Jonut” din plexiglas pe două straturi, cu litere albe aplicate pe fundal roz',
       },
       {
         title: 'Breloc gravat cu mesaj',

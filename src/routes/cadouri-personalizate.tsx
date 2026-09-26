@@ -84,7 +84,7 @@ const keychains: GiftGroup = {
   items: [
     {
       image: '/img/products/breloc-nume-plexiglas-doua-straturi',
-      alt: 'Breloc cu numele „Jonut” din plexiglas pe două straturi, cu litere albe aplicate pe fundal roz, ținut în palmă',
+      alt: 'Breloc cu numele „Jonut” din plexiglas pe două straturi, cu litere albe aplicate pe fundal roz',
       title: 'Nume pe două straturi',
       description: 'Litere aplicate pe un fundal tăiat pe contur.',
       meta: 'Plexiglas alb + roz',
