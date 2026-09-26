@@ -177,7 +177,6 @@ const categories: Category[] = [
         image: '/img/products/ornament-craciun-spiridus-luna',
         alt: 'Ornament de Crăciun din plexiglas verde cu un spiriduș pe o semilună și stele decupate laser',
       },
-      // Last: its photo is less tall than the 3:4 ones
       {
         title: 'Ornament „Crăciun Fericit”',
         material: 'Plexiglas verde',
