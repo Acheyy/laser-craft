@@ -41,7 +41,7 @@ export const Route = createFileRoute('/globuri-craciun-personalizate')({
     ...seo({
       title: 'Globuri de Crăciun Personalizate cu Nume – Craiova',
       description:
-        'Globuri de Crăciun personalizate din plexiglas, tăiate laser în Craiova: cu nume, oraș, an sau mesaj, în culoarea dorită. Preț la cerere, ofertă gratuită.',
+        'Globuri de Crăciun personalizate din plexiglas și lemn, tăiate laser în Craiova: cu nume, oraș, an sau mesaj, în culoarea dorită. Preț la cerere, ofertă gratuită.',
       path: '/globuri-craciun-personalizate',
       image: '/img/og/og-globuri-craciun.jpg',
       imageAlt:
@@ -61,7 +61,7 @@ export const Route = createFileRoute('/globuri-craciun-personalizate')({
         name: 'Globuri de Crăciun personalizate din plexiglas',
         serviceType: 'Ornamente de Crăciun personalizate tăiate laser',
         description:
-          'Globuri și ornamente de Crăciun din plexiglas colorat, tăiate laser și personalizate cu nume, oraș, an sau mesaj, realizate în atelierul LaserCraft din Craiova.',
+          'Globuri și ornamente de Crăciun din plexiglas colorat și din lemn, tăiate și gravate laser, personalizate cu nume, oraș, an sau mesaj, realizate în atelierul LaserCraft din Craiova.',
         url: `${SITE_URL}/globuri-craciun-personalizate`,
         provider: { '@id': BUSINESS_ID },
         areaServed: [{ '@type': 'City', name: 'Craiova' }],
@@ -99,6 +99,20 @@ const ornaments: ModelItem[] = [
     alt: 'Glob de Crăciun din plexiglas verde cu Moș Crăciun în sanie trasă de un ren, stele și brazi decupați laser',
     title: 'Glob cu sanie și ren',
     meta: 'Plexiglas verde',
+  },
+  {
+    image: '/img/products/glob-craciun-lemn-nume-nicolas',
+    alt: 'Glob de Crăciun rotund din lemn baițuit, gravat laser cu numele „Nicolas”, un om de zăpadă cu joben și mătură, o căsuță cu horn și fulgi de nea',
+    title: 'Glob din lemn cu nume',
+    description: 'Numele dorit, gravat în lemn.',
+    meta: 'Lemn baițuit',
+  },
+  {
+    image: '/img/products/glob-craciun-lemn-craiova-brad',
+    alt: 'Glob de Crăciun din placaj de lemn natur tăiat laser, cu textul „Craiova”, un brad cu model dantelat de fulgi de nea și două stele',
+    title: 'Glob din lemn „Craiova”',
+    description: 'Orașul se poate schimba.',
+    meta: 'Placaj de lemn',
   },
   {
     image: '/img/products/ornament-craciun-bastoane-rosii',
@@ -155,8 +169,11 @@ const personalizationOptions: Array<{
   { title: 'Un nume', detail: 'ca pe modelul „Cristina”' },
   { title: 'Orașul și anul', detail: 'ca pe globul „Craiova 26”' },
   { title: 'O urare', detail: '„Crăciun Fericit” sau textul dorit' },
-  // The gallery cards already name each model's colour.
-  { title: 'Culoarea', detail: 'plexiglas transparent, colorat sau oglindă' },
+  // The gallery cards already name each model's material and colour.
+  {
+    title: 'Materialul',
+    detail: 'plexiglas transparent, colorat sau oglindă, ori lemn',
+  },
   {
     title: 'Motivul',
     detail: 'sanie cu reni, fulgi de nea, sat de iarnă sau designul propriu',
@@ -183,7 +200,7 @@ const ideas = [
 
 const quoteChecklist = [
   'Modelul din galerie sau ideea dumneavoastră, plus numele sau urarea dorită',
-  'Culoarea plexiglasului: transparent, colorat sau oglindă (vă ajutăm să alegeți)',
+  'Materialul: plexiglas transparent, colorat sau oglindă, ori lemn (vă ajutăm să alegeți)',
   'Dimensiunile și cantitatea, de la un singur glob la producție de serie',
   'Fișierele de design, dacă există',
   'Data la care vreți globurile',
@@ -199,6 +216,11 @@ const faqItems = [
     question: 'Cât costă un glob de Crăciun personalizat?',
     answer:
       'Prețul este la cerere și depinde de model, dimensiuni și cantitate. Oferta este gratuită.',
+  },
+  {
+    question: 'Faceți și globuri de Crăciun din lemn?',
+    answer:
+      'Da. Pe lângă plexiglas, tăiem și gravăm laser globuri din lemn, natur sau baițuit, cu nume, oraș sau alt text, ca modelele „Nicolas” și „Craiova” din galerie.',
   },
   {
     question: 'Pot comanda globuri personalizate pentru colegi sau clienți?',
@@ -243,8 +265,9 @@ function GloburiCraciunPage() {
         intro={
           <p>
             Realizăm în atelierul nostru din Craiova globuri de Crăciun
-            personalizate din plexiglas, tăiate laser: ornamente pentru brad cu
-            un nume, cu orașul și anul sau cu o urare, în culoarea dorită.
+            personalizate din plexiglas și lemn, tăiate laser: ornamente pentru
+            brad cu un nume, cu orașul și anul sau cu o urare, în culoarea
+            dorită.
           </p>
         }
         chips={[
@@ -257,7 +280,7 @@ function GloburiCraciunPage() {
 
       <Section>
         <SectionHeader
-          title="Modele de globuri și ornamente de Crăciun din plexiglas"
+          title="Modele de globuri și ornamente de Crăciun din plexiglas și lemn"
           intro={
             <p>
               Lucrări reale, tăiate laser în atelierul nostru din Craiova, cu
@@ -279,9 +302,9 @@ function GloburiCraciunPage() {
               />
             </li>
           ))}
-          {/* Fills the last slot of the 2-column grid; 9 models already make
-              a full 3×3 grid on desktop. */}
-          <li className="lg:hidden">
+          {/* 11 models leave one empty slot in both the 2- and 3-column
+              grids; this tile fills it. */}
+          <li>
             <IdeaCard
               text="Trimiteți-ne o poză sau o schiță a ornamentului dorit."
               whatsappMessage={product.whatsappMessage}
