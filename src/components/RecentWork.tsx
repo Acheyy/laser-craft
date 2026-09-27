@@ -1,4 +1,5 @@
 import { Link } from '@tanstack/react-router'
+import { useId } from 'react'
 import { Icon } from '~/components/Icon'
 import { ResponsiveImage, type ImageName } from '~/components/ResponsiveImage'
 import { Section, SectionHeader, buttonClass } from '~/components/ui'
@@ -7,12 +8,14 @@ import type { ProductPath } from '~/data/products'
 // Real 3:4 workshop photos, none of them repeated from the product tiles, the
 // hero collage or the Christmas strip. Phones show the first 4 (2 × 2), larger
 // screens all 6.
-const works: Array<{
+type Work = {
   image: ImageName
   alt: string
   label: string
   to: ProductPath
-}> = [
+}
+
+const works: Work[] = [
   {
     image: '/img/products/icoana-isus-plexiglas-negru-cu-suport',
     alt: 'Icoană cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport',
@@ -59,19 +62,7 @@ export function RecentWork() {
       <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5 lg:grid-cols-6">
         {works.map((work, index) => (
           <li key={work.image} className={index >= 4 ? 'hidden sm:block' : ''}>
-            <Link to={work.to} className="group block">
-              <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-zinc-200">
-                <ResponsiveImage
-                  name={work.image}
-                  alt={work.alt}
-                  sizes="(min-width: 1280px) 190px, (min-width: 1024px) 16vw, (min-width: 640px) 31vw, 50vw"
-                  className="h-full w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105"
-                />
-              </div>
-              <p className="mt-2 text-sm font-semibold text-zinc-900 group-hover:text-amber-800">
-                {work.label}
-              </p>
-            </Link>
+            <WorkCard work={work} />
           </li>
         ))}
       </ul>
@@ -83,5 +74,28 @@ export function RecentWork() {
         </Link>
       </div>
     </Section>
+  )
+}
+
+// Named by its label only; the photo alt stays readable in browse mode.
+function WorkCard({ work }: { work: Work }) {
+  const labelId = useId()
+  return (
+    <Link to={work.to} aria-labelledby={labelId} className="group block">
+      <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-zinc-200">
+        <ResponsiveImage
+          name={work.image}
+          alt={work.alt}
+          sizes="(min-width: 1280px) 190px, (min-width: 1024px) 16vw, (min-width: 640px) 31vw, 50vw"
+          className="h-full w-full object-cover transition-transform duration-500 motion-safe:group-hover:scale-105"
+        />
+      </div>
+      <p
+        id={labelId}
+        className="mt-2 text-sm font-semibold text-zinc-900 group-hover:text-amber-800"
+      >
+        {work.label}
+      </p>
+    </Link>
   )
 }

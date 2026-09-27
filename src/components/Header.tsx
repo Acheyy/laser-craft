@@ -27,10 +27,12 @@ const pageLinks = [
   { to: '/contact', label: 'Contact' },
 ] as const
 
+// Shown after the price hint rather than the title, so it never wraps onto a
+// line of its own under a long product name.
 function SeasonBadge({ product }: { product: Product }) {
   if (!SHOW_CHRISTMAS_PROMO || !product.seasonal) return null
   return (
-    <span className="ml-2 inline-flex rounded-full bg-amber-400 px-2 py-0.5 align-middle text-[11px] font-bold uppercase tracking-wide text-slate-950">
+    <span className="ml-1.5 inline-flex rounded-full bg-amber-400 px-2 py-0.5 align-[2px] text-[11px] leading-none font-bold uppercase tracking-wide text-slate-950">
       Sezon
     </span>
   )
@@ -80,11 +82,16 @@ export function Header() {
     return () => desktop.removeEventListener('change', onChange)
   }, [])
 
+  // The open sheet covers the page: lock its scroll and make it inert, so Tab
+  // and screen readers stay in the menu instead of reaching hidden links.
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
     document.documentElement.dataset.menu = mobileOpen ? 'open' : 'closed'
+    const behind = document.querySelectorAll<HTMLElement>('#continut, #continut ~ footer')
+    for (const el of behind) el.inert = mobileOpen
     return () => {
       document.body.style.overflow = ''
+      for (const el of behind) el.inert = false
     }
   }, [mobileOpen])
 
@@ -97,7 +104,9 @@ export function Header() {
         .querySelector<HTMLElement>(
           mobileOpen ? '[aria-controls="mobile-menu"]' : '[aria-controls="produse-menu"]',
         )
-        ?.focus()
+        // No scroll: the sticky toggle is always in view, and html's
+        // scroll-padding would otherwise make focus() scroll the page up.
+        ?.focus({ preventScroll: true })
       setProductsOpen(false)
       setMobileOpen(false)
     }
@@ -137,7 +146,17 @@ export function Header() {
             <Logo />
 
             <nav aria-label="Meniu principal" className="hidden lg:flex items-center gap-1">
-              <div ref={dropdownRef} className="relative">
+              {/* Closes when focus moves to a control outside it. A click on
+                  a non-focusable part of the panel blurs with no
+                  relatedTarget and keeps it open. */}
+              <div
+                ref={dropdownRef}
+                className="relative"
+                onBlur={(event) => {
+                  const next = event.relatedTarget as Node | null
+                  if (next && !event.currentTarget.contains(next)) setProductsOpen(false)
+                }}
+              >
                 <button
                   type="button"
                   aria-expanded={productsOpen}
@@ -179,10 +198,10 @@ export function Header() {
                                 <span className="min-w-0">
                                   <span className="block font-semibold text-zinc-900">
                                     {product.label}
-                                    <SeasonBadge product={product} />
                                   </span>
                                   <span className="block text-sm text-zinc-600">
                                     {product.hint}
+                                    <SeasonBadge product={product} />
                                   </span>
                                 </span>
                               </Link>
@@ -196,6 +215,7 @@ export function Header() {
                     <Link
                       to="/servicii"
                       hash="taiere-laser-lemn"
+                      activeOptions={{ includeHash: true }}
                       className="font-medium text-zinc-700 hover:text-amber-700"
                     >
                       Tăiere laser lemn și MDF
@@ -273,11 +293,13 @@ export function Header() {
         data-placement="mobile-menu"
         onClickCapture={closeOnLink}
         inert={!mobileOpen}
-        className={`lg:hidden fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto overscroll-contain bg-slate-900 transition-opacity duration-200 ${
+        className={`lg:hidden fixed inset-x-0 top-16 bottom-0 z-40 overflow-y-auto overscroll-contain bg-slate-900 transition-opacity duration-200 [html[data-consent=pending]_&]:scroll-pb-36 ${
           mobileOpen ? 'visible opacity-100' : 'invisible opacity-0'
         }`}
       >
-        <Container className="py-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
+        {/* While the cookie banner is open it covers the bottom of the sheet:
+            the extra room and scroll padding keep focused items above it. */}
+        <Container className="py-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] [html[data-consent=pending]_&]:pb-[calc(9rem+env(safe-area-inset-bottom))]">
           <p className="px-2 text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Produse
           </p>
@@ -291,11 +313,11 @@ export function Header() {
                 >
                   <Thumb product={product} show={menusUsed} />
                   <span className="min-w-0 flex-1">
-                    <span className="block font-semibold text-white">
-                      {product.label}
+                    <span className="block font-semibold text-white">{product.label}</span>
+                    <span className="block text-sm text-zinc-400">
+                      {product.hint}
                       <SeasonBadge product={product} />
                     </span>
-                    <span className="block text-sm text-zinc-400">{product.hint}</span>
                   </span>
                   <Icon name="chevronRight" className="w-5 h-5 text-zinc-500" />
                 </Link>
@@ -305,6 +327,7 @@ export function Header() {
           <Link
             to="/servicii"
             hash="taiere-laser-lemn"
+            activeOptions={{ includeHash: true }}
             className="mt-1 flex min-h-12 items-center gap-2 rounded-xl px-2 text-sm font-medium text-zinc-300 transition-colors hover:bg-white/5 active:bg-white/10"
           >
             <Icon name="squares" className="w-5 h-5 text-amber-400" />
@@ -327,7 +350,8 @@ export function Header() {
 
           <ContactActions message={pageMessage} stacked className="mt-6" />
           <p className="mt-4 text-center text-sm text-zinc-400">
-            Program: {HOURS_SHORT}
+            <span className="block font-semibold text-zinc-300">Program</span>
+            {HOURS_SHORT}
           </p>
         </Container>
       </nav>

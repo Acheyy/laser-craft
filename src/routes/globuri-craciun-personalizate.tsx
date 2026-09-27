@@ -6,6 +6,7 @@ import { Icon, WhatsAppIcon } from '~/components/Icon'
 import { Highlight, PageHero, type HeroImage } from '~/components/PageHero'
 import { IdeaCard, ModelCard, type ModelItem } from '~/components/ProductCards'
 import { type ImageName } from '~/components/ResponsiveImage'
+import { Testimonials } from '~/components/Testimonials'
 import {
   CheckList,
   Section,
@@ -13,11 +14,20 @@ import {
   buttonClass,
   textLink,
 } from '~/components/ui'
-import { DELIVERY, whatsappHref } from '~/data/business'
+import {
+  DPI,
+  URGENT,
+  activeChristmasDeadline,
+  bucharestTodayIso,
+  formatLei,
+  type ActiveChristmasDeadline,
+  whatsappHref,
+} from '~/data/business'
 import images from '~/data/images.gen.json'
 import { getProduct } from '~/data/products'
 import {
   BUSINESS_ID,
+  SERVICE_AREA,
   SITE_URL,
   absoluteUrl,
   breadcrumbs,
@@ -25,9 +35,13 @@ import {
   seo,
 } from '~/utils/seo'
 
+const product = getProduct('/globuri-craciun-personalizate')
+
 const schemaImages = [
   '/img/products/glob-craciun-cu-nume-personalizat',
   '/img/products/glob-craciun-personalizat-craiova',
+  '/img/products/glob-craciun-lemn-nume-nicolas',
+  '/img/products/glob-craciun-lemn-craiova-brad',
   '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
   '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
 ] as const satisfies ReadonlyArray<ImageName>
@@ -35,13 +49,22 @@ const schemaImages = [
 const largestVariantUrl = (name: ImageName) =>
   absoluteUrl(`${name}-${images[name].width}.webp`)
 
+// Owner-supplied dates like '10 decembrie' must not split across lines.
+const keepTogether = (text: string) => text.replace(/ /g, '\u00a0')
+
+// "Execuție urgentă de la 24 de ore" at the start of a sentence
+const urgentSentence = `${URGENT[0].toUpperCase()}${URGENT.slice(1)}.`
+
 export const Route = createFileRoute('/globuri-craciun-personalizate')({
   component: GloburiCraciunPage,
+  // Today's date in Romania for the Christmas deadline copy. It is computed
+  // once on the server and hydrated, so both renders show the same text.
+  loader: () => ({ today: bucharestTodayIso() }),
   head: () => ({
     ...seo({
-      title: 'Globuri de Crăciun Personalizate cu Nume – Craiova',
+      title: 'Globuri personalizate cu nume, din lemn și plexiglas – Craiova',
       description:
-        'Globuri de Crăciun personalizate din plexiglas și lemn, tăiate laser în Craiova: cu nume, oraș, an sau mesaj, în culoarea dorită. Preț la cerere, ofertă gratuită.',
+        'Globuri de Crăciun personalizate cu nume, din plexiglas și lemn, tăiate laser în Craiova, cu oraș, an sau mesaj. Ofertă gratuită pe WhatsApp.',
       path: '/globuri-craciun-personalizate',
       image: '/img/og/og-globuri-craciun.jpg',
       imageAlt:
@@ -58,20 +81,41 @@ export const Route = createFileRoute('/globuri-craciun-personalizate')({
       jsonLd({
         '@context': 'https://schema.org',
         '@type': 'Service',
-        name: 'Globuri de Crăciun personalizate din plexiglas',
+        name: 'Globuri de Crăciun personalizate din plexiglas și lemn',
         serviceType: 'Ornamente de Crăciun personalizate tăiate laser',
         description:
           'Globuri și ornamente de Crăciun din plexiglas colorat și din lemn, tăiate și gravate laser, personalizate cu nume, oraș, an sau mesaj, realizate în atelierul LaserCraft din Craiova.',
         url: `${SITE_URL}/globuri-craciun-personalizate`,
         provider: { '@id': BUSINESS_ID },
-        areaServed: [{ '@type': 'City', name: 'Craiova' }],
+        areaServed: SERVICE_AREA,
         image: schemaImages.map(largestVariantUrl),
       }),
+      // Only once the owner publishes a starting price (products.ts).
+      ...(product.fromPrice
+        ? [
+            jsonLd({
+              '@context': 'https://schema.org',
+              '@type': 'Product',
+              name: 'Glob de Crăciun personalizat cu nume',
+              url: `${SITE_URL}/globuri-craciun-personalizate`,
+              image: schemaImages.map(largestVariantUrl),
+              description:
+                'Glob de Crăciun din plexiglas sau lemn, tăiat laser și personalizat cu nume, oraș, an sau mesaj, în atelierul LaserCraft din Craiova.',
+              brand: { '@type': 'Brand', name: 'LaserCraft' },
+              offers: {
+                '@type': 'AggregateOffer',
+                lowPrice: product.fromPrice,
+                priceCurrency: 'RON',
+                availability: 'https://schema.org/MadeToOrder',
+                areaServed: SERVICE_AREA,
+                seller: { '@id': BUSINESS_ID },
+              },
+            }),
+          ]
+        : []),
     ],
   }),
 })
-
-const product = getProduct('/globuri-craciun-personalizate')
 
 const ornaments: ModelItem[] = [
   {
@@ -154,7 +198,7 @@ const heroPhotos: Array<Omit<HeroImage, 'alt'>> = [
     name: '/img/products/glob-craciun-personalizat-craiova',
     position: '50% 60%',
   },
-  { name: '/img/products/glob-craciun-sanie-reni-plexiglas-verde' },
+  { name: '/img/products/glob-craciun-lemn-nume-nicolas' },
 ]
 
 const heroMedia: HeroImage[] = heroPhotos.map((photo) => ({
@@ -184,18 +228,22 @@ const personalizationOptions: Array<{
       <>
         prin{' '}
         <Link to="/gravura-laser-craiova" className={textLink}>
-          gravură laser pe plexiglas
+          gravură laser
         </Link>
-        , până la 1200 DPI
+        , pe plexiglas sau pe lemn, până la {DPI}
       </>
     ),
   },
 ]
 
-const ideas = [
-  'Un set pentru bradul familiei, cu numele fiecăruia, în aceeași culoare',
-  'Un cadou de sărbători cu numele celui drag',
-  'Ornamente cu numele firmei sau cu o urare, pentru colegi și clienți',
+// Wording ideas only: any text can be cut or engraved.
+const textIdeas = [
+  '„Primul meu Crăciun”, cu numele bebelușului și anul',
+  '„Primul nostru Crăciun împreună” sau „Primul Crăciun ca părinți”',
+  'Un set pentru familie, cu numele fiecăruia',
+  'Pentru educatoare și învățătoare: câte un glob cu numele fiecărui copil din grupă sau din clasă',
+  '„Dragi nași” și anul',
+  'Numele firmei sau o urare, pentru colegi și clienți',
 ]
 
 const quoteChecklist = [
@@ -206,49 +254,81 @@ const quoteChecklist = [
   'Data la care vreți globurile',
 ]
 
-const faqItems = [
-  {
-    question: 'Ce se poate scrie pe un glob de Crăciun personalizat?',
-    answer:
-      'Un nume, numele orașului și anul, o urare precum „Crăciun Fericit” sau textul dorit de dumneavoastră, decupat laser în plexiglas.',
-  },
-  {
-    question: 'Cât costă un glob de Crăciun personalizat?',
-    answer:
-      'Prețul este la cerere și depinde de model, dimensiuni și cantitate. Oferta este gratuită.',
-  },
-  {
-    question: 'Faceți și globuri de Crăciun din lemn?',
-    answer:
-      'Da. Pe lângă plexiglas, tăiem și gravăm laser globuri din lemn, natur sau baițuit, cu nume, oraș sau alt text, ca modelele „Nicolas” și „Craiova” din galerie.',
-  },
-  {
-    question: 'Pot comanda globuri personalizate pentru colegi sau clienți?',
-    answer:
-      'Da. Lucrăm de la piese unice la producție de serie. Trimiteți-ne textul pentru fiecare glob și numărul de bucăți.',
-  },
-  {
-    question: 'Pot trimite propriul design?',
-    answer:
-      'Da, personalizarea este completă. Ne puteți trimite fișierele de design, dacă le aveți, sau puteți porni de la un model din galerie.',
-  },
-  {
-    question: 'Când ar trebui să comand globurile?',
-    answer:
-      'Vă recomandăm să ne contactați din timp înainte de sărbători, mai ales pentru comenzile cu multe bucăți. La nevoie, oferim execuție urgentă de la 24 de ore.',
-  },
-  {
-    question: 'Cum se agață globurile în brad?',
-    answer:
-      'Modelele din galerie au în partea de sus un mic orificiu pentru agățare, prin care puteți trece o panglică sau un șnur.',
-  },
-  {
-    question: 'Livrați globurile și în alte orașe?',
-    answer: `Da. ${DELIVERY}`,
-  },
-]
+// Only the order days still ahead: a passed courier day is left out.
+function deadlineAnswer({ next, courier, pickup }: ActiveChristmasDeadline) {
+  if (!courier) {
+    return `Pentru ridicare din Craiova înainte de Crăciun, comandați până la ${keepTogether(next.label)}.`
+  }
+  return `Pentru livrare prin curier înainte de Crăciun, comandați până la ${keepTogether(courier.label)}${
+    pickup ? `; pentru ridicare din Craiova, până la ${keepTogether(pickup.label)}` : ''
+  }.`
+}
+
+function faqItems(deadline: ActiveChristmasDeadline | null) {
+  return [
+    ...(deadline
+      ? [
+          {
+            question: 'Până când pot comanda globuri pentru Crăciun?',
+            answer: deadlineAnswer(deadline),
+          },
+        ]
+      : []),
+    {
+      question: 'Ce se poate scrie pe un glob de Crăciun personalizat?',
+      answer:
+        'Un nume, numele orașului și anul, o urare precum „Crăciun Fericit” sau textul dorit de dumneavoastră, decupat sau gravat laser, în plexiglas ori în lemn.',
+    },
+    {
+      question: 'Puteți scrie „Primul meu Crăciun” și numele copilului?',
+      answer:
+        'Da. Decupăm sau gravăm laser textul dorit, în plexiglas ori în lemn: numele, anul și o urare scurtă.',
+    },
+    {
+      question: 'Cât costă un glob de Crăciun personalizat?',
+      answer: product.fromPrice
+        ? `Un glob personalizat costă de la ${formatLei(product.fromPrice)}/buc. Prețul final depinde de model, dimensiuni și cantitate; pentru cantități mari oferim reduceri. Oferta este gratuită.`
+        : 'Prețul este la cerere și depinde de model, dimensiuni și cantitate. Oferta este gratuită.',
+    },
+    {
+      question: 'Faceți și globuri de Crăciun din lemn?',
+      answer:
+        'Da. Pe lângă plexiglas, tăiem și gravăm laser globuri din lemn, natur sau baițuit, cu nume, oraș sau alt text, ca modelele „Nicolas” și „Craiova” din galerie.',
+    },
+    {
+      question: 'Pot comanda globuri personalizate pentru colegi sau clienți?',
+      answer:
+        'Da. Lucrăm de la piese unice la producție de serie. Trimiteți-ne textul pentru fiecare glob și numărul de bucăți.',
+    },
+    {
+      question: 'Pot trimite propriul design pentru globuri?',
+      answer:
+        'Da. Ne puteți trimite fișierele de design, dacă le aveți, sau puteți porni de la un model din galerie.',
+    },
+    {
+      question: 'Când ar trebui să comand globurile?',
+      answer: product.leadTime
+        ? `${product.leadTime} La nevoie, oferim ${URGENT}.`
+        : `Vă recomandăm să ne contactați din timp înainte de sărbători, mai ales pentru comenzile cu multe bucăți. La nevoie, oferim ${URGENT}.`,
+    },
+    {
+      question: 'Cum se agață globurile în brad?',
+      answer:
+        'Modelele din galerie au în partea de sus un mic orificiu pentru agățare, prin care puteți trece o panglică sau un șnur.',
+    },
+    {
+      question: 'Livrați globurile și în alte orașe?',
+      answer:
+        'Da, livrăm prin curier în toată România. În Craiova puteți ridica personal comanda.',
+    },
+  ]
+}
 
 function GloburiCraciunPage() {
+  const { today } = Route.useLoaderData()
+  // Set only while the promo runs and an order day is still ahead
+  const deadline = activeChristmasDeadline(today)
+
   return (
     <>
       <PageHero
@@ -259,7 +339,7 @@ function GloburiCraciunPage() {
         title={
           <>
             Globuri de Crăciun <Highlight>personalizate</Highlight> din
-            plexiglas, în Craiova
+            plexiglas și lemn, în Craiova
           </>
         }
         intro={
@@ -271,10 +351,19 @@ function GloburiCraciunPage() {
           </p>
         }
         chips={[
-          'Preț la cerere · ofertă gratuită',
+          product.fromPrice
+            ? `De la ${formatLei(product.fromPrice)}/buc. · ofertă gratuită`
+            : 'Preț la cerere · ofertă gratuită',
+          ...(deadline
+            ? [
+                `Comenzi ${deadline.next.kind === 'pickup' ? 'cu ridicare ' : ''}până la ${keepTogether(
+                  deadline.next.label,
+                )}`,
+              ]
+            : []),
           'Livrare prin curier în toată România',
         ]}
-        whatsappMessage={product.whatsappMessage}
+        whatsappMessage={product.orderMessage}
         media={heroMedia}
       />
 
@@ -283,8 +372,8 @@ function GloburiCraciunPage() {
           title="Modele de globuri și ornamente de Crăciun din plexiglas și lemn"
           intro={
             <p>
-              Lucrări reale, tăiate laser în atelierul nostru din Craiova, cu
-              orificiu pentru agățare. Putem adapta textul, culoarea sau
+              Modele realizate în atelierul nostru din Craiova, cu orificiu
+              pentru agățare. Putem adapta textul, culoarea sau
               motivul oricărui model. Vedeți și{' '}
               <Link to="/portofoliu" className={textLink}>
                 portofoliul LaserCraft
@@ -293,17 +382,18 @@ function GloburiCraciunPage() {
             </p>
           }
         />
-        <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3">
+        <ul className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
           {ornaments.map((ornament) => (
             <li key={ornament.image}>
               <ModelCard
                 item={ornament}
                 whatsappMessage={product.whatsappMessage}
+                sizes="(min-width: 1280px) 300px, (min-width: 1024px) 31vw, 50vw"
               />
             </li>
           ))}
-          {/* 11 models leave one empty slot in both the 2- and 3-column
-              grids; this tile fills it. */}
+          {/* 11 models plus this tile fill every row of the 2-, 3- and
+              4-column grids. */}
           <li>
             <IdeaCard
               text="Trimiteți-ne o poză sau o schiță a ornamentului dorit."
@@ -317,48 +407,51 @@ function GloburiCraciunPage() {
       <Section tone="muted">
         <div className="lg:flex lg:items-center lg:justify-between lg:gap-12">
           <SectionHeader
-            title="Cât costă globurile de Crăciun personalizate"
+            title={'Cât costă globurile de\u00a0Crăciun personalizate'}
             intro={
               <p>
                 <strong className="font-semibold text-zinc-900">
-                  Preț la cerere
-                </strong>
-                . Prețul depinde de modelul ales sau designul propriu, de
-                dimensiunile ornamentelor și de numărul de bucăți. Pentru
-                cantități mari oferim reduceri.
+                  {product.fromPrice
+                    ? `De la ${formatLei(product.fromPrice)}/buc.`
+                    : 'Preț la cerere.'}
+                </strong>{' '}
+                {product.fromPrice ? 'Prețul final' : 'Prețul'} depinde de
+                modelul ales sau designul propriu, de dimensiunile ornamentelor
+                și de numărul de bucăți. Pentru cantități mari oferim reduceri.
               </p>
             }
             className="mb-0!"
           />
-          {/* Mobile has the sticky WhatsApp bar; desktop gets a direct CTA */}
-          <div className="hidden shrink-0 lg:block">
+          {/* Shown at every width: on phones the sticky bar stays hidden
+              until the cookie choice is made. */}
+          <div className="mt-5 shrink-0 lg:mt-0">
             <a
-              href={whatsappHref(product.whatsappMessage)}
+              href={whatsappHref(product.orderMessage)}
               target="_blank"
               rel="noopener"
               data-placement="price"
-              className={buttonClass('primary', 'lg')}
+              className={buttonClass('primary', 'lg', 'w-full sm:w-auto')}
             >
-              <WhatsAppIcon className="w-5 h-5" />
-              Cereți ofertă
+              <WhatsAppIcon className="w-5 h-5 shrink-0" />
+              Cereți prețul pe WhatsApp
             </a>
           </div>
         </div>
       </Section>
 
       <Section>
-        <div className="grid gap-10 lg:grid-cols-5 lg:gap-16">
-          <div className="lg:col-span-3">
+        <div className="grid gap-10 lg:grid-cols-2 lg:gap-16">
+          <div>
             <SectionHeader
               title="Ce puteți personaliza pe un glob de Crăciun"
               intro={
                 <p>
-                  Ornamentele sunt realizate prin{' '}
+                  Ornamentele sunt{' '}
                   <Link to="/taiere-laser-plexiglas" className={textLink}>
-                    tăiere laser a plexiglasului
+                    tăiate laser din plexiglas
                   </Link>
-                  , cu margini lustruite, iar textul este decupat direct în
-                  glob.
+                  , cu margini lustruite, sau din lemn; textul este decupat
+                  direct în glob sau, pe unele modele din lemn, gravat.
                 </p>
               }
             />
@@ -377,15 +470,15 @@ function GloburiCraciunPage() {
             />
           </div>
 
-          <div className="lg:col-span-2 rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-6 lg:self-start">
-            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-balance text-zinc-900">
-              Idei pentru ornamentele de brad personalizate
+          <div className="rounded-2xl border border-paper-line bg-paper p-4 sm:p-6 lg:self-start">
+            <h2 className="text-xl sm:text-2xl font-bold text-balance text-zinc-900">
+              Idei de text pentru globuri personalizate
             </h2>
-            <CheckList items={ideas} className="mt-4" />
+            <CheckList items={textIdeas} className="mt-4" />
             <p className="mt-4 text-zinc-600 leading-relaxed">
               Alte idei:{' '}
               <Link to="/cadouri-personalizate" className={textLink}>
-                cadouri personalizate din plexiglas
+                cadouri personalizate
               </Link>
               , de la brelocuri cu nume la decoruri pe suport.
             </p>
@@ -393,26 +486,40 @@ function GloburiCraciunPage() {
         </div>
       </Section>
 
+      <Testimonials to="/globuri-craciun-personalizate" />
+
       <OrderBlock
         title="Cum comandați globuri de Crăciun personalizate"
         intro="Scrieți-ne pe WhatsApp sau pe email cu aceste detalii:"
         checklist={quoteChecklist}
         checklistTitle={null}
-        whatsappMessage={product.whatsappMessage}
+        whatsappMessage={product.orderMessage}
         emailSubject="Cerere ofertă - globuri de Crăciun personalizate"
       >
         <p className="mt-8 flex gap-3 rounded-xl bg-amber-400/10 p-4 text-sm leading-relaxed text-zinc-200 ring-1 ring-inset ring-amber-400/30">
           <Icon name="clock" className="w-5 h-5 shrink-0 text-amber-400" />
-          <span>
+          {deadline ? (
             <strong className="font-semibold text-white">
-              Comandați din timp înainte de sărbători.
-            </strong>{' '}
-            Execuție urgentă de la 24 de ore.
-          </span>
+              {deadline.courier
+                ? `Comandați până la ${keepTogether(deadline.courier.label)} pentru livrare prin curier${
+                    deadline.pickup
+                      ? `, până la ${keepTogether(deadline.pickup.label)} pentru ridicare din Craiova`
+                      : ''
+                  }.`
+                : `Comandați până la ${keepTogether(deadline.next.label)} pentru ridicare din Craiova.`}
+            </strong>
+          ) : (
+            <span>
+              <strong className="font-semibold text-white">
+                Comandați din timp înainte de sărbători.
+              </strong>{' '}
+              {urgentSentence}
+            </span>
+          )}
         </p>
       </OrderBlock>
 
-      <Faq items={faqItems} />
+      <Faq items={faqItems(deadline)} whatsappMessage={product.orderMessage} />
     </>
   )
 }

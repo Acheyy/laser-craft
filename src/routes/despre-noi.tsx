@@ -10,11 +10,11 @@ export const Route = createFileRoute('/despre-noi')({
   component: DespreNoiPage,
   head: () => ({
     ...seo({
-      title: 'Despre LaserCraft – Atelier de Tăiere și Gravură Laser Craiova',
+      title: 'Despre LaserCraft – atelier de tăiere și gravură laser Craiova',
       description:
-        'Descoperiți povestea LaserCraft, atelier de tăiere și gravare laser din Craiova — peste 10 ani de experiență și peste 2000 de proiecte realizate.',
+        'LaserCraft, atelier de tăiere și gravură laser din Craiova: peste 10 ani de experiență și peste 2000 de proiecte realizate.',
       path: '/despre-noi',
-      image: '/img/og/og-despre-noi.jpg',
+      image: '/img/og/og-despre-noi-2.jpg',
     }),
     scripts: [breadcrumbs([{ name: 'Despre noi', path: '/despre-noi' }])],
   }),
@@ -32,7 +32,7 @@ const stats = [
 // reply time and delivery are stated by the OrderBlock right below.
 const howWeWork: Array<{ icon: IconName; lead: string; rest: string }> = [
   { icon: 'shieldCheck', lead: `Precizie de ${PRECISION}`, rest: ' la tăiere' },
-  { icon: 'bolt', lead: 'Execuție urgentă', rest: ' de la 24 de ore' },
+  { icon: 'bolt', lead: 'Execuție urgentă', rest: ' de la 24\u00a0de\u00a0ore' },
   { icon: 'layers', lead: 'De la o singură piesă', rest: ' la serii mari' },
 ]
 
@@ -52,18 +52,20 @@ function DespreNoiPage() {
             și gravura laser.
           </p>
         }
+        // The square plaque goes last, so on phones the third photo still
+        // peeks out of the swipe row.
         media={[
           {
             name: '/img/products/litere-volumetrice-decor-eveniment-1',
             alt: 'Panouri arcuite cu litere volumetrice din plexiglas alb „Nuntă de probă” și „Roselle”, lângă un aranjament floral',
           },
           {
-            name: '/img/products/placuta-adresa-plexiglas-negru-auriu-1',
-            alt: 'Plăcuță de adresă din plexiglas negru cu litere și cifre aurii volumetrice, prinsă cu distanțiere din inox',
-          },
-          {
             name: '/img/products/glob-craciun-cu-nume-personalizat',
             alt: 'Glob de Crăciun personalizat din plexiglas roșu cu numele „Cristina”, Moș Crăciun în sanie cu reni și fulgi de nea, tăiat laser',
+          },
+          {
+            name: '/img/products/placuta-adresa-plexiglas-negru-auriu-1',
+            alt: 'Plăcuță de adresă din plexiglas negru cu litere și cifre aurii volumetrice, prinsă cu distanțiere din inox',
           },
         ]}
       >
@@ -87,12 +89,10 @@ function DespreNoiPage() {
             <SectionHeader title="Povestea noastră" />
             <div className="max-w-2xl space-y-4 leading-relaxed text-zinc-700 sm:text-lg">
               <p>
-                LaserCraft a pornit de la o idee simplă: tăiere și gravură laser
-                făcute cu grijă, la comandă, pentru clienții din Craiova și din
-                toată România. Am început cu un singur echipament laser.
-              </p>
-              <p>
-                Astăzi realizăm în atelierul din Craiova{' '}
+                LaserCraft face tăiere și gravură laser la comandă pentru
+                clienții din Craiova și din toată România. Am început cu un
+                singur echipament laser; astăzi realizăm în atelierul din
+                Craiova{' '}
                 <Link to="/placute-adresa" className={textLink}>
                   plăcuțe de adresă din plexiglas
                 </Link>
@@ -110,16 +110,12 @@ function DespreNoiPage() {
                 </Link>
                 .
               </p>
+              {/* Services stay unlinked: at most 4 product links here, plus
+                  the portfolio. */}
               <p>
-                Pentru persoane fizice și pentru firme facem{' '}
-                <Link to="/gravura-laser-craiova" className={textLink}>
-                  gravură laser pe lemn, sticlă, piele și plexiglas
-                </Link>{' '}
-                și{' '}
-                <Link to="/taiere-laser-plexiglas" className={textLink}>
-                  tăiere laser plexiglas la comandă
-                </Link>
-                . O parte din lucrări sunt în{' '}
+                Pentru persoane fizice și pentru firme facem gravură laser pe
+                lemn, sticlă, piele și plexiglas, precum și tăiere laser
+                plexiglas la comandă. O parte din lucrări sunt în{' '}
                 <Link to="/portofoliu" className={textLink}>
                   portofoliul nostru
                 </Link>
@@ -128,8 +124,8 @@ function DespreNoiPage() {
             </div>
           </div>
 
-          <div className="rounded-2xl bg-zinc-50 p-5 ring-1 ring-inset ring-zinc-200 sm:p-6 lg:col-span-2 lg:self-start">
-            <h2 className="text-xl font-bold tracking-tight text-zinc-900 sm:text-2xl">
+          <div className="rounded-2xl bg-paper p-5 ring-1 ring-inset ring-paper-line sm:p-6 lg:col-span-2 lg:self-start">
+            <h2 className="text-xl font-bold text-zinc-900 sm:text-2xl">
               Cum lucrăm
             </h2>
             <ul className="mt-4 space-y-3">

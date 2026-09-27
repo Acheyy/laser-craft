@@ -21,6 +21,7 @@ import {
   PLAQUE_MIN_PRICE,
   PRECISION,
   RESPONSE_TIME,
+  URGENT,
   formatAmount,
   formatLei,
 } from '~/data/business'
@@ -28,6 +29,7 @@ import images from '~/data/images.gen.json'
 import { getProduct } from '~/data/products'
 import {
   BUSINESS_ID,
+  SERVICE_AREA,
   SITE_URL,
   absoluteUrl,
   breadcrumbs,
@@ -36,7 +38,7 @@ import {
 } from '~/utils/seo'
 
 const PRICE_PER_CM2 = formatLei(ACRYLIC_PRICE_PER_CM2)
-const WHATSAPP_MESSAGE = getProduct('/litere-volumetrice').whatsappMessage
+const product = getProduct('/litere-volumetrice')
 
 const roselleImages = [
   '/img/products/litere-volumetrice-decor-eveniment-1',
@@ -66,10 +68,10 @@ export const Route = createFileRoute('/litere-volumetrice')({
   component: LitereVolumetricePage,
   head: () => ({
     ...seo({
-      title: 'Litere Volumetrice din Plexiglas Craiova – Nunți și Evenimente',
+      title: 'Litere volumetrice din plexiglas Craiova – nunți și evenimente',
       description: `Litere volumetrice din plexiglas tăiate laser în Craiova: nume pentru nuntă, decor de eveniment și litere 3D pentru firme. Reper ${PRICE_PER_CM2}/cm², ofertă gratuită.`,
       path: '/litere-volumetrice',
-      image: '/img/og/og-litere-volumetrice.jpg',
+      image: '/img/og/og-litere-volumetrice-2.jpg',
       imageAlt:
         'Litere volumetrice din plexiglas alb pentru decor de eveniment, LaserCraft Craiova',
     }),
@@ -87,7 +89,7 @@ export const Route = createFileRoute('/litere-volumetrice')({
           'Litere volumetrice, nume și forme din plexiglas tăiate laser pentru decor de nuntă, evenimente și semnalistică pentru firme, realizate în atelierul LaserCraft din Craiova.',
         url: `${SITE_URL}/litere-volumetrice`,
         provider: { '@id': BUSINESS_ID },
-        areaServed: 'Craiova',
+        areaServed: SERVICE_AREA,
         image: roselleImages.map(largestVariantUrl),
       }),
     ],
@@ -125,14 +127,14 @@ const materials = [
   { name: 'Placaj și MDF', detail: 'grosimi de până la 20\u00a0mm' },
   {
     name: 'Finisaj',
-    detail: `margini curate și lustruite, precizie ${PRECISION.replace(' ', ' ')}`,
+    detail: `margini curate și lustruite, precizie ${PRECISION}`,
   },
 ]
 
 const priceFactors = [
   'Dimensiunile și numărul literelor (suprafața tăiată)',
   'Materialul: plexiglas sau lemn și MDF',
-  'Designul: logo sau design custom, cu ofertă dedicată',
+  'Designul: logo sau design propriu, cu ofertă separată',
   'Cantitatea: reduceri pentru cantități mari',
 ]
 
@@ -159,8 +161,8 @@ const faqItems = [
     answer: (
       <p>
         Din plexiglas transparent, colorat sau oglindă, cu grosimi de până la
-        25 mm. Pentru un aspect natural, le putem tăia și din lemn masiv (până
-        la 15 mm), placaj sau MDF (până la 20 mm).
+        25&nbsp;mm. Pentru un aspect natural, le putem tăia și din lemn masiv
+        (până la 15&nbsp;mm), placaj sau MDF (până la 20&nbsp;mm).
       </p>
     ),
   },
@@ -181,18 +183,20 @@ const faqItems = [
       <p>
         Da: numele firmei, forme după logo sau semnalistică din plexiglas, cu
         margini curate și lustruite. Lucrăm atât piese unice, cât și producție
-        de serie. Pentru logo sau design custom, contactați-ne pentru o
-        ofertă.
+        de serie. Pentru un logo sau un design propriu, vă trimitem o ofertă
+        separată.
       </p>
     ),
   },
   {
     question: 'În cât timp sunt gata literele?',
+    // Leads with the usual turnaround once the owner gives it.
     answer: (
       <p>
-        Oferim execuție urgentă de la 24 de ore. Pentru nunți și evenimente cu
-        dată fixă vă recomandăm să ne contactați din timp și să menționați data
-        evenimentului când cereți oferta.
+        {product.leadTime ? `${product.leadTime} La nevoie, oferim` : 'Oferim'}{' '}
+        {URGENT}. Pentru nunți și evenimente cu dată fixă vă recomandăm să ne
+        contactați din timp și să menționați data evenimentului când cereți
+        oferta.
       </p>
     ),
   },
@@ -230,8 +234,8 @@ function LitereVolumetricePage() {
             curate și lustruite.
           </p>
         }
-        chips={[`Plexiglas ${PRICE_PER_CM2}/cm²`, 'Plexiglas sau lemn']}
-        whatsappMessage={WHATSAPP_MESSAGE}
+        chips={[`Plexiglas ${PRICE_PER_CM2}/cm²`, 'Lemn sau plexiglas']}
+        whatsappMessage={product.orderMessage}
         media={heroMedia}
       />
 
@@ -285,7 +289,7 @@ function LitereVolumetricePage() {
           {useCases.map((item) => (
             <div
               key={item.title}
-              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5"
+              className="rounded-2xl border border-paper-line bg-paper p-4 sm:p-5"
             >
               <h3 className="font-semibold leading-snug text-zinc-900">
                 {item.title}
@@ -304,7 +308,7 @@ function LitereVolumetricePage() {
           {materials.map((material) => (
             <div
               key={material.name}
-              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5"
+              className="rounded-2xl border border-paper-line bg-paper p-4 sm:p-5"
             >
               <dt className="font-semibold text-zinc-900">{material.name}</dt>
               <dd className="mt-1 text-sm leading-relaxed text-zinc-600">
@@ -370,12 +374,13 @@ function LitereVolumetricePage() {
       </Section>
 
       <OrderBlock
-        title="Termene de execuție și comandă"
+        title="Cum comandați litere volumetrice"
         intro={
           <p>Scrieți-ne pe WhatsApp sau pe email cu aceste detalii:</p>
         }
         checklist={quoteChecklist}
-        whatsappMessage={WHATSAPP_MESSAGE}
+        checklistTitle={null}
+        whatsappMessage={product.orderMessage}
         emailSubject="Cerere ofertă - litere volumetrice"
       >
         <div className="mt-8 flex gap-3 rounded-xl bg-white/5 p-4 ring-1 ring-inset ring-white/10">
@@ -385,12 +390,12 @@ function LitereVolumetricePage() {
               Planificați din timp pentru evenimente.
             </strong>{' '}
             Pentru nunți și evenimente cu dată fixă, scrieți-ne cât mai
-            devreme. La nevoie, oferim execuție urgentă de la 24 de ore.
+            devreme. La nevoie, oferim {URGENT}.
           </p>
         </div>
       </OrderBlock>
 
-      <Faq items={faqItems} />
+      <Faq items={faqItems} whatsappMessage={product.orderMessage} />
     </>
   )
 }

@@ -25,11 +25,30 @@ export type Product = {
   // object-position for the cropped tile frame, when the subject is off-centre
   imagePosition?: string
   group: 'home' | 'business'
+  // Short request, used as is by the model and idea cards
   whatsappMessage: string
+  // One sentence telling the visitor what to send next
+  whatsappHint: string
+  // whatsappMessage + whatsappHint: header, hero, sticky bar, order block, FAQ
+  orderMessage: string
+  // Owner slots, unset until the owner confirms them. fromPrice is the
+  // starting price per piece in lei; leadTime is the usual turnaround as one
+  // sentence ('O plăcuță este gata de obicei în N zile lucrătoare.').
+  // For /cadouri-personalizate, fromPrice is the name keychain's starting
+  // price (the page's FAQ and Product JSON-LD describe the keychain).
+  fromPrice?: number
+  leadTime?: string
   seasonal?: boolean
 }
 
-const allProducts: Product[] = [
+// Ornaments and gifts are priced per piece once the owner gives a price.
+function pieceHint(fromPrice?: number) {
+  return fromPrice ? `de la ${formatLei(fromPrice)}/buc.` : 'preț la cerere'
+}
+
+type ProductData = Omit<Product, 'orderMessage' | 'hint'> & { hint?: string }
+
+const productData: ProductData[] = [
   {
     to: '/placute-adresa',
     label: 'Plăcuțe de adresă',
@@ -39,39 +58,42 @@ const allProducts: Product[] = [
     alt: 'Plăcuță de adresă din plexiglas negru cu litere și cifre aurii volumetrice',
     group: 'home',
     whatsappMessage: 'Bună ziua! Aș dori o plăcuță de adresă din plexiglas.',
+    whatsappHint: 'Vă trimit mărimea, textul de pe plăcuță și culorile dorite.',
   },
   {
     to: '/globuri-craciun-personalizate',
     label: 'Globuri de Crăciun cu nume',
-    hint: 'preț la cerere',
-    description: 'Ornamente din plexiglas cu nume, an sau mesaj.',
+    description: 'Ornamente din plexiglas și lemn, cu nume, an sau mesaj.',
     image: '/img/products/glob-craciun-cu-nume-personalizat',
     alt: 'Glob de Crăciun roșu din plexiglas personalizat cu numele Cristina',
     group: 'home',
-    whatsappMessage:
-      'Bună ziua! Aș dori globuri de Crăciun personalizate din plexiglas.',
+    whatsappMessage: 'Bună ziua! Aș dori globuri de Crăciun personalizate.',
+    whatsappHint:
+      'Vă trimit textul pentru fiecare glob, numărul de bucăți și data dorită.',
     seasonal: true,
   },
   {
     to: '/cadouri-personalizate',
     label: 'Cadouri personalizate',
-    hint: 'preț la cerere',
     description: 'Brelocuri cu nume, decor cu suport, cadouri gravate.',
     image: '/img/products/breloc-nume-plexiglas-doua-straturi',
     alt: 'Breloc cu numele Jonut din plexiglas alb pe fundal roz, pe două straturi',
     group: 'home',
-    whatsappMessage: 'Bună ziua! Aș dori un cadou personalizat din plexiglas.',
+    whatsappMessage: 'Bună ziua! Aș dori un cadou personalizat.',
+    whatsappHint: 'Vă trimit numele sau textul dorit și numărul de bucăți.',
   },
   {
     to: '/litere-volumetrice',
     label: 'Litere volumetrice',
-    hint: 'decor evenimente și firme',
+    hint: 'decor pentru evenimente și firme',
     description: 'Nume și inscripții 3D pentru evenimente și firme.',
     image: '/img/products/litere-volumetrice-decor-eveniment-1',
     alt: 'Litere volumetrice din plexiglas alb pe panou crem, decor de eveniment',
     imagePosition: '50% 0%',
     group: 'business',
     whatsappMessage: 'Bună ziua! Aș dori o ofertă pentru litere volumetrice.',
+    whatsappHint:
+      'Vă trimit textul, înălțimea literelor și data evenimentului sau termenul dorit.',
   },
   {
     to: '/taiere-laser-plexiglas',
@@ -82,6 +104,8 @@ const allProducts: Product[] = [
     alt: 'Număr de casă din plexiglas negru cu model floral decupat laser',
     group: 'business',
     whatsappMessage: 'Bună ziua! Aș dori o ofertă pentru tăiere laser plexiglas.',
+    whatsappHint:
+      'Vă trimit tipul și grosimea plexiglasului, dimensiunile și cantitatea.',
   },
   {
     to: '/gravura-laser-craiova',
@@ -92,8 +116,16 @@ const allProducts: Product[] = [
     alt: 'Breloc rotund din plexiglas negru gravat laser cu mesaj personalizat',
     group: 'business',
     whatsappMessage: 'Bună ziua! Aș dori o ofertă pentru gravură laser.',
+    whatsappHint:
+      'Vă trimit obiectul sau materialul, textul ori desenul de gravat și cantitatea.',
   },
 ]
+
+const allProducts: Product[] = productData.map((product) => ({
+  ...product,
+  hint: product.hint ?? pieceHint(product.fromPrice),
+  orderMessage: `${product.whatsappMessage} ${product.whatsappHint}`,
+}))
 
 // Seasonal products go first while the promo is on and stay listed afterwards.
 export const products: Product[] = SHOW_CHRISTMAS_PROMO
@@ -114,10 +146,10 @@ export const SERVICES_WHATSAPP_MESSAGE =
 export const PORTFOLIO_WHATSAPP_MESSAGE =
   'Bună ziua! Am văzut portofoliul dumneavoastră și aș dori o ofertă pentru un proiect asemănător.'
 
-// The WhatsApp message that fits the current page (header, sticky bar);
-// undefined falls back to the generic message.
+// The WhatsApp message that fits the current page (header, sticky bar,
+// footer); undefined falls back to the generic message.
 export function whatsappMessageFor(pathname: string) {
   if (pathname === '/servicii') return SERVICES_WHATSAPP_MESSAGE
   if (pathname === '/portofoliu') return PORTFOLIO_WHATSAPP_MESSAGE
-  return allProducts.find((p) => p.to === pathname)?.whatsappMessage
+  return allProducts.find((p) => p.to === pathname)?.orderMessage
 }

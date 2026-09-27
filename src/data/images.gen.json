@@ -3,6 +3,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -12,6 +13,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -21,6 +23,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -30,6 +33,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -39,6 +43,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -48,6 +53,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -57,6 +63,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -66,6 +73,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -75,6 +83,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -84,6 +93,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -93,6 +103,27 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/globuri-lemn-taiate-laser": {
+    "width": 1200,
+    "height": 800,
+    "widths": [
+      200,
+      400,
+      800,
+      1200
+    ]
+  },
+  "/img/products/gravura-lemn-detaliu-nume": {
+    "width": 1200,
+    "height": 900,
+    "widths": [
+      200,
       400,
       800,
       1200
@@ -102,15 +133,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/img/products/jurnal-piele-gravat": {
-    "width": 1200,
-    "height": 670,
-    "widths": [
+      200,
       400,
       800,
       1200
@@ -120,6 +143,7 @@
     "width": 768,
     "height": 1024,
     "widths": [
+      200,
       400,
       768
     ]
@@ -128,6 +152,7 @@
     "width": 1024,
     "height": 682,
     "widths": [
+      200,
       400,
       800,
       1024
@@ -137,6 +162,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -146,6 +172,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -155,6 +182,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -164,6 +192,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -173,6 +202,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -182,6 +212,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -191,6 +222,7 @@
     "width": 1200,
     "height": 1607,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -200,6 +232,7 @@
     "width": 1200,
     "height": 900,
     "widths": [
+      200,
       400,
       800,
       1200
@@ -209,6 +242,7 @@
     "width": 1066,
     "height": 1066,
     "widths": [
+      200,
       400,
       800,
       1066
@@ -218,6 +252,7 @@
     "width": 1066,
     "height": 1066,
     "widths": [
+      200,
       400,
       800,
       1066
@@ -227,69 +262,17 @@
     "width": 1200,
     "height": 900,
     "widths": [
+      200,
       400,
       800,
       1200
     ]
   },
-  "/img/products/semn-luminos-plexiglas-led": {
+  "/img/products/plexiglas-taiat-laser-ornamente": {
     "width": 1200,
-    "height": 670,
+    "height": 675,
     "widths": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/img/products/suporturi-pahar-lemn-gravate": {
-    "width": 1200,
-    "height": 670,
-    "widths": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/img/products/tablou-lemn-taiat-laser": {
-    "width": 1200,
-    "height": 670,
-    "widths": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/img/products/trofeu-plexiglas-gravat": {
-    "width": 1200,
-    "height": 670,
-    "widths": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/img/services/gravura-laser": {
-    "width": 1200,
-    "height": 670,
-    "widths": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/img/services/taiere-laser-lemn": {
-    "width": 1200,
-    "height": 670,
-    "widths": [
-      400,
-      800,
-      1200
-    ]
-  },
-  "/img/services/taiere-laser-plexiglas": {
-    "width": 1200,
-    "height": 670,
-    "widths": [
+      200,
       400,
       800,
       1200

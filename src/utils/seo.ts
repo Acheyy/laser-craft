@@ -2,6 +2,13 @@ export const SITE_URL = 'https://laser-craft.ro'
 export const SITE_NAME = 'LaserCraft'
 export const BUSINESS_ID = `${SITE_URL}/#business`
 
+// areaServed for every Service and Offer: made in Craiova, delivered by
+// courier anywhere in Romania.
+export const SERVICE_AREA = [
+  { '@type': 'City', name: 'Craiova' },
+  { '@type': 'Country', name: 'România' },
+]
+
 export function absoluteUrl(path: string) {
   return path.startsWith('http') ? path : `${SITE_URL}${path}`
 }
@@ -13,7 +20,7 @@ export function seo({
   title,
   description,
   path,
-  image = '/img/og/og-home.jpg',
+  image = '/img/og/og-home-2.jpg',
   imageAlt,
 }: {
   title: string

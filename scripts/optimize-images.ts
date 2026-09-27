@@ -1,5 +1,14 @@
 // Generates the web images in public/img from the originals in images/originals.
 // Run after adding or replacing an original: `bun run images`
+//
+// Rename on replace: when a published photo or share card changes visually,
+// save the new original under a new name (-2, -3…) and update the references.
+// Never put a different picture behind a live URL: /img is cached for 30 days
+// by browsers and Cloudflare, and WhatsApp/Facebook cache link previews by
+// image URL. Remove the old original but keep its files in public/img, so
+// old shares and cached pages still resolve.
+//
+// The designed share cards come from scripts/og-cards (render.ts).
 import sharp from 'sharp'
 import { mkdir, readdir, writeFile } from 'node:fs/promises'
 import path from 'node:path'
@@ -7,7 +16,14 @@ import path from 'node:path'
 const ROOT = path.resolve(import.meta.dir, '..')
 const ORIGINALS = path.join(ROOT, 'images/originals')
 const PUBLIC_IMG = path.join(ROOT, 'public/img')
-const WIDTHS = [400, 800, 1200]
+// 200w serves the 48–56px thumbnails (menu, /contact list, Christmas strip)
+const WIDTHS = [200, 400, 800, 1200]
+const WEBP = { quality: 78 }
+// Photos whose detail (wood grain) makes them 2–3× their peers at the
+// default quality; checked by eye at 1200w
+const WEBP_OVERRIDES: Record<string, { quality: number; effort?: number }> = {
+  'glob-craciun-lemn-nume-nicolas': { quality: 60, effort: 6 },
+}
 
 const manifest: Record<string, { width: number; height: number; widths: number[] }> = {}
 
@@ -26,7 +42,7 @@ async function responsive(folder: string) {
       await source
         .clone()
         .resize({ width: w, withoutEnlargement: true })
-        .webp({ quality: 78 })
+        .webp(WEBP_OVERRIDES[name] ?? WEBP)
         .toFile(path.join(outDir, `${name}-${w}.webp`))
     }
     const largest = widths[widths.length - 1]
@@ -63,7 +79,6 @@ async function icons() {
 }
 
 await responsive('products')
-await responsive('services')
 await openGraph()
 await icons()
 await writeFile(

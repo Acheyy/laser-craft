@@ -52,13 +52,15 @@ export function Hero() {
     <section className="relative overflow-hidden bg-slate-900">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-900 to-amber-950/30" />
+        <div className="absolute inset-0 bg-cutbed" />
         <div className="absolute -top-32 right-0 h-96 w-96 rounded-full bg-amber-500/10 blur-3xl" />
       </div>
 
       <Container className="relative py-8 sm:py-12 lg:py-16">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_22rem] lg:items-center lg:gap-12 xl:grid-cols-[minmax(0,1fr)_26rem] xl:gap-16">
           <div className="min-w-0">
-            <h1 className="text-3xl font-extrabold tracking-tight text-white text-balance sm:text-5xl xl:text-6xl">
+            {/* Leading 1.08 from sm keeps the ș/ț commas clear of the next line. */}
+            <h1 className="text-3xl font-extrabold text-white text-balance sm:text-5xl sm:leading-[1.08] xl:text-6xl">
               Tăiere și gravură <Highlight>laser</Highlight> în Craiova
             </h1>
 
@@ -72,7 +74,8 @@ export function Hero() {
                 {formatLei(ACRYLIC_PRICE_PER_CM2)}/cm²
               </strong>
               , litere volumetrice, globuri și cadouri personalizate, gravură pe
-              lemn, sticlă și piele.
+              lemn, sticlă și piele. Ofertă gratuită, livrare prin curier în toată
+              România.
             </p>
 
             <div data-placement="hero" className="mt-6">
@@ -124,7 +127,7 @@ function HeroCollage() {
   return (
     <div className="hidden lg:grid lg:grid-cols-2 lg:gap-4">
       <div className="space-y-4">
-        <CollagePhoto photo={a} priority />
+        <CollagePhoto photo={a} />
         <CollagePhoto photo={b} />
       </div>
       <div className="space-y-4 pt-[33.333%]">
@@ -135,24 +138,20 @@ function HeroCollage() {
   )
 }
 
-function CollagePhoto({
-  photo,
-  priority = false,
-}: {
-  photo: (typeof collage)[number]
-  priority?: boolean
-}) {
+// All lazy: hidden (display: none) lazy images are never requested, so phones
+// download none of them. On desktop the LCP is the H1 in usual window sizes;
+// only very tall windows (inner height over ~1000px) reach the product tiles
+// below, and one of their lazy photos becomes the LCP (still well under 1 s).
+// Making the tiles eager would preload them in <head> on every screen.
+function CollagePhoto({ photo }: { photo: (typeof collage)[number] }) {
   return (
     <div
       className={`${photo.aspect} overflow-hidden rounded-2xl bg-slate-800 ring-1 ring-white/10`}
     >
-      {/* Hidden below lg: the 1px slot keeps the eager first photo at its
-          smallest file on phones. */}
       <ResponsiveImage
         name={photo.name}
         alt={photo.alt}
-        sizes="(min-width: 1280px) 200px, (min-width: 1024px) 168px, 1px"
-        priority={priority}
+        sizes="(min-width: 1280px) 200px, 168px"
         className="h-full w-full object-cover"
       />
     </div>

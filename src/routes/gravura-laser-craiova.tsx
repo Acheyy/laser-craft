@@ -4,28 +4,37 @@ import { Link } from '@tanstack/react-router'
 import { OrderBlock } from '~/components/Contact'
 import { Faq } from '~/components/Faq'
 import { Highlight, PageHero } from '~/components/PageHero'
-import { ModelCard, type ModelItem } from '~/components/ProductCards'
+import { IdeaCard, ModelCard, type ModelItem } from '~/components/ProductCards'
 import { ResponsiveImage, imageMeta } from '~/components/ResponsiveImage'
 import { RateCard, Section, SectionHeader, textLink } from '~/components/ui'
 import {
   ACRYLIC_EXAMPLE,
   ACRYLIC_PRICE_PER_CM2,
+  DPI,
   PLAQUE_MIN_PRICE,
+  URGENT,
   formatAmount,
   formatLei,
 } from '~/data/business'
 import { getProduct } from '~/data/products'
-import { BUSINESS_ID, SITE_URL, breadcrumbs, jsonLd, seo } from '~/utils/seo'
+import {
+  BUSINESS_ID,
+  SERVICE_AREA,
+  SITE_URL,
+  breadcrumbs,
+  jsonLd,
+  seo,
+} from '~/utils/seo'
 
 export const Route = createFileRoute('/gravura-laser-craiova')({
   component: GravuraLaserPage,
   head: () => ({
     ...seo({
-      title: 'Gravură Laser Craiova – Lemn, Sticlă, Piele, Plexiglas',
+      title: 'Gravură laser Craiova – lemn, sticlă, piele, plexiglas',
       description:
-        'Gravură laser în Craiova pe lemn, bambus, sticlă, piele și plexiglas, cu rezoluție de până la 1200 DPI: cadouri, trofee și logo-uri de firmă. Ofertă gratuită.',
+        `Gravură laser în Craiova pe lemn, bambus, sticlă, piele și plexiglas, cu rezoluție de până la ${DPI}: cadouri, trofee și logo-uri de firmă. Ofertă gratuită.`,
       path: '/gravura-laser-craiova',
-      image: '/img/og/og-gravura-laser.jpg',
+      image: '/img/og/og-gravura-laser-2.jpg',
       imageAlt:
         'Breloc din plexiglas negru gravat laser cu mesaj personalizat, LaserCraft Craiova',
     }),
@@ -40,10 +49,10 @@ export const Route = createFileRoute('/gravura-laser-craiova')({
         name: 'Gravură laser',
         serviceType: 'Gravură laser pe lemn, sticlă, piele și plexiglas',
         description:
-          'Gravură laser în Craiova pe lemn și bambus, sticlă și cristal, piele, plexiglas și plastic, cu rezoluție de până la 1200 DPI, pentru cadouri, trofee, branding și elemente decorative.',
+          `Gravură laser în Craiova pe lemn și bambus, sticlă și cristal, piele, plexiglas și plastic, cu rezoluție de până la ${DPI}, pentru cadouri, trofee, branding și elemente decorative.`,
         url: `${SITE_URL}/gravura-laser-craiova`,
         provider: { '@id': BUSINESS_ID },
-        areaServed: { '@type': 'City', name: 'Craiova' },
+        areaServed: SERVICE_AREA,
         offers: {
           '@type': 'Offer',
           name: 'Tăiere și gravură pe plexiglas, calculată pe suprafață',
@@ -62,33 +71,32 @@ export const Route = createFileRoute('/gravura-laser-craiova')({
 
 const product = getProduct('/gravura-laser-craiova')
 
-const detailImage = '/img/services/gravura-laser' as const
+const detailImage = '/img/products/gravura-lemn-detaliu-nume' as const
 const detailImageMeta = imageMeta(detailImage)
 
+// Engraved pieces made in the workshop (the same photos as on the globuri and
+// cadouri pages). The idea tile completes the 2×2 phone grid and the desktop row.
 const examples: ModelItem[] = [
   {
-    title: 'Trofee din plexiglas',
-    description: 'Text, logo și detalii grafice gravate pe aceeași piesă.',
-    image: '/img/products/trofeu-plexiglas-gravat',
-    alt: 'Trofeu din plexiglas gravat laser cu logo și text, pe bază neagră',
+    title: 'Glob din lemn cu nume',
+    description: 'Numele și desenul, gravate laser în lemn baițuit.',
+    meta: 'Lemn baițuit',
+    image: '/img/products/glob-craciun-lemn-nume-nicolas',
+    alt: 'Glob de Crăciun rotund din lemn baițuit, gravat laser cu numele „Nicolas”, un om de zăpadă cu joben și mătură, o căsuță cu horn și fulgi de nea',
   },
   {
-    title: 'Semn de firmă cu LED',
-    description: 'Logo gravat laser pe plexiglas transparent, iluminat cu LED.',
-    image: '/img/products/semn-luminos-plexiglas-led',
-    alt: 'Semn luminos LED din plexiglas transparent cu logo gravat laser',
+    title: 'Mamă și copil, în două culori',
+    description: 'Arcadă cu trandafiri gravați și siluete decupate.',
+    meta: 'Plexiglas magenta + galben',
+    image: '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
+    alt: 'Decor din plexiglas magenta și galben cu suport: arcadă cu trandafiri gravați și siluetele unei mame și a unui copil',
   },
   {
-    title: 'Suporturi de pahar din lemn de nuc',
-    description: 'Set de 4, cu modele botanice și geometrice gravate.',
-    image: '/img/products/suporturi-pahar-lemn-gravate',
-    alt: 'Set de 4 suporturi de pahar rotunde din lemn, gravate laser cu modele botanice și geometrice',
-  },
-  {
-    title: 'Jurnal din piele naturală',
-    description: 'Copertă gravată cu artă botanică și monogramă.',
-    image: '/img/products/jurnal-piele-gravat',
-    alt: 'Copertă de jurnal din piele naturală gravată laser cu motiv botanic și monogramă',
+    title: 'Breloc gravat cu mesaj',
+    description: 'Mesaj și desen gravate laser, cu inel metalic.',
+    meta: 'Plexiglas negru',
+    image: '/img/products/breloc-gravat-mesaj-personalizat',
+    alt: 'Breloc rotund din plexiglas negru gravat laser cu mesajul „you are INDISPENSABLE” și un personaj cu pancarta „THANK YOU”',
   },
 ]
 
@@ -128,7 +136,7 @@ const useCases: Array<{ title: string; body: React.ReactNode }> = [
         Un nume, o dată, o monogramă sau un desen gravat transformă un obiect
         obișnuit într-un cadou personal. Mai multe idei găsiți pe pagina de{' '}
         <Link to="/cadouri-personalizate" className={textLink}>
-          cadouri personalizate din plexiglas
+          cadouri personalizate
         </Link>
         .
       </>
@@ -158,7 +166,7 @@ const steps = [
   {
     title: 'Realizăm gravura',
     description:
-      'După confirmarea ofertei trecem la execuție. La nevoie, execuție urgentă de la 24 de ore.',
+      `După confirmarea ofertei trecem la execuție. La nevoie, oferim ${URGENT}.`,
   },
 ]
 
@@ -186,29 +194,34 @@ function GravuraLaserPage() {
         }
         chips={[
           `Plexiglas ${formatLei(ACRYLIC_PRICE_PER_CM2)}/cm²`,
-          'Până la 1200 DPI',
+          `Până la ${DPI}`,
         ]}
-        whatsappMessage={product.whatsappMessage}
+        whatsappMessage={product.orderMessage}
         media={[
           {
             name: '/img/products/breloc-gravat-mesaj-personalizat',
             alt: 'Breloc rotund din plexiglas negru gravat laser cu mesaj personalizat',
           },
           {
-            name: '/img/products/icoana-isus-plexiglas-negru-cu-suport',
-            alt: 'Icoană cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport',
+            name: '/img/products/glob-craciun-lemn-nume-nicolas',
+            alt: 'Glob de Crăciun din lemn baițuit, gravat laser cu numele „Nicolas”',
           },
         ]}
       />
 
       <Section>
         <SectionHeader
-          title="Exemple de gravură laser din portofoliu"
+          title="Gravuri realizate în atelierul din Craiova"
           intro={
             <>
-              Câteva lucrări realizate în atelier. Mai multe proiecte găsiți în{' '}
+              Nume, mesaje și desene gravate laser pe plexiglas și lemn. Mai
+              multe proiecte găsiți în{' '}
               <Link to="/portofoliu" className={textLink}>
                 portofoliul nostru de lucrări
+              </Link>{' '}
+              și printre{' '}
+              <Link to="/globuri-craciun-personalizate" className={textLink}>
+                globurile de Crăciun cu nume
               </Link>
               .
             </>
@@ -223,6 +236,11 @@ function GravuraLaserPage() {
               sizes="(min-width: 1280px) 300px, (min-width: 1024px) 23vw, 50vw"
             />
           ))}
+          <IdeaCard
+            title="Aveți o idee de gravură?"
+            text="Trimiteți-ne o poză sau o schiță și vă spunem prețul."
+            whatsappMessage={product.whatsappMessage}
+          />
         </div>
       </Section>
 
@@ -242,7 +260,7 @@ function GravuraLaserPage() {
                 <>
                   <p>Exemplu: {ACRYLIC_EXAMPLE}</p>
                   <p className="mt-1 text-zinc-400">
-                    Se aplică proiectelor custom din plexiglas, tăiate sau
+                    Se aplică pieselor din plexiglas la comandă, tăiate sau
                     gravate, în orice formă.
                   </p>
                 </>
@@ -253,12 +271,12 @@ function GravuraLaserPage() {
             <h3 className="mb-3 text-lg font-semibold text-zinc-900">
               Lemn, sticlă, piele și alte materiale
             </h3>
-            <div className="rounded-2xl border border-zinc-200 bg-white p-5 sm:p-6">
+            <div className="rounded-2xl border border-paper-line bg-white p-5 sm:p-6">
               <p className="text-zinc-700">
                 Prețul se stabilește prin ofertă, după material, dimensiuni și
                 cantitate.
               </p>
-              <p className="mt-4 border-t border-zinc-200 pt-4 text-sm leading-relaxed text-zinc-600">
+              <p className="mt-4 border-t border-paper-line pt-4 text-sm leading-relaxed text-zinc-600">
                 Pentru casă,{' '}
                 <Link to="/placute-adresa" className={textLink}>
                   plăcuțele de adresă din plexiglas
@@ -278,7 +296,7 @@ function GravuraLaserPage() {
           {materials.map((material) => (
             <li
               key={material.title}
-              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5"
+              className="rounded-2xl border border-paper-line bg-paper p-4 sm:p-5"
             >
               <h3 className="font-semibold text-zinc-900 sm:text-lg">
                 {material.title}
@@ -297,7 +315,7 @@ function GravuraLaserPage() {
       >
         <SectionHeader
           className="lg:mb-0"
-          title="Detalii fine, cu rezoluție de până la 1200 DPI"
+          title={`Detalii fine, cu rezoluție de până la ${DPI}`}
           intro="Textele mici, monogramele, logo-urile și modelele decorative sunt redate clar."
         />
         <div
@@ -308,7 +326,7 @@ function GravuraLaserPage() {
         >
           <ResponsiveImage
             name={detailImage}
-            alt="Exemple de gravură laser: placă din lemn cu text și motive florale, portofel din piele și trofee transparente cu logo"
+            alt="Detaliu de gravură laser pe lemn baițuit: numele „Nicolas”, fulgi de nea, un om de zăpadă și o căsuță"
             sizes="(min-width: 1280px) 616px, (min-width: 1024px) 50vw, 100vw"
             className="h-full w-full object-cover"
           />
@@ -321,7 +339,7 @@ function GravuraLaserPage() {
           {useCases.map((useCase) => (
             <div
               key={useCase.title}
-              className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5"
+              className="rounded-2xl border border-paper-line bg-paper p-4 sm:p-5"
             >
               <h3 className="font-semibold text-zinc-900 sm:text-lg">
                 {useCase.title}
@@ -348,11 +366,12 @@ function GravuraLaserPage() {
       <OrderBlock
         title="Cum comandați o gravură laser"
         steps={steps}
-        whatsappMessage={product.whatsappMessage}
+        whatsappMessage={product.orderMessage}
         emailSubject="Cerere ofertă - gravură laser"
       />
 
       <Faq
+        whatsappMessage={product.orderMessage}
         items={[
           {
             question: 'Pe ce materiale faceți gravură laser în Craiova?',
@@ -363,7 +382,7 @@ function GravuraLaserPage() {
             question: 'Cât costă gravarea laser?',
             answer: (
               <>
-                Proiectele custom din plexiglas, tăiate sau gravate, se
+                Piesele din plexiglas la comandă, tăiate sau gravate, se
                 calculează pe suprafață: {formatLei(ACRYLIC_PRICE_PER_CM2)}/cm².
                 Exemplu: {ACRYLIC_EXAMPLE}. Pentru lemn, sticlă, piele și alte
                 materiale vă trimitem o ofertă gratuită.
@@ -382,21 +401,20 @@ function GravuraLaserPage() {
           },
           {
             question: 'În cât timp este gata gravura?',
-            answer:
-              'Oferim execuție urgentă de la 24 de ore. Termenul exact îl stabilim împreună, în funcție de proiect, atunci când vă trimitem oferta.',
+            answer: `${product.leadTime ? `${product.leadTime} ` : ''}Oferim ${URGENT}. Termenul exact îl stabilim împreună, în funcție de proiect, atunci când vă trimitem oferta.`,
           },
           {
             question: 'Cât de detaliată poate fi gravura?',
-            answer:
-              'Gravăm la o rezoluție de până la 1200 DPI, potrivită pentru texte, monograme, logo-uri și modele decorative fine, precum motivele botanice și geometrice din portofoliul nostru.',
+            answer: `Gravăm la o rezoluție de până la ${DPI}, potrivită pentru texte, monograme, logo-uri și modele decorative fine, precum omul de zăpadă și căsuța de pe globul din lemn „Nicolas”.`,
           },
           {
             question: 'Faceți și tăiere laser, nu doar gravură?',
             answer: (
               <>
-                Da. Tăiem laser plexiglas de până la 25 mm grosime, lemn masiv
-                de până la 15 mm, placaj și MDF de până la 20 mm, precum și
-                piele, textile, carton și hârtie. Detalii găsiți pe pagina{' '}
+                Da. Tăiem laser plexiglas de până la 25&nbsp;mm grosime, lemn
+                masiv de până la 15&nbsp;mm, placaj și MDF de până la 20&nbsp;mm,
+                precum și piele, textile, carton și hârtie. Detalii găsiți pe
+                pagina{' '}
                 <Link to="/taiere-laser-plexiglas" className={textLink}>
                   tăiere laser plexiglas
                 </Link>{' '}

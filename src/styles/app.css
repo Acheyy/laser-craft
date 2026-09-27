@@ -1,9 +1,122 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/inter';
+
+/* Self-hosted Romanian subsets built by scripts/subset-fonts.ts. __root.tsx
+   preloads both files.
+
+   Body text is 'optional': the preloaded 27 KB file normally arrives before
+   first paint; on a slow first visit the page keeps the fallback instead of
+   rewrapping every paragraph when Inter lands (measured up to 0.22 CLS with
+   'swap' and an Android Roboto fallback). */
+@font-face {
+  font-family: 'Inter Variable';
+  src: url('../assets/fonts/inter-ro-wght.woff2') format('woff2');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: optional;
+}
+
+/* Roboto (Android) scaled to Inter's width and line metrics, so a page that
+   stays on the fallback keeps the designed line lengths. Systems without
+   Roboto skip it. One face per weight: a single weightless face would be
+   used for every weight, faking bold from Regular and showing
+   font-medium as regular. Bold Inter runs a little wider against Roboto
+   (measured on page text: 107% at 400 and 500, 107.6% at 600, 108.3% at
+   700); the overrides are scaled back so every face keeps the same line
+   metrics. */
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Roboto'), local('Roboto-Regular');
+  font-weight: 400;
+  size-adjust: 107%;
+  ascent-override: 90.5%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Roboto Medium'), local('Roboto-Medium');
+  font-weight: 500;
+  size-adjust: 107%;
+  ascent-override: 90.5%;
+  descent-override: 22.5%;
+  line-gap-override: 0%;
+}
+
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Roboto Bold'), local('Roboto-Bold');
+  font-weight: 600 800;
+  size-adjust: 108%;
+  ascent-override: 89.7%;
+  descent-override: 22.3%;
+  line-gap-override: 0%;
+}
+
+/* h1/h2 only: a static 750 instance serves both font-bold and font-extrabold.
+   Headings swap in, so they always end up in the approved face. */
+@font-face {
+  font-family: 'Bricolage Grotesque';
+  src: url('../assets/fonts/bricolage-ro-750.woff2') format('woff2');
+  font-weight: 700 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Roboto Bold sets the same widths as Bricolage 750 (within 0.3%), so the
+   heading swap keeps its line breaks and doesn't shift the page. */
+@font-face {
+  font-family: 'Bricolage Fallback';
+  src: local('Roboto Bold'), local('Roboto-Bold');
+  font-weight: 700 800;
+  ascent-override: 93%;
+  descent-override: 27%;
+  line-gap-override: 0%;
+}
+
+/* The same for Windows, macOS and iOS, which have no Roboto: Arial Bold
+   scaled to Bricolage 750's width (94.8%, measured on the site's h1/h2
+   text; Liberation Sans Bold has Arial's metrics). */
+@font-face {
+  font-family: 'Bricolage Fallback Arial';
+  src: local('Arial Bold'), local('Arial-BoldMT'), local('Liberation Sans Bold'),
+    local('LiberationSans-Bold');
+  font-weight: 700 800;
+  size-adjust: 94.8%;
+  ascent-override: 98.1%;
+  descent-override: 28.5%;
+  line-gap-override: 0%;
+}
 
 @theme {
-  --font-sans: 'Inter Variable', system-ui, sans-serif;
-  --font-display: 'Inter Variable', system-ui, sans-serif;
+  --font-sans: 'Inter Variable', 'Inter Fallback', system-ui, sans-serif;
+  --font-display: 'Bricolage Grotesque', 'Bricolage Fallback', 'Bricolage Fallback Arial',
+    'Inter Variable', 'Inter Fallback', system-ui, sans-serif;
+
+  /* Warm off-white for muted sections and light cards (instead of the
+     hue-less zinc-50), plus its matching border colour. */
+  --color-paper: oklch(0.975 0.006 80);
+  --color-paper-line: oklch(0.91 0.012 80);
+}
+
+/* Bricolage at opsz 72 is already tightly spaced, so headings use a lighter
+   tracking than Inter's tracking-tight (h1/h2 carry no tracking-* class). */
+@layer base {
+  h1,
+  h2 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+}
+
+/* Faint 32px cutting-bed grid for the dark heroes, fading out towards the
+   text on the left. Use on an aria-hidden absolute layer. */
+@utility bg-cutbed {
+  background-image:
+    linear-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgb(255 255 255 / 0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  mask-image: linear-gradient(to left, #000, transparent 70%);
 }
 
 html {
@@ -12,16 +125,34 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Below lg the fixed WhatsApp/call bar covers the bottom of the screen: keep
+   focused links and FAQ questions scrolled clear of it. */
+@media (max-width: 1023.98px) {
+  html {
+    scroll-padding-bottom: 5rem;
+  }
+}
+
 a,
 button,
 summary {
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Keyboard focus is always visible (tap highlight is off, so this matters). */
+/* Keyboard focus is always visible (tap highlight is off, so this matters).
+   The slate ring fills the offset gap, so the indicator contrasts on white
+   and paper as well as on the dark sections. */
 :focus-visible {
   outline: 2px solid var(--color-amber-400);
   outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--color-slate-900);
+}
+
+/* Focus moved by script after client-side navigation (the new page's H1,
+   the hash target, or main via the skip link) shows no ring. */
+[tabindex='-1']:focus {
+  outline: none;
+  box-shadow: none;
 }
 
 /* The mobile contact bar yields to the open menu and the cookie banner. */

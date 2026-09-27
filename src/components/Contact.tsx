@@ -2,13 +2,22 @@ import type * as React from 'react'
 import { useState } from 'react'
 import { Link } from '@tanstack/react-router'
 import { Icon, WhatsAppIcon } from '~/components/Icon'
-import { CheckList, Container, Steps, buttonClass, textLinkDark } from '~/components/ui'
+import {
+  CheckList,
+  Container,
+  Steps,
+  buttonClass,
+  textLink,
+  textLinkDark,
+} from '~/components/ui'
 import {
   DELIVERY,
   EMAIL,
   HOURS_SHORT,
+  MAPS_URL,
   PHONE_DISPLAY,
   PHONE_HREF,
+  PICKUP_AREA,
   RESPONSE_TIME,
   emailHref,
   whatsappHref,
@@ -146,7 +155,7 @@ export function ContactFacts({
   const iconClass = `w-5 h-5 shrink-0 mt-0.5 ${dark ? 'text-amber-400' : 'text-amber-600'}`
   return (
     <ul
-      className={`space-y-2.5 text-sm ${dark ? 'text-zinc-300' : 'text-zinc-600'} ${className}`}
+      className={`space-y-2.5 text-[15px] ${dark ? 'text-zinc-300' : 'text-zinc-600'} ${className}`}
     >
       <li className="flex gap-2.5">
         <Icon name="clock" className={iconClass} />
@@ -156,7 +165,66 @@ export function ContactFacts({
         <Icon name="truck" className={iconClass} />
         <span>{DELIVERY}</span>
       </li>
+      {/* Owner slots in business.ts; nothing shows until they are set. */}
+      {(PICKUP_AREA || MAPS_URL) && (
+        <li className="flex gap-2.5">
+          <Icon name="mapPin" className={iconClass} />
+          <span>
+            {PICKUP_AREA && <span className="block">Punct de ridicare: {PICKUP_AREA}, Craiova</span>}
+            {MAPS_URL && (
+              <a
+                href={MAPS_URL}
+                target="_blank"
+                rel="noopener"
+                className={`inline-flex min-h-11 items-center ${dark ? textLinkDark : textLink}`}
+              >
+                Deschideți în Google Maps
+              </a>
+            )}
+          </span>
+        </li>
+      )}
     </ul>
+  )
+}
+
+// Desktop only: wa.me links need WhatsApp Web there, while a phone camera
+// opens the chat directly. At 132px every module is exactly 4px at 1x; the
+// SVG's own white margin is the quiet zone, so the card padding stays small.
+// `dark` (order block): a quiet translucent card, with white only behind the
+// code itself, so it doesn't outshine the WhatsApp button.
+export function WhatsAppQr({
+  dark = false,
+  className = '',
+}: {
+  dark?: boolean
+  className?: string
+}) {
+  const code = (
+    <img
+      src="/img/whatsapp-qr.svg"
+      width="132"
+      height="132"
+      alt={`Cod QR pentru WhatsApp ${PHONE_DISPLAY}`}
+      loading="lazy"
+      decoding="async"
+      className="shrink-0"
+    />
+  )
+  return (
+    <div
+      className={`hidden items-center rounded-2xl pr-5 lg:flex ${
+        dark
+          ? 'gap-4 bg-white/5 p-3 ring-1 ring-inset ring-white/10'
+          : 'gap-3 bg-white p-1.5'
+      } ${className}`}
+    >
+      {dark ? <div className="shrink-0 rounded-xl bg-white p-1">{code}</div> : code}
+      <p className={`text-sm leading-relaxed ${dark ? 'text-zinc-300' : 'text-zinc-700'}`}>
+        Sunteți pe calculator? Scanați codul cu telefonul și ne scrieți direct pe
+        WhatsApp.
+      </p>
+    </div>
   )
 }
 
@@ -164,7 +232,7 @@ export const defaultOrderChecklist = [
   'Ce produs doriți (o poză cu un model ne ajută)',
   'Dimensiunile și cantitatea',
   'Textul, numele sau fișierul de design',
-  'Termenul până la care aveți nevoie',
+  'Data până la care aveți nevoie de comandă',
 ]
 
 // The single "how to order + contact" block per page. It replaces the old
@@ -172,7 +240,7 @@ export const defaultOrderChecklist = [
 export function OrderBlock({
   id = 'comanda',
   title = 'Cereți o ofertă gratuită',
-  intro,
+  intro = 'Vă răspundem cu prețul și termenul de execuție.',
   steps,
   checklist = defaultOrderChecklist,
   checklistTitle = 'Ce ne trimiteți pentru ofertă',
@@ -183,6 +251,7 @@ export function OrderBlock({
 }: {
   id?: string
   title?: React.ReactNode
+  // null hides the default intro
   intro?: React.ReactNode
   steps?: Array<{ title: React.ReactNode; description?: React.ReactNode }>
   checklist?: string[]
@@ -197,14 +266,14 @@ export function OrderBlock({
     <section
       id={id}
       data-placement="order-block"
-      className="bg-slate-900 py-12 sm:py-16 lg:py-20"
+      className="relative bg-slate-900 py-12 sm:py-16 lg:py-20"
     >
       <Container>
         {/* grid-cols-1 (minmax(0,1fr)) keeps the email row from widening the
             column past the screen on phones. */}
         <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
           <div className="min-w-0">
-            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-white text-balance">
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl lg:leading-[1.12] font-bold text-white text-balance">
               {title}
             </h2>
             {intro && (
@@ -223,6 +292,9 @@ export function OrderBlock({
               </>
             )}
             {children}
+            {/* Under the checklist rather than in the contact card: the two
+                columns end up about the same height. */}
+            <WhatsAppQr dark className="mt-8" />
           </div>
 
           <div className="min-w-0 rounded-2xl bg-white/5 p-5 ring-1 ring-inset ring-white/10 sm:p-8 lg:self-start">
@@ -241,6 +313,11 @@ export function OrderBlock({
           </div>
         </div>
       </Container>
+      {/* Laser line: sets the final CTA apart from the footer below. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-amber-500/50 to-transparent"
+      />
     </section>
   )
 }

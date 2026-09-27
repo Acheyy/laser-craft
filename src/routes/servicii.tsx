@@ -1,7 +1,7 @@
 import type * as React from 'react'
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { OrderBlock } from '~/components/Contact'
-import { Icon } from '~/components/Icon'
+import { Icon, WhatsAppIcon } from '~/components/Icon'
 import { Highlight, PageHero } from '~/components/PageHero'
 import { ProductTiles } from '~/components/ProductCards'
 import {
@@ -21,36 +21,49 @@ import {
   RateCard,
   Section,
   SectionHeader,
+  buttonClass,
   textLink,
 } from '~/components/ui'
 import {
   ACRYLIC_EXAMPLE,
   ACRYLIC_PRICE_PER_CM2,
+  DPI,
   PLAQUE_MIN_PRICE,
   PRECISION,
+  URGENT,
   formatAmount,
   formatLei,
   plaquePricing,
+  whatsappHref,
 } from '~/data/business'
-import { BUSINESS_ID, SITE_URL, breadcrumbs, jsonLd, seo } from '~/utils/seo'
+import {
+  BUSINESS_ID,
+  SERVICE_AREA,
+  SITE_URL,
+  breadcrumbs,
+  jsonLd,
+  seo,
+} from '~/utils/seo'
 
 export const Route = createFileRoute('/servicii')({
   component: ServiciiPage,
   head: () => ({
     ...seo({
-      title: 'Prețuri Tăiere și Gravură Laser Craiova – Servicii | LaserCraft',
+      title: 'Prețuri tăiere și gravură laser Craiova – servicii | LaserCraft',
       description:
         'Tăiere laser plexiglas de la 0,09 lei/cm², plăcuțe de adresă de la 55 lei, tăiere laser lemn și MDF, gravură laser pe lemn, sticlă și piele. Atelier în Craiova.',
       path: '/servicii',
-      image: '/img/og/og-servicii.jpg',
+      image: '/img/og/og-servicii-2.jpg',
     }),
     scripts: [
       breadcrumbs([{ name: 'Servicii', path: '/servicii' }]),
       jsonLd({
         '@context': 'https://schema.org',
         '@type': 'OfferCatalog',
+        '@id': `${SITE_URL}/servicii#catalog`,
         name: 'Servicii de tăiere și gravură laser – LaserCraft Craiova',
         url: `${SITE_URL}/servicii`,
+        provider: { '@id': BUSINESS_ID },
         itemListElement: [
           {
             '@type': 'Offer',
@@ -59,7 +72,7 @@ export const Route = createFileRoute('/servicii')({
               name: 'Tăiere și gravură laser plexiglas',
               url: `${SITE_URL}/taiere-laser-plexiglas`,
               provider: { '@id': BUSINESS_ID },
-              areaServed: 'Craiova',
+              areaServed: SERVICE_AREA,
             },
             priceSpecification: {
               '@type': 'UnitPriceSpecification',
@@ -75,7 +88,7 @@ export const Route = createFileRoute('/servicii')({
               name: 'Plăcuțe de adresă din plexiglas',
               url: `${SITE_URL}/placute-adresa`,
               provider: { '@id': BUSINESS_ID },
-              areaServed: 'Craiova',
+              areaServed: SERVICE_AREA,
             },
             priceSpecification: {
               '@type': 'PriceSpecification',
@@ -91,28 +104,30 @@ export const Route = createFileRoute('/servicii')({
               name: 'Tăiere laser lemn, placaj și MDF',
               url: `${SITE_URL}/servicii#taiere-laser-lemn`,
               provider: { '@id': BUSINESS_ID },
-              areaServed: 'Craiova',
+              areaServed: SERVICE_AREA,
             },
           },
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Service',
-              name: 'Globuri de Crăciun personalizate din plexiglas',
+              name: 'Globuri de Crăciun personalizate din plexiglas și lemn',
               url: `${SITE_URL}/globuri-craciun-personalizate`,
               provider: { '@id': BUSINESS_ID },
-              areaServed: 'Craiova',
+              areaServed: SERVICE_AREA,
             },
+            ...fromPriceSpecification('/globuri-craciun-personalizate'),
           },
           {
             '@type': 'Offer',
             itemOffered: {
               '@type': 'Service',
-              name: 'Cadouri personalizate din plexiglas',
+              name: 'Cadouri personalizate din plexiglas și lemn',
               url: `${SITE_URL}/cadouri-personalizate`,
               provider: { '@id': BUSINESS_ID },
-              areaServed: 'Craiova',
+              areaServed: SERVICE_AREA,
             },
+            ...fromPriceSpecification('/cadouri-personalizate'),
           },
           {
             '@type': 'Offer',
@@ -121,7 +136,7 @@ export const Route = createFileRoute('/servicii')({
               name: 'Gravură laser',
               url: `${SITE_URL}/gravura-laser-craiova`,
               provider: { '@id': BUSINESS_ID },
-              areaServed: 'Craiova',
+              areaServed: SERVICE_AREA,
             },
           },
         ],
@@ -131,6 +146,7 @@ export const Route = createFileRoute('/servicii')({
 })
 
 const WHATSAPP_MESSAGE = SERVICES_WHATSAPP_MESSAGE
+const PLAQUE_MESSAGE = getProduct('/placute-adresa').whatsappMessage
 
 // Product pages as tiles; the two service pages get link cards further down.
 const productTiles = products.filter(
@@ -143,32 +159,69 @@ const sortedPlaquePricing = [...plaquePricing].sort((a, b) => a.price - b.price)
 type OnRequestRow = {
   label: string
   hint: string
-  link: { to: ProductPath } | { to: '/servicii'; hash: string }
+  // Has a published starting price (products.ts fromPrice)
+  priced?: boolean
+  link:
+    | { to: ProductPath }
+    // includeHash: the in-page anchor is not "the current page"
+    | { to: '/servicii'; hash: string; activeOptions: { includeHash: true } }
+}
+
+// Starting price per piece for the ornaments and gifts, once the owner
+// publishes one in products.ts; nothing until then.
+function fromPriceSpecification(to: ProductPath) {
+  const { fromPrice } = getProduct(to)
+  return fromPrice
+    ? {
+        priceSpecification: {
+          '@type': 'PriceSpecification',
+          minPrice: fromPrice,
+          priceCurrency: 'RON',
+        },
+      }
+    : {}
 }
 
 // Product names come from products.ts so they match the tiles and the menu.
 // Most hints are local: the products' own "preț la cerere" would repeat the
-// column title.
-const productRow = (to: ProductPath, hint = getProduct(to).hint): OnRequestRow => ({
-  label: getProduct(to).label,
-  hint,
-  link: { to },
-})
+// column title. A published starting price replaces the hint, as on the tiles
+// below.
+const productRow = (to: ProductPath, hint = getProduct(to).hint): OnRequestRow => {
+  const { label, fromPrice } = getProduct(to)
+  return fromPrice
+    ? { label, hint: `de la ${formatLei(fromPrice)}/buc.`, priced: true, link: { to } }
+    : { label, hint, link: { to } }
+}
 
 // Everything without a fixed price. Each row links to its page (wood/MDF has
 // no page of its own, so it points to the block further down). Plexiglas
 // engraving is not here: it has the per-cm² rate.
 const onRequest: OnRequestRow[] = [
-  productRow('/globuri-craciun-personalizate', 'din plexiglas, cu an sau mesaj'),
+  productRow('/globuri-craciun-personalizate', 'din plexiglas sau lemn, cu nume sau mesaj'),
   productRow('/cadouri-personalizate', 'brelocuri, decor cu suport, cadouri gravate'),
   productRow('/litere-volumetrice'),
   productRow('/gravura-laser-craiova', 'lemn, sticlă, piele'),
   {
     label: 'Tăiere laser lemn și MDF',
-    hint: 'placaj, MDF, piele, textile',
-    link: { to: '/servicii', hash: 'taiere-laser-lemn' },
+    hint: 'lemn masiv, placaj, piele, textile',
+    link: {
+      to: '/servicii',
+      hash: 'taiere-laser-lemn',
+      activeOptions: { includeHash: true },
+    },
   },
 ]
+
+// "Preț la cerere" only while no row shows a starting price
+const onRequestColumn = onRequest.some((row) => row.priced)
+  ? {
+      title: 'Alte produse și servicii',
+      intro: 'Prețul final depinde de model, material și cantitate. Oferta este gratuită.',
+    }
+  : {
+      title: 'Preț la cerere, ofertă gratuită',
+      intro: 'Prețul depinde de model, material și cantitate.',
+    }
 
 // Services that have their own landing page: a compact link card here, the
 // details live on the dedicated page. The ids keep the old anchors working.
@@ -188,10 +241,10 @@ const serviceCards: Array<{
     title: 'Tăiere laser plexiglas (acril)',
     description:
       'Debitare la dimensiune și tăiere în orice formă, pentru semnalistică, plăcuțe, litere și decorațiuni.',
-    facts: ['Grosimi de până la 25 mm', `Precizie ${PRECISION}`],
+    facts: ['Grosimi de până la 25\u00a0mm', `Precizie ${PRECISION}`],
     cue: 'Detalii și prețuri',
-    image: '/img/services/taiere-laser-plexiglas',
-    alt: 'Piese din plexiglas transparent și colorat tăiate laser: litere, cifre și forme geometrice cu margini lustruite',
+    image: '/img/products/plexiglas-taiat-laser-ornamente',
+    alt: 'Ornamente din plexiglas tăiate laser: fulg de nea alb, inimă geometrică roz și glob verde cu sanie și reni',
   },
   {
     id: 'gravura-laser',
@@ -199,16 +252,16 @@ const serviceCards: Array<{
     title: 'Gravură laser',
     description:
       'Personalizare pentru cadouri, trofee și logo-uri de firmă, pe lemn, sticlă, piele sau acril.',
-    facts: ['Până la 1200 DPI'],
+    facts: [`Până la ${DPI}`],
     cue: 'Detalii și exemple',
-    image: '/img/services/gravura-laser',
-    alt: 'Exemple de gravură laser: placă din lemn cu text și motive florale, portofel din piele și trofee transparente cu logo',
+    image: '/img/products/gravura-lemn-detaliu-nume',
+    alt: 'Detaliu de gravură laser pe lemn baițuit: numele „Nicolas”, fulgi de nea, un om de zăpadă și o căsuță',
   },
 ]
 
 const woodFeatures = [
-  'Lemn masiv până la 15 mm',
-  'Placaj și MDF până la 20 mm',
+  'Lemn masiv până la 15\u00a0mm',
+  'Placaj și MDF până la 20\u00a0mm',
   'Piele naturală și sintetică',
   'Textile și fetru',
   'Carton și hârtie',
@@ -303,12 +356,12 @@ function ServiciiPage() {
             title="Plăcuțe de adresă"
             intro="Plexiglas pe 2 straturi: fundal și litere sau cifre aplicate."
           >
-            <div className="overflow-hidden rounded-2xl border border-zinc-200">
+            <div className="overflow-hidden rounded-2xl border border-paper-line">
               <table className="w-full text-left">
                 <caption className="sr-only">
                   Prețuri plăcuțe de adresă din plexiglas, pe mărimi
                 </caption>
-                <thead className="bg-zinc-50 text-xs uppercase tracking-wider text-zinc-600">
+                <thead className="bg-paper text-xs uppercase tracking-wider text-zinc-600">
                   <tr>
                     <th scope="col" className="px-4 py-2.5 font-semibold">
                       Mărime
@@ -321,7 +374,7 @@ function ServiciiPage() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-zinc-200">
+                <tbody className="divide-y divide-paper-line">
                   {sortedPlaquePricing.map((item) => (
                     <tr key={item.size}>
                       <th
@@ -342,6 +395,17 @@ function ServiciiPage() {
               Prețul include ambele straturi, tăierea și gravarea textului.
               Logo sau design propriu: preț prin ofertă.
             </p>
+            {/* Same as on /placute-adresa: the message starts with the size. */}
+            <a
+              href={whatsappHref(`${PLAQUE_MESSAGE} Mărimea dorită: `)}
+              target="_blank"
+              rel="noopener"
+              data-placement="price-table"
+              className={buttonClass('primary', 'md', 'mt-4 w-full sm:w-auto sm:self-start')}
+            >
+              <WhatsAppIcon className="w-5 h-5 shrink-0" />
+              Comandați pe WhatsApp
+            </a>
             <p className="mt-1 text-sm">
               <Link to="/placute-adresa" className={standaloneLink}>
                 Modele de plăcuțe de adresă din plexiglas
@@ -375,16 +439,19 @@ function ServiciiPage() {
           </PriceColumn>
 
           <PriceColumn
-            title="Preț la cerere, ofertă gratuită"
-            intro="Prețul depinde de model, material și cantitate."
+            title={onRequestColumn.title}
+            intro={onRequestColumn.intro}
             className="md:col-span-2 lg:col-span-1"
           >
-            <ul className="divide-y divide-zinc-200 overflow-hidden rounded-2xl border border-zinc-200">
+            {/* The rows fill the clipped list, so their focus ring is drawn
+                inside (two-tone like the global one) and follows the corners.
+                `!` because the global :focus-visible rule is unlayered. */}
+            <ul className="divide-y divide-paper-line overflow-hidden rounded-2xl border border-paper-line [&>li:first-child>a]:rounded-t-2xl [&>li:last-child>a]:rounded-b-2xl">
               {onRequest.map((row) => (
                 <li key={row.label}>
                   <Link
                     {...row.link}
-                    className="group flex min-h-14 items-center gap-3 px-4 py-2.5 transition-colors hover:bg-zinc-50"
+                    className="group flex min-h-14 items-center gap-3 px-4 py-2.5 transition-colors hover:bg-paper focus-visible:outline-offset-[-4px]! focus-visible:shadow-[inset_0_0_0_2px_var(--color-slate-900)]!"
                   >
                     <span className="min-w-0 flex-1">
                       <span className="block font-medium text-zinc-900 group-hover:text-amber-800">
@@ -407,7 +474,7 @@ function ServiciiPage() {
       </Section>
 
       <Section tone="muted">
-        <SectionHeader title="Produse personalizate din plexiglas" />
+        <SectionHeader title="Produse personalizate din plexiglas și lemn" />
         {/* 4 tiles: one row on desktop instead of 3 + 1 */}
         <ProductTiles products={productTiles} columns={4} />
       </Section>
@@ -434,10 +501,10 @@ function ServiciiPage() {
             />
             <CheckList items={woodFeatures} columns={2} className="mt-5" />
           </div>
-          <div className="aspect-video overflow-hidden rounded-2xl bg-zinc-100">
+          <div className="aspect-[3/2] overflow-hidden rounded-2xl bg-zinc-100">
             <ResponsiveImage
-              name="/img/services/taiere-laser-lemn"
-              alt="Decupaje laser din placaj: panou cu model floral, fulgi de nea, ren, căsuțe și suporturi rotunde"
+              name="/img/products/globuri-lemn-taiate-laser"
+              alt="Globuri din lemn tăiate laser: „Craiova” cu brad dantelat, din placaj natural, și „Nicolas”, din lemn baițuit, cu nume și desen gravate"
               sizes="(min-width: 1280px) 584px, (min-width: 1024px) 46vw, 100vw"
               className="h-full w-full object-cover"
             />
@@ -493,14 +560,10 @@ function ServiciiPage() {
           {materials.map((group) => (
             <div key={group.title}>
               <h3 className="font-semibold text-zinc-900">{group.title}</h3>
-              {/* Flat tags, not outlined pills: nothing here is tappable. */}
               <ul className="mt-3 flex flex-wrap gap-2">
                 {group.items.map((item) => (
-                  <li
-                    key={item}
-                    className="rounded-md bg-zinc-200/60 px-2.5 py-1 text-sm text-zinc-800"
-                  >
-                    {item}
+                  <li key={item}>
+                    <Chip>{item}</Chip>
                   </li>
                 ))}
               </ul>
@@ -513,8 +576,8 @@ function ServiciiPage() {
         title="Cereți o ofertă pentru proiectul dumneavoastră"
         intro={
           <p>
-            Vă trimitem prețul și termenul de execuție. La nevoie, avem
-            execuție urgentă de la 24 de ore.
+            Vă trimitem prețul și termenul de execuție. La nevoie, avem{' '}
+            {URGENT}.
           </p>
         }
         whatsappMessage={WHATSAPP_MESSAGE}

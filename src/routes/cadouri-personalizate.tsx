@@ -2,7 +2,7 @@ import { Link, createFileRoute } from '@tanstack/react-router'
 import type * as React from 'react'
 import { OrderBlock } from '~/components/Contact'
 import { Faq } from '~/components/Faq'
-import { WhatsAppIcon } from '~/components/Icon'
+import { Icon, WhatsAppIcon } from '~/components/Icon'
 import { Highlight, PageHero } from '~/components/PageHero'
 import { IdeaCard, ModelCard, type ModelItem } from '~/components/ProductCards'
 import type { ImageName } from '~/components/ResponsiveImage'
@@ -13,11 +13,18 @@ import {
   buttonClass,
   textLink,
 } from '~/components/ui'
-import { DELIVERY, SHOW_CHRISTMAS_PROMO, whatsappHref } from '~/data/business'
+import {
+  DPI,
+  SHOW_CHRISTMAS_PROMO,
+  URGENT,
+  formatLei,
+  whatsappHref,
+} from '~/data/business'
 import images from '~/data/images.gen.json'
 import { getProduct } from '~/data/products'
 import {
   BUSINESS_ID,
+  SERVICE_AREA,
   SITE_URL,
   absoluteUrl,
   breadcrumbs,
@@ -25,11 +32,21 @@ import {
   seo,
 } from '~/utils/seo'
 
+// Set fromPrice (products.ts) to the name keychain's starting price: the
+// price copy and the Product node below describe the keychain.
+const product = getProduct('/cadouri-personalizate')
+
 const schemaImages = [
   '/img/products/breloc-nume-plexiglas-doua-straturi',
   '/img/products/breloc-gravat-mesaj-personalizat',
   '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
   '/img/products/decor-love-pisici-plexiglas-roz',
+  '/img/products/glob-craciun-lemn-nume-nicolas',
+] as const satisfies ReadonlyArray<ImageName>
+
+const keychainImages = [
+  '/img/products/breloc-nume-plexiglas-doua-straturi',
+  '/img/products/breloc-gravat-mesaj-personalizat',
 ] as const satisfies ReadonlyArray<ImageName>
 
 const largestVariantUrl = (name: ImageName) =>
@@ -39,9 +56,9 @@ export const Route = createFileRoute('/cadouri-personalizate')({
   component: CadouriPersonalizatePage,
   head: () => ({
     ...seo({
-      title: 'Cadouri Personalizate din Plexiglas – Craiova | LaserCraft',
+      title: 'Cadouri personalizate și brelocuri cu nume – Craiova | LaserCraft',
       description:
-        'Cadouri personalizate din plexiglas, tăiate și gravate laser în Craiova: brelocuri cu nume sau mesaj și decor cu suport. Preț la cerere, ofertă gratuită.',
+        'Brelocuri cu nume, decor cu suport și globuri de Crăciun cu nume, din plexiglas și lemn, realizate în Craiova. Livrare în toată țara, ofertă gratuită.',
       path: '/cadouri-personalizate',
       image: '/img/og/og-cadouri-personalizate.jpg',
       imageAlt:
@@ -55,28 +72,51 @@ export const Route = createFileRoute('/cadouri-personalizate')({
       jsonLd({
         '@context': 'https://schema.org',
         '@type': 'Service',
-        name: 'Cadouri personalizate din plexiglas',
+        name: 'Cadouri personalizate din plexiglas și lemn',
         serviceType: 'Cadouri personalizate tăiate și gravate laser',
         description:
-          'Cadouri personalizate din plexiglas tăiate și gravate laser — brelocuri cu nume sau mesaj, decoruri cu suport și forme decorative — realizate în atelierul LaserCraft din Craiova.',
+          'Cadouri personalizate din plexiglas și lemn tăiate și gravate laser — brelocuri cu nume sau mesaj, decoruri cu suport, globuri de Crăciun cu nume și forme decorative — realizate în atelierul LaserCraft din Craiova.',
         url: `${SITE_URL}/cadouri-personalizate`,
         provider: { '@id': BUSINESS_ID },
-        areaServed: { '@type': 'City', name: 'Craiova' },
+        areaServed: SERVICE_AREA,
         image: schemaImages.map(largestVariantUrl),
       }),
+      // Only once the owner publishes a starting price (products.ts).
+      ...(product.fromPrice
+        ? [
+            jsonLd({
+              '@context': 'https://schema.org',
+              '@type': 'Product',
+              name: 'Breloc personalizat cu nume',
+              url: `${SITE_URL}/cadouri-personalizate`,
+              image: keychainImages.map(largestVariantUrl),
+              description:
+                'Breloc din plexiglas personalizat cu nume sau mesaj, tăiat și gravat laser în atelierul LaserCraft din Craiova.',
+              brand: { '@type': 'Brand', name: 'LaserCraft' },
+              offers: {
+                '@type': 'AggregateOffer',
+                lowPrice: product.fromPrice,
+                priceCurrency: 'RON',
+                availability: 'https://schema.org/MadeToOrder',
+                areaServed: SERVICE_AREA,
+                seller: { '@id': BUSINESS_ID },
+              },
+            }),
+          ]
+        : []),
     ],
   }),
 })
-
-const product = getProduct('/cadouri-personalizate')
 
 type GiftGroup = {
   title: string
   intro: React.ReactNode
   items: ModelItem[]
+  // Model-card request; defaults to the gift message
+  whatsappMessage?: string
 }
 
-// The three gift categories keep their own H2s (each is a search topic).
+// Each gift category keeps its own H2 (each is a search topic).
 const keychains: GiftGroup = {
   title: 'Brelocuri personalizate cu nume sau mesaj',
   intro:
@@ -157,6 +197,37 @@ const petGifts: GiftGroup = {
   ],
 }
 
+// Same titles and alts as in the /globuri-craciun-personalizate gallery
+const christmasGifts: GiftGroup = {
+  title: 'Cadouri de\u00a0Crăciun personalizate',
+  intro:
+    'Globuri din plexiglas sau din lemn, cu numele celui drag ori al orașului.',
+  whatsappMessage: getProduct('/globuri-craciun-personalizate').whatsappMessage,
+  items: [
+    {
+      image: '/img/products/glob-craciun-cu-nume-personalizat',
+      alt: 'Glob de Crăciun din plexiglas roșu personalizat cu numele „Cristina”, cu Moș Crăciun în sanie, reni și fulgi de nea',
+      title: 'Glob personalizat cu nume',
+      description: 'Numele dorit, pe banda centrală.',
+      meta: 'Plexiglas roșu',
+    },
+    {
+      image: '/img/products/glob-craciun-lemn-nume-nicolas',
+      alt: 'Glob de Crăciun rotund din lemn baițuit, gravat laser cu numele „Nicolas”, un om de zăpadă cu joben și mătură, o căsuță cu horn și fulgi de nea',
+      title: 'Glob din lemn cu nume',
+      description: 'Numele dorit, gravat în lemn.',
+      meta: 'Lemn baițuit',
+    },
+    {
+      image: '/img/products/glob-craciun-lemn-craiova-brad',
+      alt: 'Glob de Crăciun din placaj de lemn natur tăiat laser, cu textul „Craiova”, un brad cu model dantelat de fulgi de nea și două stele',
+      title: 'Glob din lemn „Craiova”',
+      description: 'Orașul se poate schimba.',
+      meta: 'Placaj de lemn',
+    },
+  ],
+}
+
 const personalizationOptions: React.ReactNode[] = [
   'Numele, inițialele sau un mesaj scurt, tăiate din plexiglas sau gravate laser.',
   <>
@@ -164,9 +235,9 @@ const personalizationOptions: React.ReactNode[] = [
     <Link to="/gravura-laser-craiova" className={textLink}>
       gravură laser
     </Link>{' '}
-    la până la 1200 DPI.
+    la până la {DPI}.
   </>,
-  'Plexiglas (acril) transparent, colorat sau oglindă, pe unul sau două straturi.',
+  'Materialul: plexiglas (acril) transparent, colorat sau oglindă, pe unul sau două straturi; sau lemn.',
   'Forma: breloc, decor cu suport, ornament sau conturul dorit, cu margini lustruite.',
 ]
 
@@ -196,8 +267,8 @@ const otherOccasions: Array<{ title: string; description: React.ReactNode }> = [
     description: 'Icoană sau decor cu numele copilului.',
   },
   {
-    title: 'Colegi și clienți',
-    description: 'Brelocuri cu mesaj sau logo, în serie.',
+    title: 'Nași și fini',
+    description: 'Un glob „Dragi nași” sau un decor cu numele finilor.',
   },
 ]
 
@@ -206,6 +277,25 @@ const otherOccasions: Array<{ title: string; description: React.ReactNode }> = [
 const occasions = SHOW_CHRISTMAS_PROMO
   ? [christmas, ...otherOccasions]
   : [...otherOccasions, christmas]
+
+// Only facts published elsewhere on the site
+const businessGifts: React.ReactNode[] = [
+  'Brelocuri cu mesaj sau logo, în serie',
+  <>
+    <Link to="/globuri-craciun-personalizate" className={textLink}>
+      Globuri de Crăciun
+    </Link>{' '}
+    cu numele firmei sau cu o urare, pentru colegi și clienți
+  </>,
+  <>
+    Logo-ul firmei, prin{' '}
+    <Link to="/gravura-laser-craiova" className={textLink}>
+      gravură laser
+    </Link>{' '}
+    pe plexiglas, lemn, sticlă sau piele
+  </>,
+  'Reduceri pentru cantități mari',
+]
 
 const quoteChecklist = [
   'Obiectul dorit și textul de pe piesă',
@@ -217,8 +307,14 @@ const quoteChecklist = [
 
 const faqItems = [
   {
-    question: 'Cât costă un cadou personalizat din plexiglas?',
-    answer: (
+    question: 'Cât costă un cadou personalizat?',
+    answer: product.fromPrice ? (
+      <p>
+        Un breloc cu nume costă de la {formatLei(product.fromPrice)}/buc.
+        Prețul final depinde de dimensiuni, material, design și cantitate;
+        pentru cantități mari oferim reduceri. Oferta este gratuită.
+      </p>
+    ) : (
       <p>
         Prețul este la cerere și depinde de dimensiuni, material, design și
         cantitate. Oferta este gratuită.
@@ -239,13 +335,13 @@ const faqItems = [
     question: 'Ce se poate grava pe un breloc sau pe un decor?',
     answer: (
       <p>
-        Un nume, un mesaj, un desen sau un logo, la o rezoluție de până la 1200
-        DPI. Gravăm pe plexiglas, dar și pe lemn, sticlă sau piele.
+        Un nume, un mesaj, un desen sau un logo, la o rezoluție de până la{' '}
+        {DPI}. Gravăm pe plexiglas, dar și pe lemn, sticlă sau piele.
       </p>
     ),
   },
   {
-    question: 'Pot trimite propriul design?',
+    question: 'Pot trimite propriul desen sau logo pentru un cadou?',
     answer: (
       <p>
         Da. Trimiteți-ne fișierul împreună cu dimensiunile și cantitatea dorite.
@@ -254,17 +350,25 @@ const faqItems = [
     ),
   },
   {
-    question: 'În cât timp este gata comanda?',
-    answer: (
+    question: 'În cât timp este gata un cadou personalizat?',
+    answer: product.leadTime ? (
       <p>
-        Menționați termenul dorit când cereți oferta. Oferim și execuție
-        urgentă de la 24 de ore.
+        {product.leadTime} La nevoie, oferim {URGENT}.
+      </p>
+    ) : (
+      <p>
+        Menționați termenul dorit când cereți oferta. Oferim și {URGENT}.
       </p>
     ),
   },
   {
     question: 'Puteți trimite cadoul prin curier?',
-    answer: <p>Da. {DELIVERY}</p>,
+    answer: (
+      <p>
+        Da, livrăm prin curier în toată România. În Craiova puteți ridica
+        personal comanda.
+      </p>
+    ),
   },
 ]
 
@@ -293,7 +397,7 @@ function GiftGroupBlock({
           <li key={item.image}>
             <ModelCard
               item={item}
-              whatsappMessage={product.whatsappMessage}
+              whatsappMessage={group.whatsappMessage ?? product.whatsappMessage}
               sizes="(min-width: 1280px) 290px, (min-width: 1024px) 23vw, 50vw"
             />
           </li>
@@ -301,6 +405,35 @@ function GiftGroupBlock({
         {children}
       </ul>
     </div>
+  )
+}
+
+// Ornament cards plus a tile that fills the 4th slot and leads to the full
+// ornament gallery.
+function ChristmasGiftsBlock() {
+  return (
+    <GiftGroupBlock group={christmasGifts} gridClassName="lg:grid-cols-4">
+      <li>
+        <Link
+          to="/globuri-craciun-personalizate"
+          className="group flex h-full flex-col justify-center rounded-2xl border border-amber-200 bg-amber-50 p-4 text-zinc-900 transition-colors hover:border-amber-300 hover:bg-amber-100 sm:p-6"
+        >
+          <span className="font-semibold leading-snug sm:text-lg">
+            Mai multe globuri de Crăciun
+          </span>
+          <span className="mt-1.5 text-sm leading-relaxed text-zinc-700">
+            Modele din plexiglas și lemn, cu nume, oraș, an sau mesaj.
+          </span>
+          <span className="mt-3 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-amber-800">
+            Vedeți toate modelele
+            <Icon
+              name="arrowRight"
+              className="w-4 h-4 shrink-0 transition-transform group-hover:translate-x-0.5"
+            />
+          </span>
+        </Link>
+      </li>
+    </GiftGroupBlock>
   )
 }
 
@@ -314,22 +447,24 @@ function CadouriPersonalizatePage() {
         ]}
         title={
           <>
-            <Highlight>Cadouri personalizate</Highlight> din plexiglas,
+            <Highlight>Cadouri personalizate</Highlight> din plexiglas și lemn,
             realizate în Craiova
           </>
         }
         intro={
           <p>
-            Realizăm cadouri personalizate din plexiglas în atelierul nostru de
-            tăiere și gravură laser din Craiova: brelocuri cu nume sau mesaj,
-            decoruri cu suport și forme decorative.
+            Realizăm cadouri personalizate din plexiglas și lemn în atelierul
+            nostru de tăiere și gravură laser din Craiova: brelocuri cu nume
+            sau mesaj, decoruri cu suport și globuri de Crăciun cu nume.
           </p>
         }
         chips={[
-          'Preț la cerere · ofertă gratuită',
+          product.fromPrice
+            ? `De la ${formatLei(product.fromPrice)}/buc. · ofertă gratuită`
+            : 'Preț la cerere · ofertă gratuită',
           'Livrare prin curier în toată România',
         ]}
-        whatsappMessage={product.whatsappMessage}
+        whatsappMessage={product.orderMessage}
         media={[
           {
             name: '/img/products/breloc-nume-plexiglas-doua-straturi',
@@ -347,6 +482,13 @@ function CadouriPersonalizatePage() {
       />
 
       <Section>
+        {/* Christmas gifts lead while the ornaments are promoted. */}
+        {SHOW_CHRISTMAS_PROMO && (
+          <div className="mb-10 sm:mb-14">
+            <ChristmasGiftsBlock />
+          </div>
+        )}
+
         <div className="grid gap-10 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-5 lg:gap-y-0">
           <GiftGroupBlock group={keychains} subgrid />
           <GiftGroupBlock group={standDecor} subgrid />
@@ -363,6 +505,12 @@ function CadouriPersonalizatePage() {
             </li>
           </GiftGroupBlock>
         </div>
+
+        {!SHOW_CHRISTMAS_PROMO && (
+          <div className="mt-10 sm:mt-14">
+            <ChristmasGiftsBlock />
+          </div>
+        )}
       </Section>
 
       <Section tone="muted">
@@ -372,32 +520,36 @@ function CadouriPersonalizatePage() {
             intro={
               <p>
                 <strong className="font-semibold text-zinc-900">
-                  Preț la cerere
-                </strong>
-                . Depinde de dimensiuni, material, design și cantitate. Pentru
-                cantități mari oferim reduceri.
+                  {product.fromPrice
+                    ? `De la ${formatLei(product.fromPrice)}/buc.`
+                    : 'Preț la cerere.'}
+                </strong>{' '}
+                {product.fromPrice ? 'Prețul final depinde' : 'Depinde'} de
+                dimensiuni, material, design și cantitate. Pentru cantități mari
+                oferim reduceri.
               </p>
             }
             className="mb-0!"
           />
-          {/* Mobile has the sticky WhatsApp bar; desktop gets a direct CTA */}
-          <div className="hidden shrink-0 lg:block">
+          {/* Shown at every width: on phones the sticky bar stays hidden
+              until the cookie choice is made. */}
+          <div className="mt-5 shrink-0 lg:mt-0">
             <a
-              href={whatsappHref(product.whatsappMessage)}
+              href={whatsappHref(product.orderMessage)}
               target="_blank"
               rel="noopener"
               data-placement="price"
-              className={buttonClass('primary', 'lg')}
+              className={buttonClass('primary', 'lg', 'w-full sm:w-auto')}
             >
-              <WhatsAppIcon className="w-5 h-5" />
-              Cereți ofertă
+              <WhatsAppIcon className="w-5 h-5 shrink-0" />
+              Cereți prețul pe WhatsApp
             </a>
           </div>
         </div>
 
         {/* subgrid starts both lists on the same line although the second
             heading wraps to two lines */}
-        <div className="mt-12 grid gap-10 border-t border-zinc-200 pt-12 sm:mt-14 sm:pt-14 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-16 lg:gap-y-0">
+        <div className="mt-12 grid gap-10 border-t border-paper-line pt-12 sm:mt-14 sm:pt-14 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-16 lg:gap-y-0">
           <div className="lg:row-span-2 lg:grid lg:grid-rows-subgrid">
             <SectionHeader title="Ce puteți personaliza" />
             <CheckList items={personalizationOptions} />
@@ -425,16 +577,35 @@ function CadouriPersonalizatePage() {
         </div>
       </Section>
 
+      <Section>
+        <div className="grid gap-6 lg:grid-cols-2 lg:items-center lg:gap-16">
+          <SectionHeader
+            title="Cadouri personalizate pentru firme"
+            intro={
+              <p>
+                Pentru colegi, clienți și parteneri: de la piese unice la
+                producție de serie.
+              </p>
+            }
+            className="mb-0!"
+          />
+          <CheckList
+            items={businessGifts}
+            className="rounded-2xl border border-paper-line bg-paper p-5 sm:p-6"
+          />
+        </div>
+      </Section>
+
       <OrderBlock
         title="Cum comandați un cadou personalizat"
         intro="Scrieți-ne pe WhatsApp sau pe email cu aceste detalii:"
         checklist={quoteChecklist}
         checklistTitle={null}
-        whatsappMessage={product.whatsappMessage}
+        whatsappMessage={product.orderMessage}
         emailSubject="Cerere ofertă - cadou personalizat"
       />
 
-      <Faq items={faqItems} />
+      <Faq items={faqItems} whatsappMessage={product.orderMessage} />
     </>
   )
 }

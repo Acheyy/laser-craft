@@ -2,7 +2,8 @@ import type * as React from 'react'
 import { Icon } from '~/components/Icon'
 
 // Shared UI recipes. Palette: slate-900 surfaces, amber/orange accents,
-// white / zinc-50 light sections. Text on amber is always slate-950 (AA).
+// white / warm paper light sections (bg-paper, border-paper-line). Text on
+// amber is always slate-950 (AA).
 //
 // Button labels use the formal register used across the site:
 // 'Scrieți-ne pe WhatsApp' / 'WhatsApp', 'Sunați', 'Cereți ofertă',
@@ -14,14 +15,16 @@ type ButtonSize = 'sm' | 'md' | 'lg'
 const buttonBase =
   'inline-flex items-center justify-center gap-2 rounded-xl font-semibold text-center transition-[background-color,border-color,color,transform] duration-150 active:scale-[0.98] select-none'
 
+// The transparent borders on primary/dark keep a visible button outline in
+// forced-colors (high contrast) mode, where backgrounds are dropped.
 const buttonVariants: Record<ButtonVariant, string> = {
   primary:
-    'bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-lg shadow-orange-500/20 hover:from-amber-300 hover:to-orange-400',
-  dark: 'bg-slate-900 text-white hover:bg-slate-800',
+    'border border-transparent bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-lg shadow-orange-500/20 hover:from-amber-300 hover:to-orange-400',
+  dark: 'border border-transparent bg-slate-900 text-white hover:bg-slate-800',
   outlineDark:
     'border border-white/20 text-white hover:bg-white/10 hover:border-white/30',
   outlineLight:
-    'border border-zinc-300 bg-white text-zinc-900 hover:bg-zinc-50 hover:border-zinc-400',
+    'border border-zinc-300 bg-white text-zinc-900 hover:bg-paper hover:border-zinc-400',
 }
 
 const buttonSizes: Record<ButtonSize, string> = {
@@ -38,9 +41,10 @@ export function buttonClass(
   return `${buttonBase} ${buttonVariants[variant]} ${buttonSizes[size]} ${extra}`
 }
 
-// Inline text links inside body copy (amber-700 on white = 5:1).
+// Inline text links inside body copy: dark text with an amber underline, so
+// amber text stays reserved for calls to action and prices.
 export const textLink =
-  'font-medium text-amber-700 underline decoration-amber-600/40 underline-offset-4 hover:text-amber-800 hover:decoration-amber-700'
+  'font-medium text-zinc-900 underline decoration-amber-500 decoration-2 underline-offset-4 hover:text-amber-800 hover:decoration-amber-600'
 
 // Same, for dark backgrounds.
 export const textLinkDark =
@@ -56,8 +60,12 @@ export function Container({
   // A max-w-* in className replaces the default width instead of competing
   // with it in the cascade.
   const width = /(^|\s)max-w-/.test(className) ? '' : 'max-w-7xl'
+  // The side padding grows to the safe-area inset (notch in landscape;
+  // __root.tsx sets viewport-fit=cover).
   return (
-    <div className={`mx-auto ${width} px-4 sm:px-6 lg:px-8 ${className}`}>
+    <div
+      className={`mx-auto ${width} pl-[max(1rem,env(safe-area-inset-left))] pr-[max(1rem,env(safe-area-inset-right))] sm:pl-[max(1.5rem,env(safe-area-inset-left))] sm:pr-[max(1.5rem,env(safe-area-inset-right))] lg:pl-[max(2rem,env(safe-area-inset-left))] lg:pr-[max(2rem,env(safe-area-inset-right))] ${className}`}
+    >
       {children}
     </div>
   )
@@ -65,7 +73,7 @@ export function Container({
 
 const sectionTones = {
   white: 'bg-white',
-  muted: 'bg-zinc-50',
+  muted: 'bg-paper',
   dark: 'bg-slate-900 text-white',
 }
 
@@ -137,7 +145,7 @@ export function SectionHeader({
         </div>
       )}
       <h2
-        className={`text-2xl sm:text-3xl font-bold tracking-tight text-balance ${
+        className={`text-2xl sm:text-3xl lg:text-4xl lg:leading-[1.12] font-bold text-balance ${
           dark ? 'text-white' : 'text-zinc-900'
         }`}
       >
@@ -277,7 +285,7 @@ export function RateCard({
       className={`rounded-2xl p-5 sm:p-6 ${
         dark
           ? 'bg-slate-900 text-white'
-          : 'bg-white border border-zinc-200'
+          : 'bg-white border border-paper-line'
       }`}
     >
       <Eyebrow dark={dark}>{label}</Eyebrow>

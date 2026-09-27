@@ -24,11 +24,12 @@ export function MobileActionBar() {
   const message = whatsappMessageFor(pathname)
 
   return (
-    <div
+    <aside
+      aria-label="Contact rapid"
       data-mobile-bar
       data-placement="sticky-bar"
       inert={!visible}
-      className={`fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-slate-900/95 px-3 pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] backdrop-blur-md transition-transform duration-200 lg:hidden ${
+      className={`fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-slate-900/95 pl-[max(0.75rem,env(safe-area-inset-left))] pr-[max(0.75rem,env(safe-area-inset-right))] pt-2 pb-[calc(0.5rem+env(safe-area-inset-bottom))] backdrop-blur-md transition-transform duration-200 lg:hidden ${
         visible ? 'translate-y-0' : 'translate-y-full'
       }`}
     >
@@ -47,6 +48,6 @@ export function MobileActionBar() {
           Sunați
         </a>
       </div>
-    </div>
+    </aside>
   )
 }

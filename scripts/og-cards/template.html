@@ -1,0 +1,229 @@
+<!doctype html>
+<!--
+  Share card layout (1200×630). render.ts serves the repo root, opens this
+  page, calls renderCard() with one entry from its CARDS list and takes the
+  screenshot. Paths below are relative to the repo root.
+-->
+<html lang="ro">
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      /* The files the site ships (Romanian + Latin-1 subsets), so cards match
+         the headings; the variable sources only load if a subset is missing. */
+      @font-face {
+        font-family: 'Bricolage Grotesque';
+        src:
+          url('/src/assets/fonts/bricolage-ro-750.woff2') format('woff2'),
+          url('/fonts-src/bricolage-grotesque/BricolageGrotesque[opsz,wdth,wght].ttf') format('truetype');
+        font-weight: 200 800;
+      }
+      @font-face {
+        font-family: 'Inter Variable';
+        src:
+          url('/src/assets/fonts/inter-ro-wght.woff2') format('woff2'),
+          url('/fonts-src/inter/InterVariable.woff2') format('woff2');
+        font-weight: 100 900;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+      }
+      body {
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        font-family: 'Inter Variable', sans-serif;
+        /* Same optical sizes as the site: Inter at text size, Bricolage at 72 */
+        font-variation-settings: 'opsz' 14;
+        color: #fff;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      .card {
+        position: relative;
+        width: 1200px;
+        height: 630px;
+        overflow: hidden;
+        background:
+          radial-gradient(560px 460px at 930px 10px, rgb(217 119 6 / 0.16), transparent 70%),
+          #0f172a; /* slate-900 */
+      }
+
+      .text {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 64px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.01em;
+      }
+      .brand img {
+        width: 48px;
+        height: 48px;
+      }
+      .brand span {
+        color: #fbbf24; /* amber-400 */
+      }
+
+      h1 {
+        margin: 36px 0 0;
+        font-family: 'Bricolage Grotesque', 'Inter Variable', sans-serif;
+        font-weight: 750;
+        font-variation-settings: 'opsz' 72;
+        font-size: 66px;
+        line-height: 1.06;
+        letter-spacing: -0.025em; /* tracking-tight, as the site's headings */
+      }
+      h1 .accent {
+        background: linear-gradient(90deg, #fbbf24, #f97316); /* amber-400 → orange-500 */
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        -webkit-box-decoration-break: clone;
+        box-decoration-break: clone;
+      }
+
+      .subtitle {
+        margin: 18px 0 0;
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 1.35;
+        color: #cbd5e1; /* slate-300 */
+        text-wrap: balance;
+      }
+
+      .chips {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 32px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        height: 44px;
+        padding: 0 18px;
+        border: 1px solid rgb(251 191 36 / 0.3);
+        border-radius: 999px;
+        background: rgb(251 191 36 / 0.1);
+        color: #fcd34d; /* amber-300 */
+        font-size: 19px;
+        font-weight: 700;
+        white-space: nowrap;
+      }
+
+      .url {
+        margin-top: 40px;
+        font-size: 20px;
+        font-weight: 500;
+        color: #94a3b8; /* slate-400 */
+      }
+
+      /* Photos: a box right-aligned and vertically centred, tiles placed inside
+         it by pixel coordinates (see the layouts in render.ts) */
+      .media {
+        position: absolute;
+        right: 64px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+      .tile {
+        position: absolute;
+        overflow: hidden;
+        border-radius: 24px;
+        background: #fff;
+        box-shadow:
+          0 28px 60px -18px rgb(0 0 0 / 0.75),
+          0 0 0 1px rgb(255 255 255 / 0.06);
+      }
+      .tile.small {
+        border-radius: 18px;
+      }
+      .tile img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="text">
+        <div class="brand">
+          <img src="/public/img/logo.svg" alt="" />
+          <div>Laser<span>Craft</span></div>
+        </div>
+        <h1></h1>
+        <p class="subtitle" hidden></p>
+        <div class="chips"></div>
+        <div class="url">laser-craft.ro</div>
+      </div>
+      <div class="media"></div>
+    </div>
+    <script>
+      // "Gravură laser\n*în Craiova*": \n breaks the line, *…* is the amber part
+      function titleHtml(title) {
+        const escape = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        return escape(title)
+          .replace(/\*([^*]+)\*/g, '<span class="accent">$1</span>')
+          .replace(/\n/g, '<br>')
+      }
+
+      window.renderCard = (card) => {
+        const text = document.querySelector('.text')
+        text.style.width = `${card.textWidth}px`
+        document.querySelector('h1').innerHTML = titleHtml(card.title)
+
+        const subtitle = document.querySelector('.subtitle')
+        subtitle.hidden = !card.subtitle
+        subtitle.textContent = card.subtitle ?? ''
+
+        document.querySelector('.chips').replaceChildren(
+          ...card.chips.map((label) => {
+            const chip = document.createElement('span')
+            chip.className = 'chip'
+            chip.textContent = label
+            return chip
+          }),
+        )
+
+        const media = document.querySelector('.media')
+        media.style.width = `${card.media.width}px`
+        media.style.height = `${card.media.height}px`
+        media.replaceChildren(
+          ...card.media.tiles.map((tile) => {
+            const box = document.createElement('div')
+            box.className = tile.small ? 'tile small' : 'tile'
+            Object.assign(box.style, {
+              left: `${tile.x}px`,
+              top: `${tile.y}px`,
+              width: `${tile.w}px`,
+              height: `${tile.h}px`,
+            })
+            const img = document.createElement('img')
+            img.src = tile.src
+            img.alt = ''
+            img.style.objectPosition = tile.position ?? '50% 50%'
+            box.append(img)
+            return box
+          }),
+        )
+      }
+    </script>
+  </body>
+</html>
