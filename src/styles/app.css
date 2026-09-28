@@ -97,6 +97,11 @@
      hue-less zinc-50), plus its matching border colour. */
   --color-paper: oklch(0.975 0.006 80);
   --color-paper-line: oklch(0.91 0.012 80);
+
+  /* Border of the shop's text fields and quantity stepper: on a white card
+     it is all that marks the field, so it keeps 3:1 against white (3.5:1;
+     zinc-400 is only 2.6:1, zinc-500 looks heavy next to the paper lines). */
+  --color-field-line: oklch(0.63 0.013 286);
 }
 
 /* Bricolage at opsz 72 is already tightly spaced, so headings use a lighter

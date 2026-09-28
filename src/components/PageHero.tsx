@@ -7,7 +7,7 @@ import { RESPONSE_TIME } from '~/data/business'
 
 type Crumb = {
   label: string
-  to?: '/' | '/servicii' | '/portofoliu'
+  to?: '/' | '/servicii' | '/portofoliu' | '/magazin'
 }
 
 export type HeroImage = {

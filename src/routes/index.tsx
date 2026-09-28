@@ -27,6 +27,7 @@ import {
   type ActiveChristmasDeadline,
 } from '~/data/business'
 import { getProduct } from '~/data/products'
+import { getShopProduct, minPriceIn } from '~/data/shop'
 import { seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/')({
@@ -44,7 +45,8 @@ export const Route = createFileRoute('/')({
     }),
 })
 
-// Owner-supplied dates like '10 decembrie' must not split across lines.
+// Owner-supplied dates like '10 decembrie', and 'de la 8 lei', must not split
+// across lines.
 const keepTogether = (text: string) => text.replace(/ /g, '\u00a0')
 
 // Materials and limits already published on the landing pages; each heading
@@ -107,6 +109,7 @@ function HomePage() {
           className="max-sm:mb-4"
         />
         <ProductTiles />
+        <ShopTeaser />
 
         <div className="mt-14 sm:mt-20">
           <SectionHeader
@@ -181,6 +184,58 @@ function HomePage() {
   )
 }
 
+// Pieces that are in neither the tiles, the hero collage, the Christmas strip
+// nor RecentWork, so no photo shows twice on the home page.
+const teaserProducts = [
+  'glob-craciun-lemn-craiova',
+  'glob-craciun-fericit',
+  'breloc-inima-geometrica',
+  'breloc-os-caine',
+].map((slug) => getShopProduct(slug)!)
+
+const globesFrom = formatLei(minPriceIn('craciun'))
+const keychainsFrom = formatLei(minPriceIn('brelocuri'))
+// Christmas first while the promo is on, like the shop itself.
+const teaserOffer = SHOW_CHRISTMAS_PROMO
+  ? `Globuri de Crăciun de la ${globesFrom}, brelocuri de la ${keychainsFrom}`
+  : `Brelocuri de la ${keychainsFrom}, globuri de Crăciun de la ${globesFrom}`
+
+// The fixed-price shop, right under the tiles that lead to the made-to-order
+// pages. The thumbnails are decorative (alt=""): the text says what is sold.
+// Dark button: the gradient stays for WhatsApp.
+function ShopTeaser() {
+  return (
+    <div className="mt-5 flex flex-col gap-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:mt-6 sm:p-5 lg:flex-row lg:items-center lg:gap-6">
+      <div className="flex shrink-0 gap-1.5">
+        {teaserProducts.map((product) => (
+          <div
+            key={product.slug}
+            className="h-14 w-14 overflow-hidden rounded-lg bg-white ring-1 ring-amber-200"
+          >
+            <ResponsiveImage
+              name={product.image}
+              alt=""
+              sizes="56px"
+              className="h-full w-full object-cover"
+            />
+          </div>
+        ))}
+      </div>
+      <div className="min-w-0 flex-1">
+        <h3 className="text-lg font-semibold leading-snug text-zinc-900">Magazin online</h3>
+        <p className="mt-0.5 text-zinc-700">
+          {/* Not "cu numele dorit": the 7-lei keychain takes no name. */}
+          {teaserOffer} – prețuri fixe, comandați direct din magazin.
+        </p>
+      </div>
+      <Link to="/magazin" className={buttonClass('dark', 'md', 'shrink-0')}>
+        Intrați în magazin
+        <Icon name="arrowRight" className="w-5 h-5" />
+      </Link>
+    </div>
+  )
+}
+
 const stripOrnaments: ImageName[] = [
   '/img/products/ornament-craciun-bastoane-rosii',
   '/img/products/glob-craciun-lemn-nume-nicolas',
@@ -198,7 +253,8 @@ function ChristmasStrip({ deadline }: { deadline: ActiveChristmasDeadline | null
     >
       <Container>
         <Link
-          to="/globuri-craciun-personalizate"
+          to="/magazin"
+          hash="craciun"
           className="group flex items-center gap-3 py-2.5 sm:gap-4 sm:py-3"
         >
           <div className="flex shrink-0 gap-1.5">
@@ -224,13 +280,14 @@ function ChristmasStrip({ deadline }: { deadline: ActiveChristmasDeadline | null
             </strong>{' '}
             –{' '}
             {/* Once the courier day has passed, only pickup is left. The
-                no-break space keeps 'sărbători' off a line of its own on
-                360px phones (text-pretty would split the product name). */}
+                no-break spaces keep 'de la 8 lei' and 'comandați online'
+                whole on 360px phones (text-pretty would split the product
+                name). */}
             {deadline
               ? `comandați până la ${keepTogether(deadline.next.label)}${
                   deadline.next.kind === 'pickup' ? ', cu ridicare din Craiova' : ''
                 }`
-              : 'comandați din timp pentru\u00a0sărbători'}
+              : `${keepTogether(`de la ${globesFrom}`)}, comandați\u00a0online`}
           </p>
           <Icon
             name="arrowRight"
@@ -240,7 +297,7 @@ function ChristmasStrip({ deadline }: { deadline: ActiveChristmasDeadline | null
               Dark, not the gradient: that stays for WhatsApp. */}
           <span className="hidden shrink-0 sm:block">
             <span className={buttonClass('dark', 'sm', 'group-hover:bg-slate-800')}>
-              Vedeți modelele
+              Comandați online
               <Icon name="arrowRight" className="w-4 h-4" />
             </span>
           </span>

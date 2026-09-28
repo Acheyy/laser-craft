@@ -10,12 +10,13 @@ import {
   type ImageName,
 } from '~/components/ResponsiveImage'
 import { Section, textLink } from '~/components/ui'
-import { SHOW_CHRISTMAS_PROMO } from '~/data/business'
+import { SHOW_CHRISTMAS_PROMO, formatLei } from '~/data/business'
 import {
   PORTFOLIO_WHATSAPP_MESSAGE,
   getProduct,
   type ProductPath,
 } from '~/data/products'
+import { linkedShopProduct } from '~/data/shop'
 import { breadcrumbs, seo } from '~/utils/seo'
 
 export const Route = createFileRoute('/portofoliu')({
@@ -47,6 +48,9 @@ type Project = {
   alt: string
   // Overrides the category's landing page
   link?: ProjectLink
+  // The shop product this piece is (slug in shop.ts): the card then shows
+  // its price and links to its product page instead of any landing page.
+  shopSlug?: string
   // A landscape photo spanning two grid columns (not in masonry)
   wide?: boolean
 }
@@ -128,12 +132,14 @@ const categories: Category[] = [
         title: 'Glob de Crăciun cu nume — „Cristina”',
         material: 'Plexiglas roșu',
         image: '/img/products/glob-craciun-cu-nume-personalizat',
+        shopSlug: 'glob-craciun-cu-nume',
         alt: 'Glob de Crăciun personalizat din plexiglas roșu cu numele „Cristina”, Moș Crăciun în sanie cu reni și fulgi de nea, tăiat laser',
       },
       {
         title: 'Glob personalizat „Craiova 26”',
         material: 'Plexiglas verde',
         image: '/img/products/glob-craciun-personalizat-craiova',
+        shopSlug: 'glob-craciun-craiova',
         alt: 'Glob de Crăciun din plexiglas verde personalizat cu textul „Craiova 26”, cu sanie, reni și fulgi de nea decupați laser',
       },
       {
@@ -141,6 +147,7 @@ const categories: Category[] = [
         description: 'Numele și desenul, gravate laser.',
         material: 'Lemn baițuit',
         image: '/img/products/glob-craciun-lemn-nume-nicolas',
+        shopSlug: 'glob-craciun-lemn-cu-nume',
         alt: 'Glob de Crăciun rotund din lemn baițuit, gravat laser cu numele „Nicolas”, un om de zăpadă cu joben și mătură, o căsuță cu horn și fulgi de nea',
       },
       {
@@ -148,48 +155,49 @@ const categories: Category[] = [
         description: 'Brad cu model dantelat, tăiat laser.',
         material: 'Placaj de lemn',
         image: '/img/products/glob-craciun-lemn-craiova-brad',
+        shopSlug: 'glob-craciun-lemn-craiova',
         alt: 'Glob de Crăciun din placaj de lemn natur tăiat laser, cu textul „Craiova”, un brad cu model dantelat de fulgi de nea și două stele',
       },
       {
         title: 'Glob cu sat de iarnă',
         material: 'Plexiglas negru',
         image: '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
+        shopSlug: 'glob-craciun-sat-de-iarna',
         alt: 'Glob de Crăciun din plexiglas negru cu sat de iarnă decupat laser: case, biserică, brazi și stea în vârf',
       },
       {
         title: 'Glob cu sanie și ren',
         material: 'Plexiglas verde',
         image: '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
+        shopSlug: 'glob-craciun-sanie-si-ren',
         alt: 'Glob de Crăciun din plexiglas verde cu Moș Crăciun în sanie trasă de un ren, stele și brazi decupați laser',
       },
       {
         title: 'Bastoane de Crăciun',
         material: 'Plexiglas roșu',
         image: '/img/products/ornament-craciun-bastoane-rosii',
+        shopSlug: 'bastoane-de-craciun',
         alt: 'Ornament de Crăciun din plexiglas roșu cu două bastoane legate cu fundă și fulgi de nea decupați laser',
       },
       {
         title: 'Fulg de nea',
         material: 'Plexiglas alb',
         image: '/img/products/ornament-craciun-fulg-de-nea-alb',
+        shopSlug: 'fulg-de-nea',
         alt: 'Ornament fulg de nea din plexiglas alb tăiat laser, cu orificiu pentru agățare în brad',
-      },
-      {
-        title: 'Inimă geometrică',
-        material: 'Plexiglas roz',
-        image: '/img/products/ornament-craciun-inima-geometrica-roz',
-        alt: 'Ornament inimă geometrică din plexiglas roz tăiat laser, agățat cu o panglică roșie',
       },
       {
         title: 'Spiriduș pe lună',
         material: 'Plexiglas verde',
         image: '/img/products/ornament-craciun-spiridus-luna',
+        shopSlug: 'spiridus-pe-luna',
         alt: 'Ornament de Crăciun din plexiglas verde cu un spiriduș pe o semilună și stele decupate laser',
       },
       {
         title: 'Ornament „Crăciun Fericit”',
         material: 'Plexiglas verde',
         image: '/img/products/glob-craciun-fericit-plexiglas-verde',
+        shopSlug: 'glob-craciun-fericit',
         alt: 'Ornament rotund de Crăciun din plexiglas verde cu textul „Crăciun Fericit” și fulgi de nea, tăiat laser',
       },
     ],
@@ -205,6 +213,7 @@ const categories: Category[] = [
         title: 'Breloc cu nume pe 2 straturi — „Jonut”',
         material: 'Plexiglas alb + roz',
         image: '/img/products/breloc-nume-plexiglas-doua-straturi',
+        shopSlug: 'breloc-cu-nume',
         alt: 'Breloc cu numele „Jonut” din plexiglas pe două straturi, cu litere albe aplicate pe fundal roz',
       },
       {
@@ -220,18 +229,21 @@ const categories: Category[] = [
         description: 'Pe suport, în două culori, cu trandafiri gravați.',
         material: 'Plexiglas magenta + galben',
         image: '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
+        shopSlug: 'decor-mama-si-copil',
         alt: 'Decor din plexiglas magenta și galben cu siluetele unei mame și a unui copil cu balon, pe suport',
       },
       {
         title: 'Icoană decorativă',
         material: 'Plexiglas negru + alb',
         image: '/img/products/icoana-isus-plexiglas-negru-cu-suport',
+        shopSlug: 'icoana-decorativa',
         alt: 'Icoană decorativă cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport pentru masă sau raft',
       },
       {
         title: 'Decor „LOVE” cu pisici',
         material: 'Plexiglas roz',
         image: '/img/products/decor-love-pisici-plexiglas-roz',
+        shopSlug: 'decor-love-pisici',
         alt: 'Decor „LOVE” din plexiglas roz tăiat laser, cu siluete de pisici integrate în litere',
       },
       {
@@ -244,7 +256,17 @@ const categories: Category[] = [
         title: 'Os pentru iubitorii de câini',
         material: 'Plexiglas roz',
         image: '/img/products/ornament-os-caine-plexiglas-roz',
+        shopSlug: 'breloc-os-caine',
         alt: 'Os din plexiglas roz cu orificiu în formă de inimă, agățat cu o panglică roșie',
+      },
+      // Sold as a keychain (the owner's price list), so here and not with
+      // the Christmas ornaments
+      {
+        title: 'Breloc inimă geometrică',
+        material: 'Plexiglas roz',
+        image: '/img/products/ornament-craciun-inima-geometrica-roz',
+        shopSlug: 'breloc-inima-geometrica',
+        alt: 'Breloc inimă geometrică din plexiglas roz tăiat laser, agățat cu o panglică roșie',
       },
     ],
   },
@@ -398,7 +420,8 @@ function PortofoliuPage() {
   )
 }
 
-// The whole card links to the product page; the photo keeps its natural ratio.
+// The whole card links to the product page, or to the shop page of a piece
+// sold in the shop, with its price; the photo keeps its natural ratio.
 function ProjectCard({
   project,
   link,
@@ -413,13 +436,17 @@ function ProjectCard({
   className: string
 }) {
   const meta = imageMeta(project.image)
-  // The link is named by its title only; the photo alt stays readable in
-  // browse mode instead of being read out with every link.
+  const shopProduct = linkedShopProduct(project.shopSlug)
+  // The link is named by its title (and price) only; the photo alt stays
+  // readable in browse mode instead of being read out with every link.
   const titleId = useId()
+  const priceId = useId()
   return (
     <Link
-      to={link.to}
-      aria-labelledby={titleId}
+      {...(shopProduct
+        ? { to: '/magazin/$slug', params: { slug: shopProduct.slug } }
+        : { to: link.to })}
+      aria-labelledby={shopProduct ? `${titleId} ${priceId}` : titleId}
       className={`group flex flex-col overflow-hidden rounded-2xl border border-zinc-200 bg-white transition-[border-color,box-shadow] hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/10 active:border-amber-400 ${className}`}
     >
       <div
@@ -446,13 +473,21 @@ function ProjectCard({
             {project.description}
           </p>
         )}
-        {/* Same material style as the ModelCard meta on the product pages */}
-        <p className="mt-auto flex items-end justify-between gap-2 pt-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-amber-800">
-            {project.material}
-          </span>
-          <Icon name="arrowRight" className="w-4 h-4 shrink-0 text-amber-600" />
-        </p>
+        <div className="mt-auto pt-2">
+          {shopProduct && (
+            <p id={priceId} className="mb-1 text-sm font-semibold text-zinc-900">
+              {formatLei(shopProduct.price)}
+              <span className="font-normal text-zinc-600">/buc.</span>
+            </p>
+          )}
+          {/* Same material style as the ModelCard meta on the product pages */}
+          <p className="flex items-end justify-between gap-2">
+            <span className="text-xs font-semibold uppercase tracking-wider text-amber-800">
+              {project.material}
+            </span>
+            <Icon name="arrowRight" className="w-4 h-4 shrink-0 text-amber-600" />
+          </p>
+        </div>
       </div>
     </Link>
   )

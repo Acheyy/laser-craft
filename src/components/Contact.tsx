@@ -23,6 +23,7 @@ import {
   whatsappHref,
 } from '~/data/business'
 import { trackEvent } from '~/utils/analytics'
+import { copyText } from '~/utils/clipboard'
 
 // Primary actions: WhatsApp first, phone second. On narrow screens the two
 // buttons sit side by side with short labels.
@@ -87,22 +88,9 @@ export function CopyEmail({
   const [copied, setCopied] = useState(false)
 
   const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(EMAIL)
-    } catch {
-      // In-app browsers (Facebook, Instagram) often lack the clipboard API.
-      const field = document.createElement('textarea')
-      field.value = EMAIL
-      field.setAttribute('readonly', '')
-      field.style.cssText = 'position:fixed;opacity:0'
-      document.body.appendChild(field)
-      field.select()
-      const ok = document.execCommand('copy')
-      field.remove()
-      if (!ok) {
-        window.location.href = emailHref(subject, body)
-        return
-      }
+    if (!(await copyText(EMAIL))) {
+      window.location.href = emailHref(subject, body)
+      return
     }
     setCopied(true)
     trackEvent('copy_email')

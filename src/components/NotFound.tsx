@@ -19,10 +19,16 @@ export function NotFound() {
           produsele de mai jos.
         </p>
         <ContactActions dark={false} className="mt-6 sm:justify-center" />
-        <Link to="/" className={`mt-3 inline-flex min-h-11 items-center gap-1.5 ${textLink}`}>
-          Înapoi la pagina principală
-          <Icon name="arrowRight" className="w-4 h-4" />
-        </Link>
+        <div className="mt-3 flex flex-wrap justify-center gap-x-6">
+          <Link to="/" className={`inline-flex min-h-11 items-center gap-1.5 ${textLink}`}>
+            Înapoi la pagina principală
+            <Icon name="arrowRight" className="w-4 h-4" />
+          </Link>
+          <Link to="/magazin" className={`inline-flex min-h-11 items-center gap-1.5 ${textLink}`}>
+            Magazin online
+            <Icon name="arrowRight" className="w-4 h-4" />
+          </Link>
+        </div>
       </div>
       <div className="mt-12">
         <ProductTiles headingLevel="h2" />

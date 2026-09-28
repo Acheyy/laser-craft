@@ -5,6 +5,7 @@ import {
   SHOW_CHRISTMAS_PROMO,
   formatLei,
 } from '~/data/business'
+import { type ShopProduct, getShopProduct, minPriceIn } from '~/data/shop'
 
 export type ProductPath =
   | '/placute-adresa'
@@ -31,17 +32,19 @@ export type Product = {
   whatsappHint: string
   // whatsappMessage + whatsappHint: header, hero, sticky bar, order block, FAQ
   orderMessage: string
-  // Owner slots, unset until the owner confirms them. fromPrice is the
-  // starting price per piece in lei; leadTime is the usual turnaround as one
-  // sentence ('O plăcuță este gata de obicei în N zile lucrătoare.').
-  // For /cadouri-personalizate, fromPrice is the name keychain's starting
-  // price (the page's FAQ and Product JSON-LD describe the keychain).
+  // Starting price per piece in lei: the cheapest piece of the product's
+  // shop categories (shop.ts), so the hints, the hero chip and the /servicii
+  // offer follow the price list.
   fromPrice?: number
+  // Owner slot, unset until the owner confirms it: the usual turnaround as
+  // one sentence ('O plăcuță este gata de obicei în N zile lucrătoare.').
   leadTime?: string
   seasonal?: boolean
 }
 
-// Ornaments and gifts are priced per piece once the owner gives a price.
+// Ornaments and gifts are priced per piece. Both have a shop price now; the
+// "preț la cerere" fallback (like the hero chips' and the /servicii one) is
+// kept for a future per-piece product without one.
 function pieceHint(fromPrice?: number) {
   return fromPrice ? `de la ${formatLei(fromPrice)}/buc.` : 'preț la cerere'
 }
@@ -70,6 +73,7 @@ const productData: ProductData[] = [
     whatsappMessage: 'Bună ziua! Aș dori globuri de Crăciun personalizate.',
     whatsappHint:
       'Vă trimit textul pentru fiecare glob, numărul de bucăți și data dorită.',
+    fromPrice: minPriceIn('craciun'),
     seasonal: true,
   },
   {
@@ -81,6 +85,8 @@ const productData: ProductData[] = [
     group: 'home',
     whatsappMessage: 'Bună ziua! Aș dori un cadou personalizat.',
     whatsappHint: 'Vă trimit numele sau textul dorit și numărul de bucăți.',
+    // The page sells both the keychains and the decor pieces.
+    fromPrice: Math.min(minPriceIn('brelocuri'), minPriceIn('decor')),
   },
   {
     to: '/litere-volumetrice',
@@ -145,11 +151,29 @@ export const SERVICES_WHATSAPP_MESSAGE =
   'Bună ziua! Aș dori o ofertă pentru tăiere sau gravură laser.'
 export const PORTFOLIO_WHATSAPP_MESSAGE =
   'Bună ziua! Am văzut portofoliul dumneavoastră și aș dori o ofertă pentru un proiect asemănător.'
+export const SHOP_WHATSAPP_MESSAGE =
+  'Bună ziua! Am o întrebare despre produsele din magazinul online.'
+
+// A question about one shop product, or about the shop when there is none.
+// Quotes inside the name become «…», the Romanian quote within a quote:
+// „Glob «Crăciun Fericit»”.
+export function shopWhatsappMessage(product?: ShopProduct) {
+  if (!product) return SHOP_WHATSAPP_MESSAGE
+  const name = product.name.replace(/„([^”]*)”/g, '«$1»')
+  return `Bună ziua! Am o întrebare despre produsul „${name}” din magazin.`
+}
+
+// /magazin, /magazin/ and /magazin/<slug>
+const SHOP_PATH = /^\/magazin(?:\/([^/]+))?\/?$/
 
 // The WhatsApp message that fits the current page (header, sticky bar,
 // footer); undefined falls back to the generic message.
 export function whatsappMessageFor(pathname: string) {
   if (pathname === '/servicii') return SERVICES_WHATSAPP_MESSAGE
   if (pathname === '/portofoliu') return PORTFOLIO_WHATSAPP_MESSAGE
+  if (pathname === '/cos') return SHOP_WHATSAPP_MESSAGE
+  // An unknown slug gets the shop question
+  const shop = SHOP_PATH.exec(pathname)
+  if (shop) return shopWhatsappMessage(shop[1] ? getShopProduct(shop[1]) : undefined)
   return allProducts.find((p) => p.to === pathname)?.orderMessage
 }

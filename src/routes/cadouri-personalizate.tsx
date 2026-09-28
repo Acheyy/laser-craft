@@ -4,7 +4,13 @@ import { OrderBlock } from '~/components/Contact'
 import { Faq } from '~/components/Faq'
 import { Icon, WhatsAppIcon } from '~/components/Icon'
 import { Highlight, PageHero } from '~/components/PageHero'
-import { IdeaCard, ModelCard, type ModelItem } from '~/components/ProductCards'
+import {
+  IdeaCard,
+  ModelCard,
+  type ModelItem,
+  ShopPriceTable,
+  shopPriceLabel,
+} from '~/components/ProductCards'
 import type { ImageName } from '~/components/ResponsiveImage'
 import {
   CheckList,
@@ -12,6 +18,7 @@ import {
   SectionHeader,
   buttonClass,
   textLink,
+  textLinkDark,
 } from '~/components/ui'
 import {
   DPI,
@@ -22,6 +29,7 @@ import {
 } from '~/data/business'
 import images from '~/data/images.gen.json'
 import { getProduct } from '~/data/products'
+import { getShopCategory, getShopProduct, minPriceIn, shopProductsIn } from '~/data/shop'
 import {
   BUSINESS_ID,
   SERVICE_AREA,
@@ -32,8 +40,8 @@ import {
   seo,
 } from '~/utils/seo'
 
-// Set fromPrice (products.ts) to the name keychain's starting price: the
-// price copy and the Product node below describe the keychain.
+// fromPrice (products.ts) is the cheapest keychain or decor piece in the
+// shop, for the hero chip.
 const product = getProduct('/cadouri-personalizate')
 
 const schemaImages = [
@@ -44,26 +52,36 @@ const schemaImages = [
   '/img/products/glob-craciun-lemn-nume-nicolas',
 ] as const satisfies ReadonlyArray<ImageName>
 
-const keychainImages = [
-  '/img/products/breloc-nume-plexiglas-doua-straturi',
-  '/img/products/breloc-gravat-mesaj-personalizat',
-] as const satisfies ReadonlyArray<ImageName>
-
 const largestVariantUrl = (name: ImageName) =>
   absoluteUrl(`${name}-${images[name].width}.webp`)
+
+// The shop's gift prices: each category from its cheapest piece, plus the
+// two pieces the price copy names.
+const keychainShop = shopProductsIn('brelocuri')
+const decorShop = shopProductsIn('decor')
+const nameKeychain = getShopProduct('breloc-cu-nume')!
+const icon = getShopProduct('icoana-decorativa')!
 
 export const Route = createFileRoute('/cadouri-personalizate')({
   component: CadouriPersonalizatePage,
   head: () => ({
     ...seo({
       title: 'Cadouri personalizate și brelocuri cu nume – Craiova | LaserCraft',
-      description:
-        'Brelocuri cu nume, decor cu suport și globuri de Crăciun cu nume, din plexiglas și lemn, realizate în Craiova. Livrare în toată țara, ofertă gratuită.',
+      // Starts with the page's starting price (product.fromPrice: the
+      // cheapest keychain), then the pieces the price copy names.
+      description: `Brelocuri de la ${formatLei(
+        minPriceIn('brelocuri'),
+      )}/buc., breloc cu nume ${formatLei(nameKeychain.price)}, decoruri de la ${formatLei(
+        minPriceIn('decor'),
+      )}/buc. și globuri de Crăciun cu nume, din plexiglas și lemn, realizate în Craiova.`,
       path: '/cadouri-personalizate',
       image: '/img/og/og-cadouri-personalizate.jpg',
       imageAlt:
         'Decor din plexiglas magenta și galben cu siluetele unei mame și a unui copil cu balon, pe suport, LaserCraft Craiova',
     }),
+    // No Product node here: Google shows product rich results only for a
+    // page about one product, and each gift's /magazin page carries its own
+    // Product and Offer.
     scripts: [
       breadcrumbs([
         { name: 'Servicii', path: '/servicii' },
@@ -81,29 +99,6 @@ export const Route = createFileRoute('/cadouri-personalizate')({
         areaServed: SERVICE_AREA,
         image: schemaImages.map(largestVariantUrl),
       }),
-      // Only once the owner publishes a starting price (products.ts).
-      ...(product.fromPrice
-        ? [
-            jsonLd({
-              '@context': 'https://schema.org',
-              '@type': 'Product',
-              name: 'Breloc personalizat cu nume',
-              url: `${SITE_URL}/cadouri-personalizate`,
-              image: keychainImages.map(largestVariantUrl),
-              description:
-                'Breloc din plexiglas personalizat cu nume sau mesaj, tăiat și gravat laser în atelierul LaserCraft din Craiova.',
-              brand: { '@type': 'Brand', name: 'LaserCraft' },
-              offers: {
-                '@type': 'AggregateOffer',
-                lowPrice: product.fromPrice,
-                priceCurrency: 'RON',
-                availability: 'https://schema.org/MadeToOrder',
-                areaServed: SERVICE_AREA,
-                seller: { '@id': BUSINESS_ID },
-              },
-            }),
-          ]
-        : []),
     ],
   }),
 })
@@ -124,6 +119,7 @@ const keychains: GiftGroup = {
   items: [
     {
       image: '/img/products/breloc-nume-plexiglas-doua-straturi',
+      shopSlug: 'breloc-cu-nume',
       alt: 'Breloc cu numele „Jonut” din plexiglas pe două straturi, cu litere albe aplicate pe fundal roz',
       title: 'Nume pe două straturi',
       description: 'Litere aplicate pe un fundal tăiat pe contur.',
@@ -136,6 +132,14 @@ const keychains: GiftGroup = {
       description: 'Mesaj și desen gravate laser, cu inel metalic.',
       meta: 'Plexiglas negru',
     },
+    {
+      image: '/img/products/ornament-craciun-inima-geometrica-roz',
+      shopSlug: 'breloc-inima-geometrica',
+      alt: 'Breloc inimă geometrică din plexiglas roz tăiat laser, agățat cu o panglică roșie',
+      title: 'Breloc inimă geometrică',
+      description: 'O inimă cu model geometric, decupată laser.',
+      meta: 'Plexiglas roz',
+    },
   ],
 }
 
@@ -146,6 +150,7 @@ const standDecor: GiftGroup = {
   items: [
     {
       image: '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
+      shopSlug: 'decor-mama-si-copil',
       alt: 'Decor din plexiglas magenta și galben cu suport: arcadă cu trandafiri gravați și siluetele unei mame și a unui copil',
       title: 'Mamă și copil, în două culori',
       description: 'Arcadă cu trandafiri gravați și siluete decupate.',
@@ -153,6 +158,7 @@ const standDecor: GiftGroup = {
     },
     {
       image: '/img/products/icoana-isus-plexiglas-negru-cu-suport',
+      shopSlug: 'icoana-decorativa',
       alt: 'Icoană decorativă cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport pentru masă sau raft',
       title: 'Icoană decorativă',
       description: 'Chipul lui Isus decupat laser, cu suport.',
@@ -175,6 +181,7 @@ const petGifts: GiftGroup = {
   items: [
     {
       image: '/img/products/decor-love-pisici-plexiglas-roz',
+      shopSlug: 'decor-love-pisici',
       alt: 'Decor „LOVE” din plexiglas roz tăiat laser, cu siluete de pisici integrate în litere',
       title: 'Decor „LOVE” cu pisici',
       description: 'Siluete de pisici integrate în litere.',
@@ -189,9 +196,10 @@ const petGifts: GiftGroup = {
     },
     {
       image: '/img/products/ornament-os-caine-plexiglas-roz',
+      shopSlug: 'breloc-os-caine',
       alt: 'Os din plexiglas roz cu orificiu în formă de inimă, agățat cu o panglică roșie',
       title: 'Os pentru iubitorii de câini',
-      description: 'Cu orificiu în formă de inimă și panglică.',
+      description: 'Cu orificiu în formă de inimă.',
       meta: 'Plexiglas roz',
     },
   ],
@@ -206,6 +214,7 @@ const christmasGifts: GiftGroup = {
   items: [
     {
       image: '/img/products/glob-craciun-cu-nume-personalizat',
+      shopSlug: 'glob-craciun-cu-nume',
       alt: 'Glob de Crăciun din plexiglas roșu personalizat cu numele „Cristina”, cu Moș Crăciun în sanie, reni și fulgi de nea',
       title: 'Glob personalizat cu nume',
       description: 'Numele dorit, pe banda centrală.',
@@ -213,6 +222,7 @@ const christmasGifts: GiftGroup = {
     },
     {
       image: '/img/products/glob-craciun-lemn-nume-nicolas',
+      shopSlug: 'glob-craciun-lemn-cu-nume',
       alt: 'Glob de Crăciun rotund din lemn baițuit, gravat laser cu numele „Nicolas”, un om de zăpadă cu joben și mătură, o căsuță cu horn și fulgi de nea',
       title: 'Glob din lemn cu nume',
       description: 'Numele dorit, gravat în lemn.',
@@ -220,6 +230,7 @@ const christmasGifts: GiftGroup = {
     },
     {
       image: '/img/products/glob-craciun-lemn-craiova-brad',
+      shopSlug: 'glob-craciun-lemn-craiova',
       alt: 'Glob de Crăciun din placaj de lemn natur tăiat laser, cu textul „Craiova”, un brad cu model dantelat de fulgi de nea și două stele',
       title: 'Glob din lemn „Craiova”',
       description: 'Orașul se poate schimba.',
@@ -308,16 +319,17 @@ const quoteChecklist = [
 const faqItems = [
   {
     question: 'Cât costă un cadou personalizat?',
-    answer: product.fromPrice ? (
+    answer: (
       <p>
-        Un breloc cu nume costă de la {formatLei(product.fromPrice)}/buc.
-        Prețul final depinde de dimensiuni, material, design și cantitate;
-        pentru cantități mari oferim reduceri. Oferta este gratuită.
-      </p>
-    ) : (
-      <p>
-        Prețul este la cerere și depinde de dimensiuni, material, design și
-        cantitate. Oferta este gratuită.
+        În{' '}
+        <Link to="/magazin" hash="brelocuri" className={textLink}>
+          magazinul online
+        </Link>
+        , brelocurile costă {shopPriceLabel(keychainShop)}/buc. (brelocul cu
+        nume, {formatLei(nameKeychain.price)}, cu numele inclus), iar
+        decorurile {shopPriceLabel(decorShop)}/buc. (icoana decorativă,{' '}
+        {formatLei(icon.price)}). Pentru alte modele sau dimensiuni vă facem o
+        ofertă gratuită; pentru cantități mari oferim reduceri.
       </p>
     ),
   },
@@ -325,9 +337,18 @@ const faqItems = [
     question: 'Pot comanda un singur breloc cu nume?',
     answer: (
       <p>
-        Da. Lucrăm de la piese unice până la producție de serie, așa că puteți
-        comanda un singur breloc sau mai multe bucăți, de exemplu pentru colegi
-        ori clienți.
+        Da.{' '}
+        <Link
+          to="/magazin/$slug"
+          params={{ slug: nameKeychain.slug }}
+          className={textLink}
+        >
+          Brelocul cu nume pe două straturi
+        </Link>{' '}
+        costă {formatLei(nameKeychain.price)}/buc., cu numele inclus, și se
+        comandă direct din magazinul online. Lucrăm de la piese unice până la
+        producție de serie, așa că puteți comanda un singur breloc sau mai
+        multe bucăți, de exemplu pentru colegi ori clienți.
       </p>
     ),
   },
@@ -489,8 +510,20 @@ function CadouriPersonalizatePage() {
           </div>
         )}
 
-        <div className="grid gap-10 lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-5 lg:gap-y-0">
-          <GiftGroupBlock group={keychains} subgrid />
+        {/* Three keychains and two decor pieces share a desktop row: the
+            3:2 split keeps the cards about the same width. On the 2-column
+            grids below lg the idea tile fills the keychains' empty cell. */}
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)] lg:grid-rows-[auto_auto] lg:gap-x-5 lg:gap-y-0">
+          <GiftGroupBlock group={keychains} subgrid gridClassName="lg:grid-cols-3">
+            <li className="lg:hidden">
+              <IdeaCard
+                title="Alt text sau altă formă?"
+                text="Putem adapta textul, culoarea sau motivul oricărui model."
+                whatsappMessage={product.whatsappMessage}
+                className="h-full"
+              />
+            </li>
+          </GiftGroupBlock>
           <GiftGroupBlock group={standDecor} subgrid />
         </div>
 
@@ -514,35 +547,59 @@ function CadouriPersonalizatePage() {
       </Section>
 
       <Section tone="muted">
-        <div className="lg:flex lg:items-center lg:justify-between lg:gap-12">
+        {/* Phones: text, prices, then the buttons. Desktop: text and buttons
+            left, prices right. */}
+        <div className="grid gap-6 lg:grid-cols-2 lg:gap-x-16 lg:gap-y-6">
           <SectionHeader
             title="Cât costă un cadou personalizat"
             intro={
               <p>
                 <strong className="font-semibold text-zinc-900">
-                  {product.fromPrice
-                    ? `De la ${formatLei(product.fromPrice)}/buc.`
-                    : 'Preț la cerere.'}
+                  Prețuri fixe pe bucată
                 </strong>{' '}
-                {product.fromPrice ? 'Prețul final depinde' : 'Depinde'} de
-                dimensiuni, material, design și cantitate. Pentru cantități mari
-                oferim reduceri.
+                pentru modelele din magazin, cu numele inclus la brelocul cu
+                nume. Pentru alte modele, dimensiuni sau un design propriu vă
+                facem o ofertă gratuită. Pentru cantități mari oferim reduceri.
               </p>
             }
-            className="mb-0!"
+            className="mb-0! lg:col-start-1 lg:row-start-1"
           />
-          {/* Shown at every width: on phones the sticky bar stays hidden
-              until the cookie choice is made. */}
-          <div className="mt-5 shrink-0 lg:mt-0">
+          <ShopPriceTable
+            caption="Prețuri brelocuri și decor, pe categorii"
+            rows={[
+              {
+                label: getShopCategory('brelocuri').label,
+                detail: `Brelocul cu nume: ${formatLei(nameKeychain.price)}`,
+                products: keychainShop,
+              },
+              {
+                label: getShopCategory('decor').label,
+                detail: `Icoana decorativă: ${formatLei(icon.price)}`,
+                products: decorShop,
+              },
+            ]}
+            className="lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:self-center"
+          />
+          {/* The WhatsApp link shows at every width: on phones the sticky
+              bar stays hidden until the cookie choice is made. */}
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-6 lg:col-start-1 lg:row-start-2 lg:self-start">
+            <Link
+              to="/magazin"
+              hash="brelocuri"
+              className={buttonClass('dark', 'lg', 'w-full sm:w-auto')}
+            >
+              <Icon name="bag" className="w-5 h-5 shrink-0" />
+              Comandați din magazin
+            </Link>
             <a
               href={whatsappHref(product.orderMessage)}
               target="_blank"
               rel="noopener"
               data-placement="price"
-              className={buttonClass('primary', 'lg', 'w-full sm:w-auto')}
+              className={`${textLink} inline-flex min-h-11 items-center justify-center gap-2`}
             >
-              <WhatsAppIcon className="w-5 h-5 shrink-0" />
-              Cereți prețul pe WhatsApp
+              <WhatsAppIcon className="w-4 h-4 shrink-0 text-amber-700" />
+              Altă idee? Scrieți-ne pe WhatsApp
             </a>
           </div>
         </div>
@@ -598,7 +655,16 @@ function CadouriPersonalizatePage() {
 
       <OrderBlock
         title="Cum comandați un cadou personalizat"
-        intro="Scrieți-ne pe WhatsApp sau pe email cu aceste detalii:"
+        intro={
+          <p>
+            Modelele cu preț afișat se comandă din{' '}
+            <Link to="/magazin" hash="brelocuri" className={textLinkDark}>
+              magazinul online
+            </Link>
+            . Pentru alt model, un design propriu sau cantități mari,
+            scrieți-ne pe WhatsApp sau pe email cu aceste detalii:
+          </p>
+        }
         checklist={quoteChecklist}
         checklistTitle={null}
         whatsappMessage={product.orderMessage}

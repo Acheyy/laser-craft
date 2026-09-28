@@ -78,14 +78,16 @@ export const Route = createFileRoute('/placute-adresa')({
           highPrice: priciest.price,
           priceCurrency: 'RON',
           offerCount: plaquePricing.length,
-          availability: 'https://schema.org/MadeToOrder',
+          // Google's list of availability values has no MadeToOrder; in its
+          // terms InStock means "accepting orders and can fulfil them".
+          availability: 'https://schema.org/InStock',
           seller: { '@id': BUSINESS_ID },
           offers: sortedPricing.map((item) => ({
             '@type': 'Offer',
             name: `Plăcuță de adresă din plexiglas ${item.size}`,
             price: item.price,
             priceCurrency: 'RON',
-            availability: 'https://schema.org/MadeToOrder',
+            availability: 'https://schema.org/InStock',
           })),
         },
       }),

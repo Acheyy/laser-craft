@@ -107,6 +107,11 @@ export function Footer() {
           <nav aria-label="Produse" className="lg:col-span-3">
             <h2 className={headingClass}>Produse</h2>
             <ul className="mt-2">
+              <li>
+                <Link to="/magazin" className={linkClass}>
+                  Magazin online
+                </Link>
+              </li>
               {products.map((product) => (
                 <li key={product.to}>
                   <Link to={product.to} className={linkClass}>
@@ -175,13 +180,28 @@ export function Footer() {
               </>
             )}
           </p>
-          <button
-            type="button"
-            onClick={openConsentSettings}
-            className="inline-flex min-h-11 items-center self-start text-left hover:text-amber-300 sm:self-auto"
-          >
-            Setări cookie
-          </button>
+          <div className="flex flex-col items-start self-start sm:flex-row sm:items-center sm:gap-x-5 sm:self-auto">
+            {/* ANPC's notice for traders (Ordinul 449/2022). It ships with the
+                company details: both depend on the owner confirming that the
+                shop sells as a registered trader. */}
+            {COMPANY && (
+              <a
+                href="https://anpc.ro/ce-este-sal/"
+                target="_blank"
+                rel="noopener"
+                className="inline-flex min-h-11 items-center hover:text-amber-300"
+              >
+                Soluționarea alternativă a litigiilor (ANPC – SAL)
+              </a>
+            )}
+            <button
+              type="button"
+              onClick={openConsentSettings}
+              className="inline-flex min-h-11 items-center text-left hover:text-amber-300"
+            >
+              Setări cookie
+            </button>
+          </div>
         </div>
       </Container>
     </footer>

@@ -3,16 +3,21 @@ import { useId } from 'react'
 import { Icon } from '~/components/Icon'
 import { ResponsiveImage, type ImageName } from '~/components/ResponsiveImage'
 import { Section, SectionHeader, buttonClass } from '~/components/ui'
+import { formatLei } from '~/data/business'
 import type { ProductPath } from '~/data/products'
+import { linkedShopProduct } from '~/data/shop'
 
 // Real 3:4 workshop photos, none of them repeated from the product tiles, the
-// hero collage or the Christmas strip. Phones show the first 4 (2 × 2), larger
+// hero collage, the shop teaser or the Christmas strip. Phones show the first 4 (2 × 2), larger
 // screens all 6.
 type Work = {
   image: ImageName
   alt: string
   label: string
+  // Landing page; a piece sold in the shop (shopSlug, see shop.ts) links to
+  // its product page instead
   to: ProductPath
+  shopSlug?: string
 }
 
 const works: Work[] = [
@@ -21,24 +26,28 @@ const works: Work[] = [
     alt: 'Icoană cu chipul lui Isus din plexiglas negru decupat laser pe fundal alb, cu suport',
     label: 'Icoană decorativă',
     to: '/cadouri-personalizate',
+    shopSlug: 'icoana-decorativa',
   },
   {
     image: '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
     alt: 'Glob de Crăciun din plexiglas negru cu sat de iarnă decupat laser: case, biserică, brazi și stea în vârf',
     label: 'Glob cu sat de iarnă',
     to: '/globuri-craciun-personalizate',
+    shopSlug: 'glob-craciun-sat-de-iarna',
   },
   {
     image: '/img/products/decor-love-pisici-plexiglas-roz',
     alt: 'Decor „LOVE” din plexiglas roz tăiat laser, cu siluete de pisici integrate în litere',
     label: 'Decor „LOVE” cu pisici',
     to: '/cadouri-personalizate',
+    shopSlug: 'decor-love-pisici',
   },
   {
     image: '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
     alt: 'Glob de Crăciun din plexiglas verde cu Moș Crăciun în sanie trasă de un ren, stele și brazi decupați laser',
     label: 'Glob cu sanie și ren',
     to: '/globuri-craciun-personalizate',
+    shopSlug: 'glob-craciun-sanie-si-ren',
   },
   {
     image: '/img/products/ornament-pisica-inger-plexiglas-roz',
@@ -51,6 +60,7 @@ const works: Work[] = [
     alt: 'Ornament de Crăciun din plexiglas verde cu un spiriduș pe o semilună și stele decupate laser',
     label: 'Spiriduș pe lună',
     to: '/globuri-craciun-personalizate',
+    shopSlug: 'spiridus-pe-luna',
   },
 ]
 
@@ -77,11 +87,20 @@ export function RecentWork() {
   )
 }
 
-// Named by its label only; the photo alt stays readable in browse mode.
+// Named by its label (and price) only; the photo alt stays readable in
+// browse mode.
 function WorkCard({ work }: { work: Work }) {
+  const shopProduct = linkedShopProduct(work.shopSlug)
   const labelId = useId()
+  const priceId = useId()
   return (
-    <Link to={work.to} aria-labelledby={labelId} className="group block">
+    <Link
+      {...(shopProduct
+        ? { to: '/magazin/$slug', params: { slug: shopProduct.slug } }
+        : { to: work.to })}
+      aria-labelledby={shopProduct ? `${labelId} ${priceId}` : labelId}
+      className="group block"
+    >
       <div className="aspect-[3/4] overflow-hidden rounded-2xl bg-zinc-200">
         <ResponsiveImage
           name={work.image}
@@ -96,6 +115,11 @@ function WorkCard({ work }: { work: Work }) {
       >
         {work.label}
       </p>
+      {shopProduct && (
+        <p id={priceId} className="text-sm text-zinc-600">
+          {formatLei(shopProduct.price)}/buc.
+        </p>
+      )}
     </Link>
   )
 }

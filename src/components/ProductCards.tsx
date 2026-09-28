@@ -4,8 +4,9 @@ import { useId } from 'react'
 import { Icon, WhatsAppIcon } from '~/components/Icon'
 import { ResponsiveImage, type ImageName, imageMeta } from '~/components/ResponsiveImage'
 import { buttonClass } from '~/components/ui'
-import { SHOW_CHRISTMAS_PROMO, whatsappHref } from '~/data/business'
+import { SHOW_CHRISTMAS_PROMO, formatLei, whatsappHref } from '~/data/business'
 import { type Product, products as allProducts } from '~/data/products'
+import { type ShopProduct, linkedShopProduct } from '~/data/shop'
 
 // Grid of product tiles linking to the landing pages (home, /servicii, 404).
 // Photos are cropped to 4:5 (square from sm), so each product image is chosen
@@ -98,6 +99,9 @@ export type ModelItem = {
   // row of square ones (the row would otherwise stretch the square cards).
   // Only for photos whose centre square still shows the whole piece.
   frame?: 'square'
+  // The shop product this model is (slug in shop.ts): the card then shows
+  // its price and leads to its product page instead of WhatsApp.
+  shopSlug?: string
 }
 
 // Last tile of a model gallery: invites a custom request. It fills the empty
@@ -155,9 +159,11 @@ export function IdeaCard({
   )
 }
 
-// Gallery card for a concrete model, with a pre-filled WhatsApp request.
-// The frame keeps the photo's own aspect ratio, so text on the piece is never
-// cropped (unless the item asks for a square frame, see ModelItem).
+// Gallery card for a concrete model. A model sold in the shop (its shopSlug)
+// shows its fixed price and leads to its product page; the others keep
+// a pre-filled WhatsApp request. The frame keeps the photo's own aspect ratio,
+// so text on the piece is never cropped (unless the item asks for a square
+// frame, see ModelItem).
 export function ModelCard({
   item,
   whatsappMessage,
@@ -171,6 +177,7 @@ export function ModelCard({
 }) {
   const Heading = headingLevel
   const meta = imageMeta(item.image)
+  const shopProduct = linkedShopProduct(item.shopSlug)
   // The material goes into the message only when it is plain text, starting
   // lower-case mid-sentence: "Modelul: … (plexiglas roșu)."
   const material =
@@ -178,7 +185,13 @@ export function ModelCard({
       ? ` (${item.meta.charAt(0).toLowerCase()}${item.meta.slice(1)})`
       : ''
   return (
-    <article className="flex h-full flex-col overflow-hidden rounded-2xl border border-paper-line bg-white">
+    <article
+      className={`flex h-full flex-col overflow-hidden rounded-2xl border border-paper-line bg-white ${
+        shopProduct
+          ? 'relative transition-[border-color,box-shadow] hover:border-amber-300 hover:shadow-lg hover:shadow-amber-500/10'
+          : ''
+      }`}
+    >
       <div
         className={`overflow-hidden bg-zinc-100 ${item.frame === 'square' ? 'aspect-square' : ''}`}
         style={
@@ -204,24 +217,114 @@ export function ModelCard({
             {item.meta}
           </p>
         )}
-        {whatsappMessage && (
-          <a
-            href={whatsappHref(`${whatsappMessage} Modelul: ${item.title}${material}.`)}
-            target="_blank"
-            rel="noopener"
-            data-placement="model-card"
-            className="mt-auto inline-flex min-h-11 items-center gap-1.5 pt-3 text-sm font-semibold text-amber-800 hover:text-amber-900 sm:gap-2"
-          >
-            <WhatsAppIcon className="w-4 h-4 shrink-0" />
-            {/* The full label doesn't fit a 2-column card on 360px phones. */}
-            <span className="sm:hidden">Vreau modelul</span>
-            <span className="hidden sm:inline">Vreau acest model</span>
-            {/* Tells the repeated links apart in a screen reader's link list. */}
-            <span className="sr-only">: {item.title}</span>
-            <Icon name="arrowRight" className="hidden w-4 h-4 sm:block" />
-          </a>
+        {shopProduct ? (
+          <div className="mt-auto">
+            {/* The short phone label leaves the price out, so it gets its
+                own line there. */}
+            <p className="pt-3 font-bold text-zinc-900 sm:hidden">
+              {formatLei(shopProduct.price)}
+              <span className="text-sm font-medium text-zinc-600">/buc.</span>
+            </p>
+            {/* Same box as the WhatsApp link below, so the two kinds of card
+                line up in a row. It covers the whole card: a tap on the photo
+                opens the product page too. */}
+            <Link
+              to="/magazin/$slug"
+              params={{ slug: shopProduct.slug }}
+              className="inline-flex min-h-11 items-center gap-1.5 pt-3 text-sm font-semibold text-amber-800 after:absolute after:inset-0 after:rounded-2xl hover:text-amber-900 sm:gap-2"
+            >
+              <Icon name="bag" className="w-4 h-4 shrink-0" />
+              <span className="sm:hidden">Comandați</span>
+              <span className="hidden sm:inline">
+                Comandați · {formatLei(shopProduct.price)}
+              </span>
+              {/* Tells the repeated links apart in a screen reader's link list. */}
+              <span className="sr-only">: {item.title}</span>
+              <Icon name="arrowRight" className="hidden w-4 h-4 sm:block" />
+            </Link>
+          </div>
+        ) : (
+          whatsappMessage && (
+            <a
+              href={whatsappHref(`${whatsappMessage} Modelul: ${item.title}${material}.`)}
+              target="_blank"
+              rel="noopener"
+              data-placement="model-card"
+              className="mt-auto inline-flex min-h-11 items-center gap-1.5 pt-3 text-sm font-semibold text-amber-800 hover:text-amber-900 sm:gap-2"
+            >
+              <WhatsAppIcon className="w-4 h-4 shrink-0" />
+              {/* The full label doesn't fit a 2-column card on 360px phones. */}
+              <span className="sm:hidden">Vreau modelul</span>
+              <span className="hidden sm:inline">Vreau acest model</span>
+              {/* Tells the repeated links apart in a screen reader's link list. */}
+              <span className="sr-only">: {item.title}</span>
+              <Icon name="arrowRight" className="hidden w-4 h-4 sm:block" />
+            </a>
+          )
         )}
       </div>
     </article>
+  )
+}
+
+// "10 lei" when every piece of the group costs the same, else "de la 7 lei".
+export function shopPriceLabel(products: ShopProduct[]) {
+  const prices = products.map((p) => p.price)
+  const min = Math.min(...prices)
+  return min === Math.max(...prices) ? formatLei(min) : `de la ${formatLei(min)}`
+}
+
+// The shop's fixed prices on a landing page (globes by material, gifts by
+// category), styled like the plaque price tables. A row whose pieces cost
+// different amounts shows its cheapest one, "de la 7 lei".
+export function ShopPriceTable({
+  caption,
+  rows,
+  className = '',
+}: {
+  caption: string
+  rows: Array<{ label: React.ReactNode; detail?: React.ReactNode; products: ShopProduct[] }>
+  className?: string
+}) {
+  return (
+    <div className={`overflow-hidden rounded-2xl border border-paper-line bg-white ${className}`}>
+      <table className="w-full text-left">
+        <caption className="sr-only">{caption}</caption>
+        <thead className="border-b border-paper-line text-xs font-semibold uppercase tracking-wider text-zinc-600">
+          <tr>
+            <th scope="col" className="px-4 py-2.5 sm:px-5">
+              Produs
+            </th>
+            <th scope="col" className="px-4 py-2.5 text-right sm:px-5">
+              Preț/buc.
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-paper-line">
+          {rows.map((row, index) => {
+            const prices = row.products.map((p) => p.price)
+            const min = Math.min(...prices)
+            return (
+              <tr key={index}>
+                <th scope="row" className="px-4 py-3 font-semibold text-zinc-900 sm:px-5">
+                  {row.label}
+                  {row.detail && (
+                    <span className="mt-0.5 block text-sm font-normal text-zinc-600">
+                      {row.detail}
+                    </span>
+                  )}
+                </th>
+                <td className="whitespace-nowrap px-4 py-3 text-right text-lg font-bold text-zinc-900 sm:px-5">
+                  {min < Math.max(...prices) && (
+                    <span className="text-sm font-medium text-zinc-600">de la </span>
+                  )}
+                  {formatLei(min)}
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
   )
 }

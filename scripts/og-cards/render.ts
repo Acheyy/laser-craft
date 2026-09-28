@@ -15,6 +15,16 @@ import { createRequire } from 'node:module'
 import { mkdir } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import path from 'node:path'
+import { formatLei } from '~/data/business'
+import {
+  SHOP_MIN_PRICE,
+  SHOP_OG_IMAGE,
+  type ShopProduct,
+  formatPrice,
+  formatSize,
+  shopOgImage,
+  shopProducts,
+} from '~/data/shop'
 
 const ROOT = path.resolve(import.meta.dir, '../..')
 const PLAYWRIGHT_FROM = process.env.PLAYWRIGHT_FROM
@@ -41,6 +51,8 @@ type Card = {
   title: string
   subtitle?: string
   chips: string[]
+  /** Checked like the title lines; unset lets the chips wrap */
+  chipRows?: number
   media: Media
 }
 
@@ -58,6 +70,53 @@ const wide = (photo: string): Media => ({
   height: H,
   tiles: [{ photo, x: 0, y: 0, w: 496, h: H }],
 })
+
+// The shop cards take their file name from the URL the pages publish
+const ogName = (url: string) => path.parse(url).name
+
+// Where each shop product name breaks: this first line, then the rest in
+// amber. Chosen by eye so every title fits two lines in the portrait layout.
+const FIRST_LINE: Record<string, string> = {
+  'glob-craciun-cu-nume': 'Glob de Crăciun',
+  'glob-craciun-lemn-cu-nume': 'Glob de Crăciun',
+  'glob-craciun-craiova': 'Glob de Crăciun',
+  'glob-craciun-lemn-craiova': 'Glob de Crăciun',
+  'glob-craciun-sanie-si-ren': 'Glob de Crăciun',
+  'glob-craciun-sat-de-iarna': 'Glob de Crăciun',
+  'glob-craciun-fericit': 'Glob',
+  'bastoane-de-craciun': 'Bastoane',
+  'spiridus-pe-luna': 'Spiriduș',
+  'fulg-de-nea': 'Fulg',
+  'breloc-cu-nume': 'Breloc cu nume',
+  'breloc-inima-geometrica': 'Breloc',
+  'breloc-os-caine': 'Breloc os pentru',
+  'icoana-decorativa': 'Icoană decorativă',
+  'decor-mama-si-copil': 'Decor mamă și copil,',
+  'decor-love-pisici': 'Decor „LOVE”',
+}
+
+// One card per /magazin product, with the name and price from the catalogue.
+// Link previews are cached by image URL, so when a product's name or price
+// changes, give its card a new name in shopOgImage (src/data/shop.ts, e.g.
+// og-magazin-<slug>-2; rename on replace, see scripts/optimize-images.ts) and
+// render it again under that name.
+function productCard(product: ShopProduct): Card {
+  const first = FIRST_LINE[product.slug]
+  if (!first || !product.name.startsWith(`${first} `)) {
+    throw new Error(`Pick a title break for ${product.slug} in FIRST_LINE`)
+  }
+  return {
+    name: ogName(shopOgImage(product)),
+    title: `${first}\n*${product.name.slice(first.length + 1)}*`,
+    chips: [
+      `${formatPrice(product)}/buc.`,
+      formatSize(product.size),
+      product.finish[0].toUpperCase() + product.finish.slice(1),
+    ],
+    chipRows: 1,
+    media: portrait(product.image.replace('/img/products/', '')),
+  }
+}
 
 const CARDS: Card[] = [
   {
@@ -145,6 +204,25 @@ const CARDS: Card[] = [
     chips: ['Craiova', 'Evenimente și firme', 'Ofertă gratuită'],
     media: portrait('litere-volumetrice-decor-eveniment-1'),
   },
+  // Shows the lowest shop price: a new one needs a new name in SHOP_OG_IMAGE
+  {
+    name: ogName(SHOP_OG_IMAGE),
+    title: `Magazin online\n*globuri și cadouri*`,
+    chips: [`de la ${formatLei(SHOP_MIN_PRICE)}/buc.`, 'Livrare în toată România', 'Comandă pe WhatsApp'],
+    // Three name pieces from the shop, in the /portofoliu card layout. The
+    // small tiles are 3:4 like the photos, since the wooden globe fills its
+    // photo edge to edge.
+    media: {
+      width: 496,
+      height: H,
+      tiles: [
+        { photo: 'glob-craciun-cu-nume-personalizat', x: 0, y: 0, w: 290, h: H, position: '48% 50%' },
+        { photo: 'breloc-nume-plexiglas-doua-straturi', x: 306, y: 0, w: 190, h: 252, small: true },
+        { photo: 'glob-craciun-lemn-nume-nicolas', x: 306, y: 268, w: 190, h: 252, small: true },
+      ],
+    },
+  },
+  ...shopProducts.map(productCard),
 ]
 
 const args = process.argv.slice(2)
@@ -191,7 +269,7 @@ try {
     )
     await page.goto(`http://127.0.0.1:${server.port}/scripts/og-cards/template.html`)
     const problems: string[] = await page.evaluate(
-      async ({ card, lines }: { card: unknown; lines: number }) => {
+      async ({ card, lines, chipRows }: { card: unknown; lines: number; chipRows?: number }) => {
         ;(window as unknown as { renderCard(card: unknown): void }).renderCard(card)
         await document.fonts.ready
         await Promise.all(
@@ -199,11 +277,14 @@ try {
             img.complete ? img.decode().catch(() => {}) : new Promise((r) => (img.onload = img.onerror = r)),
           ),
         )
-        // A title that wraps more than its \n breaks, a missing font or photo
+        // A title that wraps more than its \n breaks, chips on more rows than
+        // asked for, a missing font or photo
         const found: string[] = []
         const h1 = document.querySelector('h1')!
         const rendered = Math.round(h1.offsetHeight / parseFloat(getComputedStyle(h1).lineHeight))
         if (rendered !== lines) found.push(`title has ${rendered} lines, expected ${lines}`)
+        const rows = new Set([...document.querySelectorAll<HTMLElement>('.chip')].map((c) => c.offsetTop)).size
+        if (chipRows && rows > chipRows) found.push(`chips on ${rows} rows, expected ${chipRows}`)
         for (const face of document.fonts) {
           if (face.status !== 'loaded') found.push(`font ${face.family} ${face.status}`)
         }
@@ -217,6 +298,7 @@ try {
           textWidth: 1200 - 64 - card.media.width - 48 - 64,
         },
         lines: card.title.split('\n').length,
+        chipRows: card.chipRows,
       },
     )
     // A failed check leaves the committed original alone: that render goes

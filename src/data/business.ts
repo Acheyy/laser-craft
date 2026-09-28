@@ -9,6 +9,9 @@ export const PHONE_HREF = `tel:${PHONE_E164}`
 export const EMAIL = 'lasercraft.contact@gmail.com'
 
 const WHATSAPP_NUMBER = PHONE_E164.replace('+', '')
+// The chat with no message, for links whose text is added on click (the
+// cart's send button)
+export const WHATSAPP_CHAT_HREF = `https://wa.me/${WHATSAPP_NUMBER}`
 const DEFAULT_WHATSAPP_MESSAGE =
   'Bună ziua! Aș dori o ofertă pentru un produs personalizat.'
 

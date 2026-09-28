@@ -82,6 +82,7 @@ const examples: ModelItem[] = [
     description: 'Numele și desenul, gravate laser în lemn baițuit.',
     meta: 'Lemn baițuit',
     image: '/img/products/glob-craciun-lemn-nume-nicolas',
+    shopSlug: 'glob-craciun-lemn-cu-nume',
     alt: 'Glob de Crăciun rotund din lemn baițuit, gravat laser cu numele „Nicolas”, un om de zăpadă cu joben și mătură, o căsuță cu horn și fulgi de nea',
   },
   {
@@ -89,6 +90,7 @@ const examples: ModelItem[] = [
     description: 'Arcadă cu trandafiri gravați și siluete decupate.',
     meta: 'Plexiglas magenta + galben',
     image: '/img/products/decor-mama-si-copil-plexiglas-cu-suport',
+    shopSlug: 'decor-mama-si-copil',
     alt: 'Decor din plexiglas magenta și galben cu suport: arcadă cu trandafiri gravați și siluetele unei mame și a unui copil',
   },
   {

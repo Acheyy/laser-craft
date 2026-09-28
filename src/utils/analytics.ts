@@ -115,13 +115,17 @@ export function openConsentSettings() {
 // Events are only queued once GA is queued (i.e. after consent), so nothing
 // collected while refused is sent after a later "Accept". gtag.js itself may
 // still be on its way; queued events are sent when it arrives.
-export function trackEvent(name: string, params: Record<string, string> = {}) {
+export function trackEvent(name: string, params: Record<string, unknown> = {}) {
   if (!(window as AnalyticsWindow).lcGaLoaded) return
   gtag('event', name, params)
 }
 
 // Delegated click tracking for every contact link on the site.
 export function trackContactClick(event: MouseEvent) {
+  // A click the page cancelled opened nothing (on /cos, a send blocked by a
+  // missing name), so it is no contact. React's own listener on document was
+  // added before this one and has already run.
+  if (event.defaultPrevented) return
   const link = (event.target as Element | null)?.closest?.('a[href]')
   if (!link) return
   const href = link.getAttribute('href') ?? ''

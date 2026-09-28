@@ -1,6 +1,7 @@
 import { Link, useRouterState } from '@tanstack/react-router'
 import type * as React from 'react'
 import { useEffect, useRef, useState } from 'react'
+import { CartLink } from '~/components/CartLink'
 import { ContactActions } from '~/components/Contact'
 import { Icon, WhatsAppIcon } from '~/components/Icon'
 import { Logo } from '~/components/Logo'
@@ -11,6 +12,7 @@ import {
   PHONE_DISPLAY,
   PHONE_HREF,
   SHOW_CHRISTMAS_PROMO,
+  formatLei,
   whatsappHref,
 } from '~/data/business'
 import {
@@ -19,8 +21,10 @@ import {
   products,
   whatsappMessageFor,
 } from '~/data/products'
+import { SHOP_MIN_PRICE } from '~/data/shop'
 
 const pageLinks = [
+  { to: '/magazin', label: 'Magazin' },
   { to: '/servicii', label: 'Prețuri' },
   { to: '/portofoliu', label: 'Portofoliu' },
   { to: '/despre-noi', label: 'Despre noi' },
@@ -173,9 +177,11 @@ export function Header() {
                   />
                 </button>
 
+                {/* 46rem wide, so the three links of the bottom row fit on
+                    one line. */}
                 <div
                   id="produse-menu"
-                  className={`absolute left-0 top-full mt-3 w-[42rem] rounded-2xl bg-white p-5 shadow-2xl shadow-black/30 ring-1 ring-black/5 transition duration-150 ${
+                  className={`absolute left-0 top-full mt-3 w-[46rem] rounded-2xl bg-white p-5 shadow-2xl shadow-black/30 ring-1 ring-black/5 transition duration-150 ${
                     productsOpen
                       ? 'visible opacity-100 translate-y-0'
                       : 'invisible opacity-0 -translate-y-1'
@@ -211,7 +217,14 @@ export function Header() {
                       </div>
                     ))}
                   </div>
-                  <div className="mt-4 flex items-center justify-between gap-4 border-t border-zinc-100 px-2 pt-4 text-sm">
+                  <div className="mt-4 flex items-center gap-6 whitespace-nowrap border-t border-zinc-100 px-2 pt-4 text-sm">
+                    <Link
+                      to="/magazin"
+                      className="inline-flex items-center gap-1.5 font-semibold text-zinc-900 hover:text-amber-700"
+                    >
+                      <Icon name="bag" className="w-4 h-4 text-amber-600" />
+                      Magazin online · prețuri fixe
+                    </Link>
                     <Link
                       to="/servicii"
                       hash="taiere-laser-lemn"
@@ -222,7 +235,7 @@ export function Header() {
                     </Link>
                     <Link
                       to="/servicii"
-                      className="inline-flex items-center gap-1 font-semibold text-amber-700 hover:text-amber-800"
+                      className="ml-auto inline-flex items-center gap-1 font-semibold text-amber-700 hover:text-amber-800"
                     >
                       Toate serviciile și prețurile
                       <Icon name="arrowRight" className="w-4 h-4" />
@@ -244,6 +257,7 @@ export function Header() {
             </nav>
 
             <div className="hidden lg:flex items-center gap-4">
+              <CartLink />
               <a
                 href={PHONE_HREF}
                 className="hidden xl:inline-flex items-center gap-2 text-sm font-semibold text-white hover:text-amber-300"
@@ -263,6 +277,7 @@ export function Header() {
             </div>
 
             <div className="flex items-center gap-1 lg:hidden">
+              <CartLink />
               <a
                 href={whatsappHref(pageMessage)}
                 target="_blank"
@@ -300,7 +315,24 @@ export function Header() {
         {/* While the cookie banner is open it covers the bottom of the sheet:
             the extra room and scroll padding keep focused items above it. */}
         <Container className="py-5 pb-[calc(1.5rem+env(safe-area-inset-bottom))] [html[data-consent=pending]_&]:pb-[calc(9rem+env(safe-area-inset-bottom))]">
-          <p className="px-2 text-xs font-semibold uppercase tracking-wider text-zinc-400">
+          <Link
+            to="/magazin"
+            activeProps={{ className: '!bg-amber-400/20' }}
+            className="flex min-h-16 items-center gap-3 rounded-xl border border-amber-400/30 bg-amber-400/10 p-2 transition-colors hover:bg-amber-400/15 active:bg-amber-400/20"
+          >
+            <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-amber-400 text-slate-950">
+              <Icon name="bag" className="w-6 h-6" />
+            </span>
+            <span className="min-w-0 flex-1">
+              <span className="block font-semibold text-white">Magazin online</span>
+              <span className="block text-sm text-amber-200">
+                Comandați direct, de la {formatLei(SHOP_MIN_PRICE)}
+              </span>
+            </span>
+            <Icon name="chevronRight" className="w-5 h-5 text-amber-400" />
+          </Link>
+
+          <p className="mt-5 px-2 text-xs font-semibold uppercase tracking-wider text-zinc-400">
             Produse
           </p>
           <ul className="mt-2 space-y-1">

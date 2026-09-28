@@ -31,6 +31,7 @@ import {
   openingHours,
 } from '~/data/business'
 import { gaHeadScript, trackContactClick } from '~/utils/analytics'
+import { focusTarget } from '~/utils/focus'
 
 // Real work photos (largest generated width) rather than the logo share card.
 const businessPhotos = (
@@ -167,18 +168,6 @@ export const Route = createRootRoute({
   notFoundComponent: () => <NotFound />,
 })
 
-// Moves focus to a navigation target (H1, hash section, main). A tabindex
-// added just for this is removed again on blur: left in place, any later
-// click inside the element would make it the focus start again, and the next
-// Tab would jump back to its top.
-function focusTarget(target: HTMLElement, options?: FocusOptions) {
-  if (!target.hasAttribute('tabindex')) {
-    target.setAttribute('tabindex', '-1')
-    target.addEventListener('blur', () => target.removeAttribute('tabindex'), { once: true })
-  }
-  target.focus(options)
-}
-
 function RootDocument({ children }: { children: React.ReactNode }) {
   const router = useRouter()
 
@@ -186,6 +175,23 @@ function RootDocument({ children }: { children: React.ReactNode }) {
     document.addEventListener('click', trackContactClick)
     return () => document.removeEventListener('click', trackContactClick)
   }, [])
+
+  // The route JSON-LD the server put in <head> is not React's: on the client
+  // the router's <Script> renders nothing and, finding the server copy, adds
+  // none, so nothing would remove it when the page changes (the next page
+  // would carry the first page's ItemList or OfferCatalog too). It goes on
+  // the first page change; later pages add and remove their own copies.
+  // Googlebot loads every URL fresh, so this only keeps in-browser readers
+  // (extensions, testing tools) accurate.
+  React.useEffect(() => {
+    let serverLd = [...document.head.querySelectorAll('script[type="application/ld+json"]')]
+    const firstPath = router.state.location.pathname
+    return router.subscribe('onBeforeNavigate', ({ toLocation }) => {
+      if (!serverLd.length || toLocation.pathname === firstPath) return
+      for (const script of serverLd) script.remove()
+      serverLd = []
+    })
+  }, [router])
 
   // After a client-side page change, move focus to the new page's H1 (or to
   // the linked section for /page#id links): screen readers announce the new

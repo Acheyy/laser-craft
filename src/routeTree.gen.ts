@@ -18,9 +18,12 @@ import { Route as LitereVolumetriceRouteImport } from './routes/litere-volumetri
 import { Route as GravuraLaserCraiovaRouteImport } from './routes/gravura-laser-craiova'
 import { Route as GloburiCraciunPersonalizateRouteImport } from './routes/globuri-craciun-personalizate'
 import { Route as DespreNoiRouteImport } from './routes/despre-noi'
+import { Route as CosRouteImport } from './routes/cos'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as CadouriPersonalizateRouteImport } from './routes/cadouri-personalizate'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as MagazinIndexRouteImport } from './routes/magazin.index'
+import { Route as MagazinSlugRouteImport } from './routes/magazin.$slug'
 
 const TaiereLaserPlexiglasRoute = TaiereLaserPlexiglasRouteImport.update({
   id: '/taiere-laser-plexiglas',
@@ -69,6 +72,11 @@ const DespreNoiRoute = DespreNoiRouteImport.update({
   path: '/despre-noi',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CosRoute = CosRouteImport.update({
+  id: '/cos',
+  path: '/cos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ContactRoute = ContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -84,11 +92,22 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const MagazinIndexRoute = MagazinIndexRouteImport.update({
+  id: '/magazin/',
+  path: '/magazin/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MagazinSlugRoute = MagazinSlugRouteImport.update({
+  id: '/magazin/$slug',
+  path: '/magazin/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/cadouri-personalizate': typeof CadouriPersonalizateRoute
   '/contact': typeof ContactRoute
+  '/cos': typeof CosRoute
   '/despre-noi': typeof DespreNoiRoute
   '/globuri-craciun-personalizate': typeof GloburiCraciunPersonalizateRoute
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
@@ -98,11 +117,14 @@ export interface FileRoutesByFullPath {
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
   '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
+  '/magazin/$slug': typeof MagazinSlugRoute
+  '/magazin': typeof MagazinIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/cadouri-personalizate': typeof CadouriPersonalizateRoute
   '/contact': typeof ContactRoute
+  '/cos': typeof CosRoute
   '/despre-noi': typeof DespreNoiRoute
   '/globuri-craciun-personalizate': typeof GloburiCraciunPersonalizateRoute
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
@@ -112,12 +134,15 @@ export interface FileRoutesByTo {
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
   '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
+  '/magazin/$slug': typeof MagazinSlugRoute
+  '/magazin': typeof MagazinIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/cadouri-personalizate': typeof CadouriPersonalizateRoute
   '/contact': typeof ContactRoute
+  '/cos': typeof CosRoute
   '/despre-noi': typeof DespreNoiRoute
   '/globuri-craciun-personalizate': typeof GloburiCraciunPersonalizateRoute
   '/gravura-laser-craiova': typeof GravuraLaserCraiovaRoute
@@ -127,6 +152,8 @@ export interface FileRoutesById {
   '/portofoliu': typeof PortofoliuRoute
   '/servicii': typeof ServiciiRoute
   '/taiere-laser-plexiglas': typeof TaiereLaserPlexiglasRoute
+  '/magazin/$slug': typeof MagazinSlugRoute
+  '/magazin/': typeof MagazinIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -134,6 +161,7 @@ export interface FileRouteTypes {
     | '/'
     | '/cadouri-personalizate'
     | '/contact'
+    | '/cos'
     | '/despre-noi'
     | '/globuri-craciun-personalizate'
     | '/gravura-laser-craiova'
@@ -143,11 +171,14 @@ export interface FileRouteTypes {
     | '/portofoliu'
     | '/servicii'
     | '/taiere-laser-plexiglas'
+    | '/magazin/$slug'
+    | '/magazin'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/cadouri-personalizate'
     | '/contact'
+    | '/cos'
     | '/despre-noi'
     | '/globuri-craciun-personalizate'
     | '/gravura-laser-craiova'
@@ -157,11 +188,14 @@ export interface FileRouteTypes {
     | '/portofoliu'
     | '/servicii'
     | '/taiere-laser-plexiglas'
+    | '/magazin/$slug'
+    | '/magazin'
   id:
     | '__root__'
     | '/'
     | '/cadouri-personalizate'
     | '/contact'
+    | '/cos'
     | '/despre-noi'
     | '/globuri-craciun-personalizate'
     | '/gravura-laser-craiova'
@@ -171,12 +205,15 @@ export interface FileRouteTypes {
     | '/portofoliu'
     | '/servicii'
     | '/taiere-laser-plexiglas'
+    | '/magazin/$slug'
+    | '/magazin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CadouriPersonalizateRoute: typeof CadouriPersonalizateRoute
   ContactRoute: typeof ContactRoute
+  CosRoute: typeof CosRoute
   DespreNoiRoute: typeof DespreNoiRoute
   GloburiCraciunPersonalizateRoute: typeof GloburiCraciunPersonalizateRoute
   GravuraLaserCraiovaRoute: typeof GravuraLaserCraiovaRoute
@@ -186,6 +223,8 @@ export interface RootRouteChildren {
   PortofoliuRoute: typeof PortofoliuRoute
   ServiciiRoute: typeof ServiciiRoute
   TaiereLaserPlexiglasRoute: typeof TaiereLaserPlexiglasRoute
+  MagazinSlugRoute: typeof MagazinSlugRoute
+  MagazinIndexRoute: typeof MagazinIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -253,6 +292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DespreNoiRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cos': {
+      id: '/cos'
+      path: '/cos'
+      fullPath: '/cos'
+      preLoaderRoute: typeof CosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/contact': {
       id: '/contact'
       path: '/contact'
@@ -274,6 +320,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/magazin/': {
+      id: '/magazin/'
+      path: '/magazin'
+      fullPath: '/magazin'
+      preLoaderRoute: typeof MagazinIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/magazin/$slug': {
+      id: '/magazin/$slug'
+      path: '/magazin/$slug'
+      fullPath: '/magazin/$slug'
+      preLoaderRoute: typeof MagazinSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -281,6 +341,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CadouriPersonalizateRoute: CadouriPersonalizateRoute,
   ContactRoute: ContactRoute,
+  CosRoute: CosRoute,
   DespreNoiRoute: DespreNoiRoute,
   GloburiCraciunPersonalizateRoute: GloburiCraciunPersonalizateRoute,
   GravuraLaserCraiovaRoute: GravuraLaserCraiovaRoute,
@@ -290,6 +351,8 @@ const rootRouteChildren: RootRouteChildren = {
   PortofoliuRoute: PortofoliuRoute,
   ServiciiRoute: ServiciiRoute,
   TaiereLaserPlexiglasRoute: TaiereLaserPlexiglasRoute,
+  MagazinSlugRoute: MagazinSlugRoute,
+  MagazinIndexRoute: MagazinIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

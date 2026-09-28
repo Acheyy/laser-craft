@@ -167,8 +167,8 @@ type OnRequestRow = {
     | { to: '/servicii'; hash: string; activeOptions: { includeHash: true } }
 }
 
-// Starting price per piece for the ornaments and gifts, once the owner
-// publishes one in products.ts; nothing until then.
+// Starting price per piece for the ornaments and gifts: their cheapest piece
+// in the shop (products.ts fromPrice).
 function fromPriceSpecification(to: ProductPath) {
   const { fromPrice } = getProduct(to)
   return fromPrice
@@ -193,9 +193,11 @@ const productRow = (to: ProductPath, hint = getProduct(to).hint): OnRequestRow =
     : { label, hint, link: { to } }
 }
 
-// Everything without a fixed price. Each row links to its page (wood/MDF has
-// no page of its own, so it points to the block further down). Plexiglas
-// engraving is not here: it has the per-cm² rate.
+// Everything without a price table of its own. Each row links to its page
+// (wood/MDF has no page of its own, so it points to the block further down);
+// the ornaments and gifts show their shop starting price, and the shop itself
+// is linked under the list. Plexiglas engraving is not here: it has the
+// per-cm² rate.
 const onRequest: OnRequestRow[] = [
   productRow('/globuri-craciun-personalizate', 'din plexiglas sau lemn, cu nume sau mesaj'),
   productRow('/cadouri-personalizate', 'brelocuri, decor cu suport, cadouri gravate'),
@@ -457,7 +459,12 @@ function ServiciiPage() {
                       <span className="block font-medium text-zinc-900 group-hover:text-amber-800">
                         {row.label}
                       </span>
-                      <span className="block text-sm text-zinc-600">
+                      {/* A starting price reads as a price, as on the tiles */}
+                      <span
+                        className={`block text-sm ${
+                          row.priced ? 'font-semibold text-amber-800' : 'text-zinc-600'
+                        }`}
+                      >
                         {row.hint}
                       </span>
                     </span>
@@ -469,6 +476,11 @@ function ServiciiPage() {
                 </li>
               ))}
             </ul>
+            <p className="mt-1 text-sm">
+              <Link to="/magazin" className={standaloneLink}>
+                Globuri și cadouri la preț fix, în magazinul online
+              </Link>
+            </p>
           </PriceColumn>
         </div>
       </Section>
