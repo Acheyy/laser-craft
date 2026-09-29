@@ -23,6 +23,8 @@ const WEBP = { quality: 78 }
 // default quality; checked by eye at 1200w
 const WEBP_OVERRIDES: Record<string, { quality: number; effort?: number }> = {
   'glob-craciun-lemn-nume-nicolas': { quality: 60, effort: 6 },
+  'glob-craciun-lemn-nume-cristina-ren': { quality: 60, effort: 6 },
+  'glob-craciun-lemn-straturi-craciun-fericit': { quality: 60, effort: 6 },
 }
 
 const manifest: Record<string, { width: number; height: number; widths: number[] }> = {}

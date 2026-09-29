@@ -168,8 +168,9 @@ function faqItems(deadline: ActiveChristmasDeadline | null) {
 }
 
 // Idea tiles fill the slots a category leaves empty in its last row: ten
-// Christmas products leave two at three and at four columns (one wide tile,
-// desktop only); three gifts leave one at two and at four columns.
+// products leave two at three and at four columns (one wide tile, desktop
+// only); three gifts leave one at two and at four columns. The twelve
+// Christmas products fill every row, so they get none.
 function ideaTile(category: ShopCategory, count: number) {
   const empty = (columns: number) => (columns - (count % columns)) % columns
   const { whatsappMessage } = getProduct(category.landing)

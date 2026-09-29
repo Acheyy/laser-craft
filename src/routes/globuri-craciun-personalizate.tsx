@@ -50,6 +50,8 @@ const schemaImages = [
   '/img/products/glob-craciun-personalizat-craiova',
   '/img/products/glob-craciun-lemn-nume-nicolas',
   '/img/products/glob-craciun-lemn-craiova-brad',
+  '/img/products/glob-craciun-lemn-nume-cristina-ren',
+  '/img/products/glob-craciun-lemn-straturi-craciun-fericit',
   '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
   '/img/products/glob-craciun-sanie-reni-plexiglas-verde',
 ] as const satisfies ReadonlyArray<ImageName>
@@ -68,6 +70,7 @@ const urgentSentence = `${URGENT[0].toUpperCase()}${URGENT.slice(1)}.`
 const plexiglasShop = shopProductsIn('craciun').filter((p) => p.material === 'plexiglas')
 const woodShop = shopProductsIn('craciun').filter((p) => p.material === 'lemn')
 const globeSize = formatSize(getShopProduct('glob-craciun-cu-nume')!.size)
+const layeredGlobeSize = formatSize(getShopProduct('glob-craciun-fericit-lemn-pictat')!.size)
 
 export const Route = createFileRoute('/globuri-craciun-personalizate')({
   component: GloburiCraciunPage,
@@ -162,6 +165,22 @@ const ornaments: ModelItem[] = [
     title: 'Glob din lemn „Craiova”',
     description: 'Orașul se poate schimba.',
     meta: 'Placaj de lemn',
+  },
+  {
+    image: '/img/products/glob-craciun-lemn-nume-cristina-ren',
+    shopSlug: 'glob-craciun-lemn-cu-nume-si-ren',
+    alt: 'Glob de Crăciun rotund din lemn baițuit, gravat laser cu numele „Cristina” și un puiuț de ren cu ochi mari, cu o fundă și o floricică în coarne',
+    title: 'Glob din lemn cu nume și ren',
+    description: 'Numele dorit, cu un puiuț de ren gravat.',
+    meta: 'Lemn baițuit',
+  },
+  {
+    image: '/img/products/glob-craciun-lemn-straturi-craciun-fericit',
+    shopSlug: 'glob-craciun-fericit-lemn-pictat',
+    alt: 'Glob de Crăciun din lemn baițuit pe straturi, cu brazi decupați laser peste un cer albastru pictat cu lună și fulgi de nea, sania lui Moș Crăciun cu reni aplicată în relief argintiu și urarea gravată „Crăciun Fericit!”',
+    title: 'Glob din lemn pictat, pe straturi',
+    description: 'Cer pictat, cu sania în relief.',
+    meta: 'Lemn baițuit și pictat',
   },
   {
     image: '/img/products/ornament-craciun-bastoane-rosii',
@@ -305,7 +324,7 @@ function faqItems(deadline: ActiveChristmasDeadline | null) {
     {
       question: 'Faceți și globuri de Crăciun din lemn?',
       answer:
-        'Da. Pe lângă plexiglas, tăiem și gravăm laser globuri din lemn, natur sau baițuit, cu nume, oraș sau alt text, ca modelele „Nicolas” și „Craiova” din galerie.',
+        'Da. Pe lângă plexiglas, tăiem și gravăm laser globuri din lemn, natur sau baițuit, cu nume, oraș sau alt text, ca modelele „Nicolas”, „Cristina” și „Craiova” din galerie. Facem și globuri din lemn pe două straturi, cu un cer pictat în spatele brazilor decupați, ca modelul „Crăciun Fericit!”.',
     },
     {
       question: 'Pot comanda globuri personalizate pentru colegi sau clienți?',
@@ -404,11 +423,11 @@ function GloburiCraciunPage() {
               />
             </li>
           ))}
-          {/* 10 models fill the 2-column rows, and leave two cells at three
-              and at four columns: this tile spans two cells everywhere, a
-              full row on phones. (The geometric heart is not here: the
-              owner sells it as a keychain, see /cadouri-personalizate.) */}
-          <li className="col-span-2 lg:flex">
+          {/* 12 models fill every row at two, three and four columns, so
+              this tile takes a full row of its own. (The geometric heart is
+              not here: the owner sells it as a keychain, see
+              /cadouri-personalizate.) */}
+          <li className="col-span-2 lg:col-span-3 lg:flex xl:col-span-4">
             <IdeaCard
               text="Trimiteți-ne o poză sau o schiță a ornamentului dorit."
               whatsappMessage={product.whatsappMessage}
@@ -431,7 +450,8 @@ function GloburiCraciunPage() {
                   Prețuri fixe pe bucată,
                 </strong>{' '}
                 cu personalizarea inclusă: numele sau orașul de pe glob.
-                Globurile au {globeSize}. Pentru alte modele sau dimensiuni vă
+                Globurile au {globeSize}, iar cel pictat, pe straturi,{' '}
+                {layeredGlobeSize}. Pentru alte modele sau dimensiuni vă
                 facem o ofertă gratuită. Pentru cantități mari oferim reduceri.
               </p>
             }

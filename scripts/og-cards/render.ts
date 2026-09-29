@@ -81,6 +81,8 @@ const FIRST_LINE: Record<string, string> = {
   'glob-craciun-lemn-cu-nume': 'Glob de Crăciun',
   'glob-craciun-craiova': 'Glob de Crăciun',
   'glob-craciun-lemn-craiova': 'Glob de Crăciun',
+  'glob-craciun-lemn-cu-nume-si-ren': 'Glob de Crăciun din',
+  'glob-craciun-fericit-lemn-pictat': 'Glob „Crăciun Fericit”',
   'glob-craciun-sanie-si-ren': 'Glob de Crăciun',
   'glob-craciun-sat-de-iarna': 'Glob de Crăciun',
   'glob-craciun-fericit': 'Glob',

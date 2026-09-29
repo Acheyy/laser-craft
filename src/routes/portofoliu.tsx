@@ -159,6 +159,22 @@ const categories: Category[] = [
         alt: 'Glob de Crăciun din placaj de lemn natur tăiat laser, cu textul „Craiova”, un brad cu model dantelat de fulgi de nea și două stele',
       },
       {
+        title: 'Glob din lemn cu nume — „Cristina”',
+        description: 'Numele și puiuțul de ren, gravate laser.',
+        material: 'Lemn baițuit',
+        image: '/img/products/glob-craciun-lemn-nume-cristina-ren',
+        shopSlug: 'glob-craciun-lemn-cu-nume-si-ren',
+        alt: 'Glob de Crăciun rotund din lemn baițuit, gravat laser cu numele „Cristina” și un puiuț de ren cu ochi mari, cu o fundă și o floricică în coarne',
+      },
+      {
+        title: 'Glob din lemn pe straturi — „Crăciun Fericit!”',
+        description: 'Cer pictat, sanie aplicată în relief.',
+        material: 'Lemn baițuit și pictat',
+        image: '/img/products/glob-craciun-lemn-straturi-craciun-fericit',
+        shopSlug: 'glob-craciun-fericit-lemn-pictat',
+        alt: 'Glob de Crăciun din lemn baițuit pe straturi, cu brazi decupați laser peste un cer albastru pictat cu lună și fulgi de nea, sania lui Moș Crăciun cu reni aplicată în relief argintiu și urarea gravată „Crăciun Fericit!”',
+      },
+      {
         title: 'Glob cu sat de iarnă',
         material: 'Plexiglas negru',
         image: '/img/products/glob-craciun-plexiglas-negru-sat-iarna',
